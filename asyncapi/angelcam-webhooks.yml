@@ -1,0 +1,30 @@
+generated: '2026-07-17'
+method: searched
+source: https://developers.angelcam.com/ (RTS notifications)
+spec_type: Webhooks
+summary: 'Angelcam has no AsyncAPI document. Its event/push surface is the RTS (Remote Technical Surveillance)
+  notification system: an HTTP notification method delivers signed callbacks to a subscriber URL when
+  a notification rule matches a camera message/event.'
+delivery:
+  mechanism: HTTP notification method
+  fields:
+  - name
+  - type
+  - http_method
+  - url
+  - arrow_client
+  - signature_private_key
+  signing: HMAC signature via signature_private_key
+  also_supports: email notification method
+setup_operations:
+- operationId: rts-notification-method-create
+  summary: Create an HTTP (webhook) or email notification method
+- operationId: rts-notification-rule-create
+  summary: Bind a message type + cameras/arrow-clients to a notification method
+- operationId: rts-notifications-methods
+  summary: List notification methods
+- operationId: rts-notifications-rules
+  summary: List notification rules
+related:
+  events: polling via camera-events / events endpoints
+  messages: rts-messages

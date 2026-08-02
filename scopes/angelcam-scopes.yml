@@ -1,0 +1,328 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/angelcam-openapi-original.yml
+schemes:
+- name: OAuth2
+  source: openapi/angelcam-openapi-original.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://my.angelcam.com/oauth/authorize/
+    tokenUrl: https://my.angelcam.com/oauth/token/
+  - flow: password
+    tokenUrl: https://api.angelcam.com/oauth/token/
+  description: See the Authentication section above for full documentation.
+scopes:
+- scope: active_services_access
+  description: Permission to access active services
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: active_services_manage
+  description: Permission to manage active services
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: arrow_client_access
+  description: Permission to access Arrow clients
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: arrow_client_manage
+  description: Permission to manage Arrow clients
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: audio_message_access
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: audio_message_manage
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: audio_messages_play
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: broadcasting_access
+  description: Permission to see general broadcasting information and access broadcasting streams
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: broadcasting_start_stop
+  description: Permission to start and stop public broadcasting on camera
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: camera_access
+  description: Permission to list cameras and to get details of a specific camera
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: camera_create
+  description: Permission to create cameras
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: camera_delete
+  description: Permission to delete cameras
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: camera_guest_access
+  description: Permission to access camera guest
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: camera_guest_manage
+  description: Permission to manage camera guest
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: camera_manage
+  description: Permission to update cameras
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: client_access
+  description: Permission to list resellers clients and get details of a specific client
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: client_create
+  description: Permission to create client account
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: client_manage
+  description: Permission to update clients detail
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: event_access
+  description: Permission to access events
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: incidents_access
+  description: Permission to access Incidents
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: locations_access
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: messages_access
+  description: Permission to access RTS messages
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: messages_manage
+  description: Permission to manage RTS messages
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: notifications_methods_access
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: notifications_methods_manage
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: notifications_rules_access
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: notifications_rules_manage
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: orders_access
+  description: Permission to access orders
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: public_cameras_access
+  description: Permission to access public cameras
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: recording_access
+  description: Permission to access camera recordings
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: recording_clips_access
+  description: Permission to access recording clips
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: recording_clips_create
+  description: Permission to create recording clips
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: recording_clips_share
+  description: Permission to share recording clips
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: recording_start_stop
+  description: Permission to start and stop recording on camera
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: rts_arming_manage
+  description: Permission to arm and disarm RTS
+  flows:
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: rts_settings_access
+  description: Permission to access RTS settings
+  flows:
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: rts_settings_manage
+  description: Permission to manage RTS settings
+  flows:
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: sensor_access
+  description: Permission to list sensors and to get details of a specific sensor
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: sensor_manage
+  description: Permission to create, update and delete sensors
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: services_access
+  description: Permission to access available services
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: sites_access
+  description: Permission to access sites
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: sites_manage
+  description: Permission to create, update and delete sites
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: space_access
+  description: Permission to list and activate spaces
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: space_permissions_access
+  description: Permission to view space permissions
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: speaker_access
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: speaker_manage
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: streams_detect
+  description: Permission to detect camera streams
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: trials_access
+  description: Permission to access available trials
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: trials_activate
+  description: Permission to activate a trial
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: user_access
+  description: Permission to access user information
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- scope: user_delete
+  description: Permission to delete the current user account
+  flows:
+  - authorizationCode
+  - password
+  sources:
+  - openapi/angelcam-openapi-original.yml
+docs: https://developers.angelcam.com/guides/authentication/

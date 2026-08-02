@@ -1,0 +1,85 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/angelcam-openapi-original.yml
+summary: Entity-relationship graph derived from the Angelcam OpenAPI schemas and id-reference fields.
+  Root org unit is the Space; the primary resource is the Camera.
+entities:
+- name: Space
+  description: Organisational unit owning all resources; selected via X-Space-Id.
+- name: User
+  description: Account holder; has a default space.
+- name: Camera
+  description: IP camera; supports live stream, snapshot, recording, broadcasting, events.
+- name: SharedCamera
+  description: Camera another user shared with you (deprecated surface).
+- name: CameraGuest
+  description: Guest granted view access to a camera (deprecated surface).
+- name: Recording
+  description: Cloud recording on a camera (continuous or event); yields timeline segments and clips.
+- name: Clip
+  description: Exported/shareable video segment from a recording.
+- name: Event
+  description: Camera event (motion/sensor) used for event recording and detection.
+- name: Sensor
+  description: Attached sensor device.
+- name: Speaker
+  description: Audio device for two-way audio / audio message playback.
+- name: AudioMessage
+  description: Prerecorded audio played through a speaker.
+- name: ArrowClient
+  description: Angelcam Connector (Arrow protocol) bridging local devices to the cloud.
+- name: Location
+  description: Physical location grouping cameras.
+- name: Service
+  description: Purchasable service (e.g. Cloud Recording) with active-service + order records.
+- name: NotificationMethod
+  description: 'RTS notification target: email or HTTP (webhook).'
+- name: NotificationRule
+  description: RTS rule binding a message type + cameras to a notification method.
+- name: Incident
+  description: RTS incident.
+relationships:
+- from: Space
+  type: has_many
+  to: Camera
+  via: space
+- from: User
+  type: has_one
+  to: Space
+  via: default_space
+- from: Camera
+  type: has_many
+  to: Recording
+  via: camera_id
+- from: Camera
+  type: has_many
+  to: Clip
+  via: camera_id
+- from: Camera
+  type: has_many
+  to: Event
+  via: camera_id
+- from: Recording
+  type: has_many
+  to: Clip
+  via: recording_id
+- from: ArrowClient
+  type: has_many
+  to: Camera
+  via: arrow_client
+- from: Location
+  type: has_many
+  to: Camera
+  via: location
+- from: Speaker
+  type: has_many
+  to: AudioMessage
+  via: speaker_id
+- from: NotificationRule
+  type: belongs_to
+  to: NotificationMethod
+  via: notification_method
+- from: Service
+  type: has_many
+  to: ActiveService
+  via: service

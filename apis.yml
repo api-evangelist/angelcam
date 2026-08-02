@@ -1,0 +1,1327 @@
+aid: angelcam
+name: AngelCam
+description: Angelcam is a cloud video-surveillance platform that connects any IP camera to the cloud
+  — via ONVIF and the open-source Arrow connector — for live viewing, cloud recording, clip creation
+  and sharing, two-way audio, sensors, and Remote Technical Surveillance (RTS) event notifications.
+  The Angelcam RESTful API (HTTPS-only JSON, organised around Spaces, secured with OAuth2 or a
+  Personal Access Token) exposes 90+ endpoints across cameras, recordings, clips, events, Arrow
+  clients, notifications, speakers, and services.
+url: https://raw.githubusercontent.com/api-evangelist/angelcam/refs/heads/main/apis.yml
+x-type: company
+x-source: vc-portfolio
+x-backed-by:
+- 500-global
+x-tier: stub
+x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://developers.angelcam.com/assets/logo-angelcam.svg
+specificationVersion: '0.20'
+created: '2026-07-17'
+modified: '2026-07-17'
+tags:
+- Company
+- Video Surveillance
+- Cameras
+- IP Camera
+- Cloud Recording
+- Video Streaming
+- IoT
+- ONVIF
+- Security
+- Webhooks
+apis:
+- aid: angelcam:angelcam-active-service-api
+  name: AngelCam active-service API
+  description: >-
+    Endpoints for managing your activated services and assigning them to cameras.
+
+    A service must first be activated (purchased) for your account, then assigned to a specific camera
+    before it takes effect on that camera.
+
+
+    ## Service lifecycle
+
+    1. **Find a service code.** Browse [available services](#operation/services) to get the `code` of
+    the service you want.
+
+    2. **Activate the service** by calling [`POST /billing/active-services/`](#operation/activate-service).
+    Provide the service `code` and a billing `period` — `P1M` for monthly or `P1Y` for annual billing.
+
+    3. **Assign to a camera** by calling [`PUT /billing/active-services/{id}/usage/`](#operation/my-service-usage-update)
+    with the `camera_id`. Set `camera_id` to `null` to unassign.
+
+    4. **Upgrade or downgrade** at any time via [`PUT /billing/active-services/{id}/`](#operation/my-service-update).
+    A downgrade takes effect at the end of the current billing period by default. Set `force_downgrade:
+    true` to apply it immediately with prorated credit.
+
+    5. **Cancel** via [`DELETE /billing/active-services/{id}/`](#operation/my-service-cancel).
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - active-service
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-active-service-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-angelcameras-api
+  name: AngelCam angelcameras API
+  description: The angelcameras API from AngelCam — 1 operation(s) for angelcameras.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - angelcameras
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-angelcameras-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-arrow-clients-api
+  name: AngelCam arrow-clients API
+  description: >-
+    Manage [Arrow clients](https://github.com/angelcam/arrow-client) — pair them with your account, inspect
+    exposed services, and send commands.
+
+    **Pairing:** restart the device (pairing mode is active for the first 20 minutes after start), POST
+    to `arrow-clients/` to get the UUID, then poll `arrow-clients/{uuid}/` until status is `online`.
+
+    **Arrow proxy:** use the transparent HTTP proxy or HTTP CONNECT proxy to reach services behind an
+    Arrow client. Both require a `Host: {SERVICE_ID}-{ARROW_UUID}` header and a `Proxy-Authorization:
+    Bearer` token from the Arrow client detail endpoint.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - arrow-clients
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-arrow-clients-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-audio-message-api
+  name: AngelCam audio-message API
+  description: >-
+    Endpoints for managing audio messages. Audio messages are pre-recorded audio clips that can be played
+    through [speakers](#tag/speakers).
+
+    Audio files are uploaded as Base64-encoded content. Supported formats: AAC (`audio/aac`), MP3 (`audio/mpeg`),
+    WAV (`audio/wav`), OGG (`audio/ogg`), and WebM audio (`audio/webm`).
+
+    Keep audio files short — a few seconds is ideal. Large files will increase upload time and may affect
+    playback reliability.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - audio-message
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-audio-message-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-broadcasting-api
+  name: AngelCam broadcasting API
+  description: >-
+    Endpoints for managing broadcasting settings and retrieving broadcasting streams. If a camera doesn't
+    have the Broadcasting service activated, all camera broadcasting endpoints will return HTTP 404.
+
+
+    The broadcasting service can be used whenever you need more concurrent stream consumers. It does not
+    necessarily mean that the stream from your camera has to be public.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - broadcasting
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-broadcasting-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-camera-api
+  name: AngelCam camera API
+  description: >-
+    Manage your cameras and access live streams, snapshots, and recordings. Supported codecs: H.264, H.265
+    (experimental), MJPEG. Live streams are limited to 10 concurrent consumers per camera — use the [broadcasting
+    service](#tag/broadcasting) for higher concurrency.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - camera
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-camera-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-camera-guest-api
+  name: AngelCam camera-guest API
+  description: >-
+    You can share your camera with a guest, this means, you allow guests to view stream from your camera.
+    There is also an option to share also recordings together with live stream.
+
+
+    When you adding new guest, you just need their email. Then we send them an email informing them that
+    you share camera with them. In case when there was no account with given email we precreate an account
+    for these guest.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - camera-guest
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-camera-guest-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-camera-stream-detection-api
+  name: AngelCam camera-stream-detection API
+  description: >-
+    Using these endpoints you can verify if there are camera streams available on specified network address.
+    Detection is asynchronous. For this reason there is one endpoint for initializing stream detection
+    and one for retrieving result of detection.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - camera-stream-detection
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-camera-stream-detection-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-client-api
+  name: AngelCam client API
+  description: >-
+    Endpoints for reseller users to manage their clients.
+
+    A reseller can create two types of client accounts:
+
+    * **Full account** — the client has full control over their cameras and services. * **Limited account**
+    — the client has read-only access. They can view their cameras and streams but cannot make any changes.
+    A client can upgrade from limited to full at any time, which also revokes the reseller's access to
+    their space.
+
+    A reseller automatically has access to their clients' spaces (cameras, recordings, streams). A client
+    — whether full or limited — can revoke this access at any time.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - client
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-client-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-clip-api
+  name: AngelCam clip API
+  description: >-
+    A clip is a permanent, downloadable excerpt of recorded footage. Unlike a recording stream — which
+    is a temporary playback session — a clip is processed into a file that can be downloaded or shared
+    with others.
+
+    **Prerequisite:** The camera must have the Cloud Recording service active. If not, recording endpoints
+    return 404.
+
+
+    ## Creating a clip
+
+    1. **Check available footage.** Use [`recording/{recording_id}/timeline/`](#operation/my-cameras-recording-timeline)
+    to confirm that footage exists for the time range you want.
+
+    2. **Submit the clip request** via [`POST cameras/{camera_id}/clips/`](#operation/my-cameras-clips-create)
+    with a `name`, `start`, and `end`. The maximum clip length is **3 hours**.
+
+    3. **Poll for completion.** Clip processing is asynchronous. Status progresses from `PENDING` → `BUILDING`
+    → `READY` (or `ERROR`). Poll [`cameras/{camera_id}/clips/{clip_id}/`](#operation/my-cameras-clips-detail)
+    until the status is `READY`.
+
+    4. **Download or share.** A `READY` clip includes a `download_url` (a time-limited direct download
+    link) and a `sharing_token` for unauthenticated sharing via the clip share endpoint.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - clip
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-clip-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-event-api
+  name: AngelCam event API
+  description: >-
+    Events represent detections reported by cameras or sensors — typically motion detected by a camera
+    or a trigger from an external sensor. Events are the building blocks for [RTS incidents](#tag/incidents)
+    and camera timeline markers.
+
+
+    ## Sending events to Angelcam
+
+    When a camera or sensor detects something, it reports it to Angelcam by calling the event endpoint
+    with its unique `hash` (found in the Angelcam dashboard or via the [Sensor](#tag/sensor) endpoints).
+    Use `POST /v1/events/` in all cases where possible. A `GET /v1/events/` alternative exists solely
+    for devices that are technically incapable of making POST requests (some older cameras). The rate
+    limit for event submission is 10 requests per minute per hash.
+
+
+    ## Listing events
+
+    Pagination for event list endpoints works differently from other list endpoints: there is no `offset`
+    parameter. Instead:
+
+    - Use the `next` link in the response to move to the next page. - Pagination is one-directional (forward
+    only). - Use the `start` and `end` filters to narrow down the time range.
+
+    Events are returned ordered by `occurred_at` (newest first).
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - event
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-event-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-incidents-api
+  name: AngelCam incidents API
+  description: >-
+    Endpoints for managing Real Time Security (RTS) incidents.
+
+    An incident is a security event that has been detected and may require attention. Incidents are created
+    automatically when sensor events or camera status changes match an active [notification rule](#tag/rts_notification_rules).
+
+    Incidents go through the following states:
+
+    * **Open** — the incident has been created and not yet reviewed. * **Verified** — acknowledged as
+    a genuine security event (`verified_at` is set). * **Closed** — the incident has been resolved (`closed_at`
+    is set). An incident can be closed without being verified first (e.g. a false alarm).
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - incidents
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-incidents-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-location-api
+  name: AngelCam location API
+  description: >-
+    Endpoints for accessing and managing locations. Locations are used to organize cameras into groups.
+    Every camera belongs to exactly one location, and every user has a root location whose ID is available
+    from the [Current User Info](#tag/user) endpoint.
+
+    Locations can be **armed** or **disarmed**. When a location is armed, Real Time Security (RTS) will
+    generate notifications for events on cameras in that location. Each location supports scheduled arming/disarming
+    so notifications can be active only during certain hours.
+
+    > **Note:** Creating, editing, and deleting locations is currently only possible through the [My Angelcam](https://my.angelcam.com/)
+    web UI. These API endpoints provide read access only.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - location
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-location-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-order-api
+  name: AngelCam order API
+  description: The order API from AngelCam — 3 operation(s) for order.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - order
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-order-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-public-camera-api
+  name: AngelCam public-camera API
+  description: >-
+    Endpoints for browsing cameras that are publicly accessible. A camera appears here if it has the Broadcasting
+    service active and has been marked as public — either because it uses free public broadcasting, or
+    because the camera owner has explicitly enabled public access.
+
+    > **Access restricted:** These endpoints are available only to partners who have arranged access with
+    Angelcam. Please contact [support](https://www.angelcam.com/support/) if you are interested in using
+    them.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - public-camera
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-public-camera-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-recording-api
+  name: AngelCam recording API
+  description: >-
+    Cloud Recording endpoints. Requires the Cloud Recording service to be active on the camera — otherwise
+    all endpoints return 404.
+
+    A camera can have multiple simultaneous recordings (e.g. continuous + event-only) with different retentions.
+    The timeline endpoint returns _segments_ (continuous blocks of recorded video) for a given time range;
+    maximum range per request is 24 hours.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - recording
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-recording-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-rts-messages-api
+  name: AngelCam rts_messages API
+  description: >-
+    Endpoints for managing notifications. Base object is message. We create a message when something important
+    happens. For example, when a camera goes offline, when a sensor detects motion, etc. When a message
+    is created, we can send it to user using different notification methods based on notification rules.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - rts_messages
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-rts-messages-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-rts-notification-methods-api
+  name: AngelCam rts_notification_methods API
+  description: >-
+    Manage notification methods — email and HTTP webhook. HTTP methods send a signed POST to your URL
+    with a JSON payload on each notification. See the [Webhooks guide](/guides/webhooks/) for payload
+    fields and signature verification.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - rts_notification_methods
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-rts-notification-methods-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-rts-notification-rules-api
+  name: AngelCam rts_notification_rules API
+  description: >-
+    Endpoints for managing notification rules. Notification rule is a rule that defines when and how we
+    should send message to user. For example, we can create rule that says: "When camera goes offline,
+    send me an email".
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - rts_notification_rules
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-rts-notification-rules-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-rts-settings-api
+  name: AngelCam rts_settings API
+  description: >-
+    Global Real Time Security (RTS) settings for your account.
+
+    The main setting is `incident_ttl`, which controls how long (in [ISO 8601 duration format](#section/Angelcam-API/Time-and-duration-formats))
+    an open incident stays active before it is automatically closed when no new events are received.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - rts_settings
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-rts-settings-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-sensor-api
+  name: AngelCam sensor API
+  description: >-
+    With sensor endpoints you can view, manage and connect sensors to the user account.
+
+
+    Sensor can be bind to one particular already connected [camera](#tag/camera) to mark received [events](#tag/event)
+    on camera timeline. If camera that sensor is bind to has active [Cloud Recording](#tag/recording)
+    event recording can be enabled using these endpoints. Event recording will not be applied in the case
+    that the camera assigned to the sensor doesn't have Cloud Recording activated.
+
+
+    To specify event recording length [duration](#section/Angelcam-API/Time-and-duration-formats) format
+    must be used and currently options for recording length are limited to:
+      - 30 seconds
+      - 1 minute
+      - 2 minutes
+      - 5 minutes
+
+    Each sensor is given a unique email and unique hash. Those can be used to send [events](#tag/event)
+    to Angelcam.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - sensor
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-sensor-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-service-api
+  name: AngelCam service API
+  description: >-
+    A catalog of services available for purchase. Use these endpoints to discover service `code` values
+    before activating a service via the [My services](#tag/active-service) endpoints.
+
+    Services fall into two categories:
+
+    * **Account plan** — your overall subscription level. * **Camera services** — features you enable
+    on individual cameras. The two main camera services are **Cloud Recording** and **Broadcasting**.
+    Activating a camera service creates an active service instance that you then [assign to a specific
+    camera](#operation/my-service-usage-update).
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - service
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-service-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-shared-camera-api
+  name: AngelCam shared-camera API
+  description: >-
+    For access to cameras which somebody shared with you. In general everything is same as in my cameras
+    section, see above, there is only one difference. Together with cameras information you get also a
+    camera's public page url
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - shared-camera
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-shared-camera-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-shared-camera-clip-api
+  name: AngelCam shared-camera-clip API
+  description: >-
+    Recording clips on cameras shared with you. Everything works the same as [My recording clips](#tag/clip)
+    — just replace `cameras` with `shared-cameras` in the endpoint URLs.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - shared-camera-clip
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-shared-camera-clip-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-shared-camera-recording-api
+  name: AngelCam shared-camera-recording API
+  description: >-
+    Everything is same as in recording for my own cameras. Just replace `cameras` by `shared-cameras`
+    in every endpoints url.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - shared-camera-recording
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-shared-camera-recording-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-space-api
+  name: AngelCam space API
+  description: >-
+    A **space** is the organisational unit in Angelcam — it owns all resources: cameras, locations, recordings,
+    services, and billing. Every API request operates within a space context — by default the user's default
+    space, or a specific space selected via the `X-Space-Id` header.
+
+    See the [Key concepts guide](/guides/key-concepts/) for details on space context and permissions.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - space
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-space-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-speakers-api
+  name: AngelCam speakers API
+  description: >-
+    Manage speakers and trigger audio playback. See the [Speakers guide](/guides/speakers/) for setup
+    instructions, including how to configure an AngelBox as a speaker.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - speakers
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-speakers-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-stream-controls-api
+  name: AngelCam stream-controls API
+  description: >-
+    You normally don't have to know the `streamer_domain` and `stream_id` path parameter, but use the
+    generated endpoint URLs as reported by the `stream_controls` field in a create-stream response. Those
+    URLs correspond to the following endpoints.
+
+    * base_url: [Recording stream info](#tag/stream-controls/operation/recordings-stream-info)
+
+    * play: [Play stream](#tag/stream-controls/operation/recordings-stream-play)
+
+    * pause: [Pause stream](#tag/stream-controls/operation/recordings-stream-pause)
+
+    * speed: [Set plyback stream](#tag/stream-controls/operation/recordings-stream-speed)
+
+
+
+    ## Syncing stream and timeline
+
+    Due to various reasons, the time a user spends watching a stream doesn't necessarily have to match
+    the time actually
+
+    elapsed in the recorded video (i.e. a 5-minute long stream takes 6 minutes to watch on a user's slow
+    mobile network
+
+    connection due to lag).
+
+
+    Periodically calling endpoint, [recordings stream info](#tag/stream-controls/operation/recordings-stream-info)
+    comes in handy in this case, because it
+
+    synchronizes the time shown to the user in your UI, with the current time of the stream. This endpoint
+    tells you the
+
+    exact time where the stream is positioned at the current moment.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - stream-controls
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-stream-controls-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+- aid: angelcam:angelcam-user-api
+  name: AngelCam user API
+  description: The user API from AngelCam — 1 operation(s) for user.
+  humanURL: https://developers.angelcam.com/
+  baseURL: https://api.angelcam.com/v1
+  tags:
+  - user
+  properties:
+  - type: OpenAPI
+    url: openapi/angelcam-user-api-openapi.yml
+  - type: Authentication
+    url: authentication/angelcam-authentication.yml
+  - type: OAuthScopes
+    url: scopes/angelcam-scopes.yml
+  - type: Conventions
+    url: conventions/angelcam-conventions.yml
+  - type: ErrorCatalog
+    url: errors/angelcam-problem-types.yml
+  - type: RateLimits
+    url: rate-limits/angelcam-rate-limits.yml
+  - type: Lifecycle
+    url: lifecycle/angelcam-lifecycle.yml
+  - type: DataModel
+    url: data-model/angelcam-data-model.yml
+  - type: Conformance
+    url: conformance/angelcam-conformance.yml
+  - type: AgenticAccess
+    url: agentic-access/angelcam-agentic-access.yml
+  - type: Webhooks
+    url: asyncapi/angelcam-webhooks.yml
+  - type: Arazzo
+    url: arazzo/angelcam-watch-live-camera.yml
+  - type: Arazzo
+    url: arazzo/angelcam-create-and-share-clip.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+common:
+- type: DeveloperPortal
+  url: https://developers.angelcam.com/
+- type: Documentation
+  url: https://developers.angelcam.com/
+- type: APIReference
+  url: https://developers.angelcam.com/
+- type: GettingStarted
+  url: https://developers.angelcam.com/guides/key-concepts/
+- type: Authentication
+  url: authentication/angelcam-authentication.yml
+- type: OAuthScopes
+  url: scopes/angelcam-scopes.yml
+- type: MCPServer
+  url: mcp/angelcam-mcp.yml
+- type: AgenticAccess
+  url: agentic-access/angelcam-agentic-access.yml
+- type: LLMsTxt
+  url: llms/angelcam-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/angelcam-webhooks.yml
+- type: RateLimits
+  url: rate-limits/angelcam-rate-limits.yml
+- type: ErrorCatalog
+  url: errors/angelcam-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/angelcam-lifecycle.yml
+- type: StatusPage
+  url: https://status.angelcam.com
+- type: Deprecation
+  url: lifecycle/angelcam-lifecycle.yml
+- type: Conventions
+  url: conventions/angelcam-conventions.yml
+- type: DataModel
+  url: data-model/angelcam-data-model.yml
+- type: Conformance
+  url: conformance/angelcam-conformance.yml
+- type: DomainSecurity
+  url: security/angelcam-domain-security.yml
+- type: Support
+  url: https://help.angelcam.com
+- type: Blog
+  url: https://angelcam.com/blog/
+- type: GitHubOrganization
+  url: https://github.com/angelcam
+- type: Login
+  url: https://my.angelcam.com/
+- type: TermsOfService
+  url: https://angelcam.com/terms/
+- type: PrivacyPolicy
+  url: https://angelcam.com/privacy/
+- type: Website
+  url: https://angelcam.com
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

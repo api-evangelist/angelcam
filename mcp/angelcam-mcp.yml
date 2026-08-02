@@ -1,0 +1,52 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/angelcam-openapi-original.yml
+status: candidate
+note: No official hosted Angelcam MCP server found. Candidate tool list derived from marquee OpenAPI operations;
+  each tool maps to a verified operationId.
+server:
+  name: angelcam
+  transport: http
+tools:
+- name: my_cameras_list
+  description: List your cameras
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-list
+- name: my_cameras_detail
+  description: Get a camera
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-detail
+- name: connect_cameras
+  description: Connect a new camera
+  source_operation: openapi/angelcam-openapi-original.yml#connect-cameras
+- name: my_cameras_recordings_list
+  description: List recordings on a camera
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-recordings-list
+- name: my_cameras_recording_timeline
+  description: Get a recording timeline
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-recording-timeline
+- name: my_cameras_clips_create
+  description: Create a clip from a recording
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-clips-create
+- name: my_cameras_clips_share
+  description: Share a clip via email
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-clips-share
+- name: camera_events
+  description: List camera events
+  source_operation: openapi/angelcam-openapi-original.yml#camera-events
+- name: my_cameras_broadcasting_start
+  description: Start public broadcasting on a camera
+  source_operation: openapi/angelcam-openapi-original.yml#my-cameras-broadcasting-start
+- name: arrow_clients_list
+  description: List paired Arrow connectors
+  source_operation: openapi/angelcam-openapi-original.yml#arrow-clients-list
+- name: arrow_client_pairing_request
+  description: Pair an Arrow connector
+  source_operation: openapi/angelcam-openapi-original.yml#arrow-client-pairing-request
+- name: rts_notification_method_create
+  description: Create an RTS notification method (email/webhook)
+  source_operation: openapi/angelcam-openapi-original.yml#rts-notification-method-create
+- name: rts_notification_rule_create
+  description: Create an RTS notification rule
+  source_operation: openapi/angelcam-openapi-original.yml#rts-notification-rule-create
+- name: audio_playback_start
+  description: Play audio through a speaker
+  source_operation: openapi/angelcam-openapi-original.yml#audio-playback-start

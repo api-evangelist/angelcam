@@ -1,0 +1,465 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service audio-message API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: audio-message
+  x-displayName: Audio messages
+  description: 'Endpoints for managing audio messages. Audio messages are pre-recorded audio clips that can be played through [speakers](#tag/speakers).
+
+    Audio files are uploaded as Base64-encoded content. Supported formats: AAC (`audio/aac`), MP3 (`audio/mpeg`), WAV (`audio/wav`), OGG (`audio/ogg`), and WebM audio (`audio/webm`).
+
+    Keep audio files short — a few seconds is ideal. Large files will increase upload time and may affect playback reliability.
+
+    '
+paths:
+  /audio-messages/:
+    get:
+      operationId: audio-message-list
+      summary: Retrieve audio messages
+      tags:
+      - audio-message
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: 'Limit result set. Example: `1`.'
+        schema:
+          type: integer
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        description: 'Return results starting at `offset`. Example: `10`.'
+        schema:
+          type: integer
+          minimum: 1
+      security:
+      - OAuth2:
+        - audio_message_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Audio message list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioMessageListResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+    post:
+      operationId: create-audio-messages
+      summary: Create a new audio message
+      tags:
+      - audio-message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioMessageWriteObject'
+      security:
+      - OAuth2:
+        - audio_message_manage
+      - PersonalAccessToken: []
+      responses:
+        '201':
+          description: Newly created audio message object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioMessageObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /audio-messages/{message_id}/:
+    parameters:
+    - $ref: '#/components/parameters/messageId'
+    get:
+      operationId: audio-message-detail
+      summary: Retrieve audio message
+      tags:
+      - audio-message
+      security:
+      - OAuth2:
+        - audio_message_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Audio message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioMessageObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    put:
+      operationId: update-audio-message
+      summary: Update existing audio message
+      tags:
+      - audio-message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioMessageWriteObject'
+      security:
+      - OAuth2:
+        - audio_message_manage
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Updated audio message object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioMessageObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  schemas:
+    AudioMessageObject:
+      type: object
+      title: Audio message object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Audio message ID
+        name:
+          type: string
+          description: Audio message name
+        message:
+          type: string
+          format: url
+          description: URL where the audio message content can be downloaded
+      required:
+      - id
+      - name
+      - message
+      example:
+        id: 157
+        name: Alarm
+        message: https://example.com/alarm.mp3
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    AudioMessageListResponse:
+      type: object
+      title: Audio Message list
+      properties:
+        count:
+          type: integer
+          description: Count of audio messages
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: List of audio messages
+          items:
+            $ref: '#/components/schemas/AudioMessageObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    AudioMessageWriteObject:
+      type: object
+      title: Audio message object
+      properties:
+        name:
+          type: string
+          description: Audio message name
+        message:
+          type: string
+          format: base64
+          description: 'Base64-encoded audio file. Supported formats: `audio/aac`, `audio/mpeg` (MP3), `audio/wav`, `audio/ogg`, `audio/webm`. Keep files short — a few seconds is ideal for reliable playback.'
+      required:
+      - name
+      - message
+      example:
+        id: 157
+        name: Alarm
+        message: dGhlIGF1ZGlvIGZpbGUgY29udGVudCBnb2VzIGhlcmU=
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+  responses:
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+  parameters:
+    messageId:
+      name: message_id
+      in: path
+      required: true
+      description: Message ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

@@ -1,0 +1,1814 @@
+generated: '2026-07-17'
+method: generated
+source: openapi/angelcam-openapi-original.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 124
+  by_action_class:
+    connected: 71
+    acting: 53
+  by_consequence:
+    read: 71
+    write: 44
+    safety-critical: 8
+    physical: 1
+  human_in_the_loop_required: 8
+operations:
+- path: /angelcamera/latest-firmware/{board}/
+  method: get
+  operationId: angelcamera-latest-firmware-get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /arrow-clients/
+  method: get
+  operationId: arrow-clients-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - arrow_client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /arrow-clients/
+  method: post
+  operationId: arrow-client-pairing-request
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - arrow_client_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /arrow-clients/{mac}/
+  method: get
+  operationId: arrow-client-detail-mac
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - arrow_client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /arrow-clients/{uuid}/
+  method: get
+  operationId: arrow-client-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - arrow_client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /arrow-clients/{uuid}/
+  method: delete
+  operationId: arrow-client-unpair
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - arrow_client_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /arrow-clients/{uuid}/reset-service-table/
+  method: post
+  operationId: arrow-client-reset-service-table
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - arrow_client_manage
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /arrow-clients/{uuid}/scan-network/
+  method: post
+  operationId: arrow-client-scan-network
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - arrow_client_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /arrow-clients/{uuid}/services/
+  method: get
+  operationId: arrow-client-services
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - arrow_client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /arrow-clients/{uuid}/services/
+  method: post
+  operationId: add-arrow-service
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - arrow_client_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /arrow-clients/{uuid}/services/{service_id}/
+  method: get
+  operationId: arrow-client-service-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - arrow_client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /arrow-clients/{uuid}/services/{service_id}/
+  method: delete
+  operationId: arrow-client-service-delete
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - arrow_client_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /audio-messages/
+  method: get
+  operationId: audio-message-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - audio_message_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /audio-messages/
+  method: post
+  operationId: create-audio-messages
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - audio_message_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /audio-messages/{message_id}/
+  method: get
+  operationId: audio-message-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - audio_message_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /audio-messages/{message_id}/
+  method: put
+  operationId: update-audio-message
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - audio_message_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /billing/active-services/
+  method: get
+  operationId: my-services
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - active_services_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /billing/active-services/
+  method: post
+  operationId: activate-service
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - active_services_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /billing/active-services/{active_service_id}/
+  method: get
+  operationId: my-service-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - active_services_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /billing/active-services/{active_service_id}/
+  method: put
+  operationId: my-service-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - active_services_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /billing/active-services/{active_service_id}/
+  method: delete
+  operationId: my-service-cancel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - active_services_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /billing/active-services/{active_service_id}/usage/
+  method: get
+  operationId: my-service-usage-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - active_services_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /billing/active-services/{active_service_id}/usage/
+  method: put
+  operationId: my-service-usage-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - active_services_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /billing/orders/
+  method: get
+  operationId: orders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - orders_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /billing/orders/{order_id}/
+  method: get
+  operationId: order-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - orders_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /billing/orders/{order_id}/items/
+  method: get
+  operationId: order-items
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - orders_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /billing/services/
+  method: get
+  operationId: services
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - services_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/
+  method: get
+  operationId: my-cameras-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - camera_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/
+  method: post
+  operationId: connect-cameras
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_create
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/stream-detection/
+  method: post
+  operationId: stream-detection-start
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - streams_detect
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/stream-detection/{session_id}/
+  method: get
+  operationId: stream-detection-result
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - streams_detect
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/
+  method: get
+  operationId: my-cameras-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - camera_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/
+  method: put
+  operationId: my-cameras-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/
+  method: delete
+  operationId: my-cameras-remove
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_delete
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/broadcasting/
+  method: get
+  operationId: my-cameras-broadcasting-info
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - broadcasting_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/broadcasting/start/
+  method: post
+  operationId: my-cameras-broadcasting-start
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - broadcasting_start_stop
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/broadcasting/stop/
+  method: post
+  operationId: my-cameras-broadcasting-stop
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - broadcasting_start_stop
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /cameras/{camera_id}/clips/
+  method: get
+  operationId: my-cameras-clips-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_clips_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/clips/
+  method: post
+  operationId: my-cameras-clips-create
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - recording_clips_access
+    - recording_clips_create
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/clips/{clip_id}/
+  method: get
+  operationId: my-cameras-clips-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_clips_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/clips/{clip_id}/share/
+  method: post
+  operationId: my-cameras-clips-share
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - recording_clips_share
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/clips/{clip_id}/stream/
+  method: get
+  operationId: my-cameras-clips-stream
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_clips_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/events/
+  method: get
+  operationId: camera-events
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - event_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/guests/
+  method: get
+  operationId: my-cameras-guests
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - camera_guest_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/guests/
+  method: post
+  operationId: my-cameras-guest-create
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_guest_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/guests/{guest_id}/
+  method: get
+  operationId: my-cameras-guest
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - camera_guest_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/guests/{guest_id}/
+  method: put
+  operationId: my-cameras-guest-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_guest_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/guests/{guest_id}/
+  method: delete
+  operationId: my-cameras-guest-remove
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_guest_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/recording/
+  method: get
+  operationId: my-cameras-recording-info-deprecated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/recording/download/
+  method: get
+  operationId: my-cameras-recording-download-deprecated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/recording/start/
+  method: post
+  operationId: my-cameras-recording-start-deprecated
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - recording_start_stop
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /cameras/{camera_id}/recording/stop/
+  method: post
+  operationId: my-cameras-recording-stop-deprecated
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - recording_start_stop
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /cameras/{camera_id}/recording/stream/
+  method: get
+  operationId: my-cameras-recording-stream-deprecated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/recording/timeline/
+  method: get
+  operationId: my-cameras-recording-timeline-deprecated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /cameras/{camera_id}/recordings/
+  method: get
+  operationId: my-cameras-recordings-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /clients/
+  method: get
+  operationId: my-clients-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /clients/
+  method: post
+  operationId: create-client
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - client_create
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /clients/{client_id}/
+  method: get
+  operationId: my-client-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - client_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /clients/{client_id}/
+  method: put
+  operationId: update-client
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - client_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /clients/{client_id}/invite/
+  method: post
+  operationId: my-client-invite
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - client_create
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /events/
+  method: post
+  operationId: events-create
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /events/
+  method: get
+  operationId: events-create-get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /locations/
+  method: get
+  operationId: locations-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - locations_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /locations/{location_id}/
+  method: get
+  operationId: location-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - locations_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /me/
+  method: get
+  operationId: me
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - user_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /me/
+  method: delete
+  operationId: me-delete
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - user_delete
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /public-cameras/
+  method: get
+  operationId: public-cameras-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - public_cameras_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /public-cameras/{camera_id}/
+  method: get
+  operationId: public-cameras-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - public_cameras_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/stream/{streamer_name}/{streamer_id}/
+  method: get
+  operationId: my-cameras-recordings-stream-info
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/streams/{stream_id}/
+  method: get
+  operationId: recordings-stream-info
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/streams/{stream_id}/pause/
+  method: post
+  operationId: recordings-stream-pause
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /recording/streams/{stream_id}/play/
+  method: post
+  operationId: recordings-stream-play
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /recording/streams/{stream_id}/speed/
+  method: post
+  operationId: recordings-stream-speed
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /recording/{recording_id}/
+  method: get
+  operationId: my-cameras-recording-info
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/{recording_id}/download/
+  method: get
+  operationId: my-cameras-recording-download
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/{recording_id}/snapshot/
+  method: get
+  operationId: my-cameras-recording-snapshot
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/{recording_id}/start/
+  method: post
+  operationId: my-cameras-recording-start
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - recording_start_stop
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /recording/{recording_id}/stop/
+  method: post
+  operationId: my-cameras-recording-stop
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - recording_start_stop
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /recording/{recording_id}/stream/
+  method: get
+  operationId: my-cameras-recording-stream
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /recording/{recording_id}/timeline/
+  method: get
+  operationId: my-cameras-recording-timeline
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/
+  method: get
+  operationId: rts-settings-retrieve
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - rts_settings_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/
+  method: put
+  operationId: rts-settings-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rts_settings_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/arm/
+  method: post
+  operationId: rts-arm
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rts_arming_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/disarm/
+  method: post
+  operationId: rts-disarm
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - rts_arming_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/incidents/
+  method: get
+  operationId: incidents
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - incidents_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/incidents/{incident_id}/
+  method: get
+  operationId: rts-incident-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - incidents_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/messages/
+  method: get
+  operationId: rts-messages
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - messages_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/messages/set-all-read/
+  method: post
+  operationId: rts-message-set-all-read
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - messages_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/messages/unread-count/
+  method: get
+  operationId: rts-message-unread-count
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - messages_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/messages/{message_id}/
+  method: get
+  operationId: rts-message-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - messages_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/messages/{message_id}/
+  method: put
+  operationId: rts-message-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - messages_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/notifications/methods/
+  method: get
+  operationId: rts-notifications-methods
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - notifications_methods_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/notifications/methods/
+  method: post
+  operationId: rts-notification-method-create
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - notifications_methods_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/notifications/methods/{method_id}/
+  method: get
+  operationId: rts-notification-method-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - notifications_methods_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/notifications/methods/{method_id}/
+  method: put
+  operationId: rts-notification-method-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - notifications_methods_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/notifications/rules/
+  method: get
+  operationId: rts-notifications-rules
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - notifications_rules_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/notifications/rules/
+  method: post
+  operationId: rts-notification-rule-create
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - notifications_rules_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /rts/notifications/rules/{rule_id}/
+  method: get
+  operationId: rts-notification-rule-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - notifications_rules_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /rts/notifications/rules/{rule_id}/
+  method: put
+  operationId: rts-notification-rule-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - notifications_rules_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /sensors/
+  method: get
+  operationId: my-sensors-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - sensor_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /sensors/
+  method: post
+  operationId: connect-sensors
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - sensor_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /sensors/{sensor_id}/
+  method: get
+  operationId: my-sensors-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - sensor_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /sensors/{sensor_id}/
+  method: put
+  operationId: my-sensors-update
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - sensor_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /sensors/{sensor_id}/
+  method: delete
+  operationId: my-sensors-remove
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - sensor_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /spaces/
+  method: get
+  operationId: list-spaces
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - space_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{space_id}/
+  method: get
+  operationId: get-space
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - space_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /spaces/{space_id}/permissions/
+  method: get
+  operationId: get-space-permissions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - space_permissions_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/
+  method: get
+  operationId: shared-cameras-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - camera_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/
+  method: get
+  operationId: shared-cameras-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - camera_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/
+  method: delete
+  operationId: shared-cameras-remove
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - camera_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /shared-cameras/{camera_id}/clips/
+  method: get
+  operationId: shared-cameras-clips-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_clips_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/clips/
+  method: post
+  operationId: shared-cameras-clips-create
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - recording_clips_access
+    - recording_clips_create
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /shared-cameras/{camera_id}/clips/{clip_id}/
+  method: get
+  operationId: shared-cameras-clips-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_clips_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/clips/{clip_id}/stream/
+  method: get
+  operationId: shared-cameras-clips-stream
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_clips_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/recording/
+  method: get
+  operationId: shared-cameras-recordings-info
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/recording/stream/
+  method: get
+  operationId: shared-cameras-recordings-stream
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /shared-cameras/{camera_id}/recording/timeline/
+  method: get
+  operationId: shared-cameras-recordings-timeline
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - recording_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /speakers/
+  method: get
+  operationId: speaker-list
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - speaker_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /speakers/
+  method: post
+  operationId: connect-speakers
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - speaker_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /speakers/{speaker_id}/
+  method: get
+  operationId: speaker-detail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - speaker_access
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /speakers/{speaker_id}/
+  method: put
+  operationId: update-speaker
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - speaker_manage
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /speakers/{speaker_id}/play/
+  method: post
+  operationId: audio-playback-start
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - audio_messages_play
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /speakers/{speaker_id}/stop/
+  method: post
+  operationId: audio-playback-stop
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - audio_messages_play
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /speakers/{speaker_id}/test/
+  method: get
+  operationId: speaker-test
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - speaker_access
+    token:
+      max-ttl: 3600
+    audit: none

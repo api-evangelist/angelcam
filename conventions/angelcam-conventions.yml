@@ -1,0 +1,72 @@
+generated: '2026-07-17'
+method: searched
+source: https://developers.angelcam.com/guides/api-conventions/
+summary: Cross-cutting request/response conventions for the Angelcam RESTful API, harvested from the developer
+  conventions guide and derived from the OpenAPI.
+protocol:
+  transport: HTTPS only
+  media_type: application/json
+  trailing_slash: required on all endpoint URLs
+  base_url: https://api.angelcam.com/v1
+authentication:
+  styles:
+  - OAuth2 (authorization code)
+  - Personal Access Token
+  header: Authorization
+  pat_format: PersonalAccessToken {token}
+  docs: https://developers.angelcam.com/guides/authentication/
+  artifact: authentication/angelcam-authentication.yml
+space_context:
+  header: X-Space-Id
+  description: Every request operates within a space; defaults to the user default space, override with
+    X-Space-Id. Permissions resolve at space, location, or camera level.
+pagination:
+  style: limit/offset
+  params:
+  - limit
+  - offset
+  response_fields:
+  - count
+  - next
+  - previous
+  - results
+  default_limit: 100
+  note: Always set limit explicitly. Event endpoints use cursor pagination via the next link.
+idempotency:
+  supported: false
+  note: No idempotency-key header is documented.
+request_tracing:
+  supported: false
+  note: No request-id header is documented.
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 2026.06.11
+  note: OpenAPI info.version uses a date-based scheme (YYYY.MM.DD).
+error_envelope:
+  shape: problem-details-like
+  fields:
+  - title
+  - detail
+  - status
+  content_type: application/json
+  artifact: errors/angelcam-problem-types.yml
+  note: Errors return a title/detail/status JSON body (RFC 7807/9457-shaped) but are served as application/json,
+    not application/problem+json.
+rate_limiting:
+  per_user:
+  - 30 requests/minute
+  - 1000 requests/hour
+  exceeded_status: 429
+  signal: wait time returned in the JSON detail field; no Retry-After / X-RateLimit headers documented
+  artifact: rate-limits/angelcam-rate-limits.yml
+  increase: contact support
+datetime:
+  timestamps: ISO 8601 UTC (YYYY-MM-DDTHH:MM:SSZ)
+  durations: ISO 8601 duration (e.g. P30D, PT2M)
+cross_links:
+  errors: errors/angelcam-problem-types.yml
+  lifecycle: lifecycle/angelcam-lifecycle.yml
+  authentication: authentication/angelcam-authentication.yml
+  scopes: scopes/angelcam-scopes.yml
+  rate_limits: rate-limits/angelcam-rate-limits.yml

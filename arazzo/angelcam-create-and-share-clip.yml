@@ -1,0 +1,64 @@
+arazzo: 1.0.1
+info:
+  title: Angelcam — create and share a clip
+  version: 1.0.0
+  summary: From a camera, list recordings, read a timeline, create a clip, and share it by email.
+sourceDescriptions:
+- name: angelcam
+  url: ../openapi/angelcam-openapi-original.yml
+  type: openapi
+workflows:
+- workflowId: create-and-share-clip
+  summary: List recordings on a camera, inspect a recording timeline, create a clip and email it.
+  inputs:
+    type: object
+    required:
+    - camera_id
+    - email
+    properties:
+      camera_id:
+        type: string
+      email:
+        type: string
+  steps:
+  - stepId: list-recordings
+    operationId: my-cameras-recordings-list
+    parameters:
+    - name: camera_id
+      in: path
+      value: $inputs.camera_id
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      recording_id: $response.body#/results/0/id
+  - stepId: get-timeline
+    operationId: my-cameras-recording-timeline
+    parameters:
+    - name: recording_id
+      in: path
+      value: $steps.list-recordings.outputs.recording_id
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: create-clip
+    operationId: my-cameras-clips-create
+    parameters:
+    - name: camera_id
+      in: path
+      value: $inputs.camera_id
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      clip_id: $response.body#/id
+  - stepId: share-clip
+    operationId: my-cameras-clips-share
+    parameters:
+    - name: camera_id
+      in: path
+      value: $inputs.camera_id
+    - name: clip_id
+      in: path
+      value: $steps.create-clip.outputs.clip_id
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    clip_id: $steps.create-clip.outputs.clip_id

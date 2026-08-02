@@ -1,0 +1,41 @@
+arazzo: 1.0.1
+info:
+  title: Angelcam — watch a live camera
+  version: 1.0.0
+  summary: List cameras and retrieve the live-stream URLs for one.
+sourceDescriptions:
+- name: angelcam
+  url: ../openapi/angelcam-openapi-original.yml
+  type: openapi
+workflows:
+- workflowId: watch-live-camera
+  summary: List cameras, then fetch one camera and its live-stream URLs.
+  inputs:
+    type: object
+    properties:
+      limit:
+        type: integer
+        default: 20
+  steps:
+  - stepId: list-cameras
+    operationId: my-cameras-list
+    parameters:
+    - name: limit
+      in: query
+      value: $inputs.limit
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      camera_id: $response.body#/results/0/id
+  - stepId: get-camera
+    operationId: my-cameras-detail
+    parameters:
+    - name: camera_id
+      in: path
+      value: $steps.list-cameras.outputs.camera_id
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      camera: $response.body
+  outputs:
+    camera: $steps.get-camera.outputs.camera

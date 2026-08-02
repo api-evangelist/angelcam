@@ -1,0 +1,777 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service camera API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: camera
+  x-displayName: My cameras
+  description: 'Manage your cameras and access live streams, snapshots, and recordings. Supported codecs: H.264, H.265 (experimental), MJPEG. Live streams are limited to 10 concurrent consumers per camera — use the [broadcasting service](#tag/broadcasting) for higher concurrency.
+
+    '
+paths:
+  /cameras/:
+    get:
+      operationId: my-cameras-list
+      summary: Retrieve camera list
+      tags:
+      - camera
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: 'Limit result set. Example: `1`.'
+        schema:
+          type: integer
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        description: 'Return results starting at `offset`. Example: `10`.'
+        schema:
+          type: integer
+          minimum: 1
+      - name: refresh_rate
+        in: query
+        required: false
+        description: Set a maximum number of frames per second sent in an MJPEG stream. For example, if you want to get an MJPEG stream with frame sent every 10 seconds, use value 0.1.
+        schema:
+          type: number
+          format: float
+          minimum: 0
+      - name: max_width
+        in: query
+        required: false
+        description: Maximum frame width for the MJPEG stream and LIVE SNAPSHOT.
+        schema:
+          type: integer
+          minimum: 1
+      - name: max_height
+        in: query
+        required: false
+        description: Maximum frame height for the MJPEG stream and LIVE SNAPSHOT.
+        schema:
+          type: integer
+          minimum: 1
+      - $ref: '#/components/parameters/streamExpiresAt'
+      - name: has_guests
+        in: query
+        required: false
+        description: 1 for retrieving list of cameras that have been shared with someone, 0 for retrieving list of cameras that have not been shared with anyone. Leaving parameter empty will return list of all user cameras.
+        schema:
+          type: boolean
+      - name: tags
+        in: query
+        required: false
+        description: Filter cameras by tags. Multiple tags can be specified by separating them with a comma. When using multiple tags, any camera that has at least one of the specified tags will be returned.
+        schema:
+          type: string
+        example: tag1,tag2
+      - name: ids
+        in: query
+        required: false
+        description: Filter cameras by IDs. Multiple IDs can be specified by separating them with a comma.
+        schema:
+          type: string
+        example: 1,2,3
+      - name: location_id
+        in: query
+        required: false
+        description: Filter cameras by location ID. Only cameras belonging to the specified location will be returned.
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      security:
+      - OAuth2:
+        - camera_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Returns camera list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraListResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+    post:
+      operationId: connect-cameras
+      summary: Connect new camera
+      tags:
+      - camera
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - type
+              - url
+              - connection_type
+              properties:
+                name:
+                  type: string
+                  description: Camera name
+                type:
+                  type: string
+                  enum:
+                  - h264
+                  - h265
+                  - mjpeg
+                  description: Camera type. We currently support H.264/H.265 over RTSP and MJPEG over HTTP cameras.
+                connection_type:
+                  type: string
+                  enum:
+                  - direct
+                  - arrow
+                  description: 'How is the camera connected to Angelcam. The `direct` connection means that the camera stream is available on a public IP address. The `arrow` option can be used for connecting cameras that can be accessed via an Arrow client. Please note that cameras connected via an Arrow client use URL in a specific format. You will need to use the [stream detection](#tag/camera-stream-detection) endpoints to obtain the URL first.
+
+                    '
+                url:
+                  type: string
+                  format: url
+                  description: 'Complete URL of a camera stream. H.264 and H.265 cameras must use "rtsp" scheme, for MJPEG cameras it''s allowed to use "http" and "https" schemes. The "https" scheme is valid only for cameras using the `direct` connection type.
+
+                    '
+                enable_status_checks:
+                  type: boolean
+                  default: true
+                  description: Enable periodic online/offline checks for the camera.
+                enable_periodical_snapshots:
+                  type: boolean
+                  default: true
+                  description: Refresh camera snapshot automatically once every 24h.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: List of tags assigned to the camera. Tags can be used for filtering.
+              example:
+                name: My brand new shiny camera
+                type: h264
+                connection_type: direct
+                url: rtsp://username:password@175.36.248.73:554/live.sdp
+      security:
+      - OAuth2:
+        - camera_create
+      - PersonalAccessToken: []
+      responses:
+        '201':
+          description: Newly created camera object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /cameras/{camera_id}/:
+    get:
+      operationId: my-cameras-detail
+      summary: Retrieve camera
+      tags:
+      - camera
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - name: refresh_rate
+        in: query
+        required: false
+        description: Set a maximum number of frames per second sent in an MJPEG stream. For example, if you want to get an MJPEG stream with frame sent every 10 seconds, use value 0.1.
+        schema:
+          type: number
+          format: float
+          minimum: 0
+      - name: max_width
+        in: query
+        required: false
+        description: Maximum frame width for the MJPEG stream and LIVE SNAPSHOT.
+        schema:
+          type: integer
+          minimum: 1
+      - name: max_height
+        in: query
+        required: false
+        description: Maximum frame height for the MJPEG stream and LIVE SNAPSHOT.
+        schema:
+          type: integer
+          minimum: 1
+      - $ref: '#/components/parameters/streamExpiresAt'
+      security:
+      - OAuth2:
+        - camera_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Camera object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    put:
+      operationId: my-cameras-update
+      summary: Update camera
+      tags:
+      - camera
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: camera
+              properties:
+                name:
+                  type: string
+                  description: Camera name
+                type:
+                  type: string
+                  enum:
+                  - h264
+                  - h265
+                  - mjpeg
+                  description: Camera type. We currently support H.264/H.265 over RTSP and MJPEG over HTTP cameras.
+                connection_type:
+                  type: string
+                  enum:
+                  - direct
+                  - arrow
+                  description: 'How is the camera connected to Angelcam. The `direct` connection means that the camera stream is available on a public IP address. The `arrow` option can be used for connecting cameras that can be accessed via an Arrow client. Please note that cameras connected via an Arrow client use URL in a specific format. You will need to use the [stream detection](#tag/camera-stream-detection) endpoints to obtain the URL first.
+
+                    '
+                url:
+                  type: string
+                  format: url
+                  description: 'Complete URL of a camera stream. H.264 and H.265 cameras must use "rtsp" scheme, for MJPEG cameras it''s allowed to use "http" and "https" schemes. The "https" scheme is valid only for cameras using the `direct` connection type.
+
+                    '
+                enable_status_checks:
+                  type: boolean
+                  description: Enable periodic online/offline checks for the camera.
+                enable_periodical_snapshots:
+                  type: boolean
+                  description: Refresh camera snapshot automatically once every 24h.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: List of tags assigned to the camera. Tags can be used for filtering.
+              example:
+                name: My updated shiny camera
+                type: h264
+                url: rtsp://username:password@175.36.248.73:554/live.sdp
+      security:
+      - OAuth2:
+        - camera_manage
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Camera object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    delete:
+      operationId: my-cameras-remove
+      summary: Remove camera
+      tags:
+      - camera
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      security:
+      - OAuth2:
+        - camera_delete
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  parameters:
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+    streamExpiresAt:
+      name: stream_expires_at
+      in: query
+      required: false
+      description: "Date and time when the returned camera streams should stop. By default, the returned streams have no expiration allowing the consumer to pull them indefinitely.\n    \nDo not confuse this with expiration of the stream URLs themselves. The stream URLs have a short expiration in order to minimize the risk of leaking and this behavior cannot be changed. However, once a stream URL is used to establish a connection, the returned stream can be pulled indefinitely unless the `stream_expires_at` parameter is used.\n"
+      example: 2999-12-12T00%3A00%3A00Z
+      schema:
+        type: string
+        format: date-time
+  schemas:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    StreamObject:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Stream URL
+        format:
+          type: string
+          enum:
+          - hls
+          - mp4
+          - mpegts
+          - mjpeg
+        refresh_rate:
+          type: number
+          format: float
+          description: Stream refresh rate
+      required:
+      - url
+      - format
+      example:
+        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
+        format: mjpeg
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ApplicationObject:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - LSA
+          - CRA
+          - VVA
+          - VPA
+          - TLA
+      required:
+      - code
+      example:
+        code: LSA
+    SnapshotObject:
+      title: Snapshot object
+      properties:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          nullable: true
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
+      required:
+      - url
+      - created_at
+      example:
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      nullable: true
+      type: object
+    CameraObject:
+      type: object
+      title: Camera object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Camera ID
+        name:
+          type: string
+          description: Camera name
+        type:
+          type: string
+          enum:
+          - h264
+          - h265
+          - mjpeg
+          description: Camera type
+        snapshot:
+          $ref: '#/components/schemas/SnapshotObject'
+        status:
+          type: string
+          enum:
+          - offline
+          - online
+          - unknown
+        event_api_hash:
+          type: string
+          description: Event API hash - unique token for posting events to camera timeline from embedded devices without authentication (do not disclose)
+        live_snapshot:
+          format: uri
+          description: Live snapshot URL
+          nullable: true
+          type: string
+        streams:
+          type: array
+          items:
+            $ref: '#/components/schemas/StreamObject'
+          description: Available camera streams. [Read about stream URLs expirations.](http://help.angelcam.com/en/articles/3952149-how-to-deal-with-stream-url-expiration) Please note that the amount of stream consumers per camera is limited to 10 concurrent consumers. Angelcam web app and Angelcam mobile app also count to this limit. Recording is excluded. If you need more concurrent stream consumers, use the broadcasting service.
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationObject'
+        low_latency_enabled:
+          type: boolean
+          description: Indicates if user enabled [low latency streaming](http://help.angelcam.com/en/articles/372634-enabling-low-latency-streaming) in camera settings.
+        audio_enabled:
+          type: boolean
+          description: Indicates if audio is enabled for given camera.
+        enable_status_checks:
+          type: boolean
+          description: Indicates if periodic online/offline checks for the camera are enabled.
+        enable_periodical_snapshots:
+          type: boolean
+          description: Indicates if camera snapshot is being refreshed automatically once every 24h.
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags assigned to the camera. Tags can be used for filtering.
+      required:
+      - id
+      - name
+      - type
+      - snapshot
+      - status
+      - live_snapshot
+      - streams
+      - applications
+      - low_latency_enabled
+      - audio_enabled
+      - enable_status_checks
+      - enable_periodical_snapshots
+      - tags
+      example:
+        id: 157
+        name: Parkside Office
+        type: h264
+        snapshot:
+          url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
+          created_at: '2017-03-29T15:41:39.000Z'
+        status: online
+        live_snapshot: http://m1.angelcam.com/stream/81/snapshot.jpg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjIxOCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.85b552be2b7f0abaa0a3b5b4f412877f8af92f691c7d0c6db6b8c517ea8f921c
+        streams:
+        - format: mjpeg
+          url: http://m1.angelcam.com/stream/81/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjIxOCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.85b552be2b7f0abaa0a3b5b4f412877f8af92f691c7d0c6db6b8c517ea8f921c
+          refresh_rate: 0.1
+        - format: mp4
+          url: http://m1.angelcam.com/stream/81/stream.mp4?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjMxNiwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.b5b4cf405cf054701a75b359f4069d2af8a102c5ffd8f33cbb560a4638c7cb71
+        - format: mpegts
+          url: http://m1.angelcam.com/stream/81/stream.ts?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjMxNiwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.b5b4cf405cf054701a75b359f4069d2af8a102c5ffd8f33cbb560a4638c7cb71
+        - format: hls
+          url: http://m1.angelcam.com/stream/81/playlist.m3u8?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjQwMSwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.8ac35b434e768e8f10161b2d74da492f5fd8a8c115c18cbb421017665acd908a
+        applications:
+        - LSA
+        - CRA
+        low_latency_enabled: false
+        audio_enabled: true
+        enable_status_checks: true
+        enable_periodical_snapshots: true
+        tags:
+        - office
+        - entrance
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    CameraListResponse:
+      type: object
+      title: Camera list
+      properties:
+        count:
+          type: integer
+          description: Count of all cameras
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: List of cameras owned by the user
+          items:
+            $ref: '#/components/schemas/CameraObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+  responses:
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

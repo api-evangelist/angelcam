@@ -1,0 +1,692 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service sensor API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: sensor
+  x-displayName: My sensors
+  description: "With sensor endpoints you can view, manage and connect sensors to the user account.\n\nSensor can be bind to one particular already connected [camera](#tag/camera) to mark received [events](#tag/event) on camera timeline. If camera that sensor is bind to has active [Cloud Recording](#tag/recording) event recording can be enabled using these endpoints. Event recording will not be applied in the case that the camera assigned to the sensor doesn't have Cloud Recording activated.\n\nTo specify event recording length [duration](#section/Angelcam-API/Time-and-duration-formats) format must be used and currently options for recording length are limited to:\n  - 30 seconds\n  - 1 minute\n  - 2 minutes\n  - 5 minutes\n\nEach sensor is given a unique email and unique hash. Those can be used to send [events](#tag/event) to Angelcam.\n"
+paths:
+  /sensors/:
+    get:
+      operationId: my-sensors-list
+      summary: Retrieve sensor list
+      tags:
+      - sensor
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: 'Limit result set. Example: `1`.'
+        schema:
+          type: integer
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        description: 'Return results starting at `offset`. Example: `10`.'
+        schema:
+          type: integer
+          minimum: 1
+      security:
+      - OAuth2:
+        - sensor_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Returns sensor list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SensorListResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+    post:
+      operationId: connect-sensors
+      summary: Connect new sensor
+      tags:
+      - sensor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - type
+              properties:
+                name:
+                  type: string
+                  description: Sensor name
+                type:
+                  type: string
+                  enum:
+                  - motion
+                  - camera_motion
+                  - door_window
+                  - smoke
+                  - fire
+                  - glass_break
+                  - shock_vibration
+                  - water
+                  - perimeter_entry
+                  description: Sensor type
+                placement:
+                  type: string
+                  enum:
+                  - indoors
+                  - outdoors
+                  description: Sensor placement
+                manufacturer:
+                  type: string
+                  description: Sensor manufacturer
+                model:
+                  type: string
+                  description: Sensor model
+                note:
+                  type: string
+                  description: Any note related to sensor
+                enabled:
+                  type: boolean
+                  description: Defaults to True. Indicates if sensor is enabled or not. If disabled then all events from the sensor are ignored.
+                override_arming:
+                  type: boolean
+                  description: Defaults to False. If enabled, an event received from the sensor will always trigger an incident regardless of the arming settings.
+                camera:
+                  type: integer
+                  minimum: 1
+                  description: Camera ID sensor is bind to
+                enable_cloud_recording_for:
+                  type: string
+                  format: duration
+                  enum:
+                  - PT30S
+                  - PT1M
+                  - PT2M
+                  - PT5M
+                  description: Duration of event Recording triggered by an event from this sensor. This setting is applied only if sensor has an assigned camera with active Cloud Recording.
+                incident_delay:
+                  type: string
+                  format: duration
+                  description: A delay before RTS incident is triggered. If the site is disarmed during this period, no incident is forwarded. However the video from the binded camera is recorded. PT0S means no delay and PT3M is the max.
+              example:
+                name: My brand new sensor
+                type: smoke
+      security:
+      - OAuth2:
+        - sensor_manage
+      - PersonalAccessToken: []
+      responses:
+        '201':
+          description: Newly created sensor object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SensorObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /sensors/{sensor_id}/:
+    get:
+      operationId: my-sensors-detail
+      summary: Retrieve sensor
+      tags:
+      - sensor
+      parameters:
+      - $ref: '#/components/parameters/sensorId'
+      security:
+      - OAuth2:
+        - sensor_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Sensor object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SensorObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    put:
+      operationId: my-sensors-update
+      summary: Update sensor
+      tags:
+      - sensor
+      parameters:
+      - $ref: '#/components/parameters/sensorId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: sensor
+              properties:
+                name:
+                  type: string
+                  description: Sensor name
+                type:
+                  type: string
+                  enum:
+                  - motion
+                  - camera_motion
+                  - door_window
+                  - smoke
+                  - fire
+                  - glass_break
+                  - shock_vibration
+                  - water
+                  - perimeter_entry
+                  description: Sensor type
+                placement:
+                  type: string
+                  enum:
+                  - indoors
+                  - outdoors
+                  description: Sensor placement
+                manufacturer:
+                  type: string
+                  description: Sensor manufacturer
+                model:
+                  type: string
+                  description: Sensor model
+                note:
+                  type: string
+                  description: Any note related to sensor
+                enabled:
+                  type: boolean
+                  description: Defaults to True. Indicates if sensor is enabled or not. If disabled then all events from the sensor are ignored.
+                override_arming:
+                  type: boolean
+                  description: Defaults to False. If enabled, an event received from the sensor will always trigger an incident regardless of the arming settings.
+                camera:
+                  type: integer
+                  minimum: 1
+                  description: Camera ID sensor is bind to
+                enable_cloud_recording_for:
+                  type: string
+                  format: duration
+                  enum:
+                  - PT30S
+                  - PT1M
+                  - PT2M
+                  - PT5M
+                  description: Duration of event Recording triggered by an event from this sensor. This setting is applied only if sensor has an assigned camera with active Cloud Recording.
+                incident_delay:
+                  type: string
+                  format: duration
+                  description: A delay before RTS incident is triggered. If the site is disarmed during this period, no incident is forwarded. However the video from the binded camera is recorded. PT0S means no delay and PT3M is the max.
+              example:
+                name: My updated shiny sensor
+                type: smoke
+                camera: 24
+                enable_cloud_recording_for: PT1M
+                incident_delay: PT0S
+      security:
+      - OAuth2:
+        - sensor_manage
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Sensor object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SensorObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    delete:
+      operationId: my-sensors-remove
+      summary: Remove sensor
+      tags:
+      - sensor
+      parameters:
+      - $ref: '#/components/parameters/sensorId'
+      security:
+      - OAuth2:
+        - sensor_manage
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  parameters:
+    sensorId:
+      name: sensor_id
+      in: path
+      required: true
+      description: Sensor ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+  schemas:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    SensorListResponse:
+      type: object
+      title: My sensors list
+      properties:
+        count:
+          type: integer
+          description: Count of all sensors
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: List of sensors owned by the user
+          items:
+            $ref: '#/components/schemas/SensorObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    SensorObject:
+      type: object
+      title: Sensor object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Sensor ID
+        user:
+          type: integer
+          minimum: 1
+          description: User ID
+        name:
+          type: string
+          description: Sensor name
+        type:
+          type: string
+          enum:
+          - motion
+          - camera_motion
+          - door_window
+          - smoke
+          - fire
+          - glass_break
+          - shock_vibration
+          - water
+          - perimeter_entry
+          description: Sensor type
+        placement:
+          type: string
+          enum:
+          - indoors
+          - outdoors
+          description: Sensor placement
+        manufacturer:
+          type: string
+          description: Sensor manufacturer
+        model:
+          type: string
+          description: Sensor model
+        note:
+          type: string
+          description: Any note related to sensor
+        hash:
+          type: string
+          description: Event API hash (a unique token for each sensor)
+        email:
+          type: string
+          description: Unique email address that can be used to receive events from this sensor by Angelcam
+        enabled:
+          type: boolean
+          description: Defaults to True. Indicates if sensor is enabled or not. If disabled then all events from this sensor are ignored.
+        override_arming:
+          type: boolean
+          description: Defaults to False. If enabled, an event received from the sensor will always trigger an incident regardless of the arming settings.
+        camera:
+          type: integer
+          minimum: 1
+          description: Camera ID sensor is bind to
+        enable_cloud_recording_for:
+          type: string
+          format: duration
+          enum:
+          - PT30S
+          - PT1M
+          - PT2M
+          - PT5M
+          description: Duration of event Recording triggered by an event from this sensor. This setting is applied only if sensor has an assigned camera with active Cloud Recording.
+        incident_delay:
+          type: string
+          format: duration
+          description: A delay before RTS incident is triggered. If the site is disarmed during this period, no incident is forwarded. However the video from the binded camera is recorded. PT0S means no delay and PT3M is the max.
+        created_at:
+          type: string
+          description: DateTime when sensor was created
+        updated_at:
+          type: string
+          description: DateTime when sensor was last updated
+        events_count_ifttt:
+          type: integer
+          description: Total count of events received from this sensor via IFTTT
+        events_count_email:
+          type: integer
+          description: Total count of events received from this sensor via email
+        events_count_api:
+          type: integer
+          description: Total count of events received from this sensor via API
+      required:
+      - id
+      - user
+      - name
+      - type
+      - placement
+      - manufacturer
+      - model
+      - note
+      - hash
+      - email
+      - enabled
+      - override_arming
+      - camera
+      - enable_cloud_recording_for
+      - incident_delay
+      - created_at
+      - updated_at
+      - events_count_ifttt
+      - events_count_email
+      - events_count_api
+      example:
+        id: 34
+        user: 4
+        name: Front door sensor
+        type: motion
+        placement: indoors
+        manufacturer: SensorsX
+        model: XTF-666
+        note: Testing this sensor
+        hash: dy3ovys2ol
+        email: dy3ovys2ol@angel.cam
+        enabled: true
+        override_arming: false
+        camera: 32
+        enable_cloud_recording_for: PT1M
+        incident_delay: PT0S
+        created_at: '2019-09-24T13:16:23.899357+02:00'
+        updated_at: '2019-09-24T13:16:23.899384+02:00'
+        events_count_ifttt: 0
+        events_count_email: 0
+        events_count_api: 5
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+  responses:
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

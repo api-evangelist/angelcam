@@ -1,0 +1,408 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service space API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: space
+  x-displayName: Spaces
+  description: 'A **space** is the organisational unit in Angelcam — it owns all resources: cameras, locations, recordings, services, and billing. Every API request operates within a space context — by default the user''s default space, or a specific space selected via the `X-Space-Id` header.
+
+    See the [Key concepts guide](/guides/key-concepts/) for details on space context and permissions.
+
+    '
+paths:
+  /spaces/:
+    get:
+      operationId: list-spaces
+      summary: List spaces
+      tags:
+      - space
+      description: 'Returns all spaces the authenticated user belongs to. Use the `is_default` flag to identify the user''s default space. To operate within a specific space, pass the `X-Space-Id` request header with the desired space ID.
+
+        '
+      security:
+      - OAuth2:
+        - space_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: List of spaces the user belongs to.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SpaceObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /spaces/{space_id}/:
+    get:
+      operationId: get-space
+      summary: Get space detail
+      tags:
+      - space
+      description: 'Returns details of a specific space. The authenticated user must be a member of that space.
+
+        '
+      security:
+      - OAuth2:
+        - space_access
+      - PersonalAccessToken: []
+      parameters:
+      - name: space_id
+        in: path
+        required: true
+        description: ID of the space.
+        schema:
+          type: integer
+        example: 7
+      responses:
+        '200':
+          description: Space detail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpaceObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          description: Space not found or the user is not a member.
+  /spaces/{space_id}/permissions/:
+    get:
+      operationId: get-space-permissions
+      summary: Get space permissions
+      tags:
+      - space
+      description: 'Returns all permissions the authenticated user has within the given space. The user must be a member of that space. Includes both permissions assigned directly to the user and those inherited through group membership.
+
+        Each permission entry may be scoped to the whole space, a specific location, or a specific camera. See the [Spaces section](#tag/space) for the full list of permission slugs and scoping rules.
+
+        '
+      security:
+      - OAuth2:
+        - space_permissions_access
+      - PersonalAccessToken: []
+      parameters:
+      - name: space_id
+        in: path
+        required: true
+        description: ID of the space.
+        schema:
+          type: integer
+        example: 7
+      responses:
+        '200':
+          description: Permissions for the given space.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpacePermissionsObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          description: Space not found or the user is not a member.
+components:
+  schemas:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    SpacePermissionsObject:
+      type: object
+      title: Space permissions
+      properties:
+        assignments:
+          type: array
+          description: 'All permissions effective for the authenticated user in the active space. Includes both directly assigned permissions and those inherited through group membership.
+
+            '
+          items:
+            $ref: '#/components/schemas/AccessAssignmentObject'
+      required:
+      - assignments
+      example:
+        assignments:
+        - permission: camera.view
+          location_id: 12
+          camera_id: 345
+        - permission: location.access
+          location_id: 12
+          camera_id: null
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    AccessAssignmentObject:
+      type: object
+      title: Access assignment
+      description: 'A single permission grant within a space. The scope of the permission is determined by which fields are set:
+
+        - **Space-level** (`location_id` and `camera_id` are null): the permission applies across the entire space. - **Location-level** (`location_id` is set, `camera_id` is null): the permission applies to a specific location. Used for `location.*` slugs. - **Camera-level** (`location_id` and `camera_id` are both set): the permission applies to a specific camera. Used for `camera.*` slugs.
+
+        '
+      required:
+      - permission
+      properties:
+        permission:
+          type: string
+          description: Permission slug.
+          example: camera.view
+          enum:
+          - space.admin
+          - space.limited_client
+          - space.billing
+          - camera.notifications.status
+          - location.notifications.incident
+          - location.notifications.other
+          - location.access
+          - location.view
+          - location.arming
+          - location.manage
+          - camera.view
+          - camera.manage
+          - camera.recording.view
+          - camera.recording.manage
+          - camera.clip.view
+          - camera.clip.manage
+          - camera.clip.create
+          - camera.broadcasting.manage
+          - camera.timelapse.manage
+        location_id:
+          type: integer
+          nullable: true
+          description: 'When set, the permission is scoped to this location. Always present for `location.*` and `camera.*` slugs.
+
+            '
+          example: 12
+        camera_id:
+          type: integer
+          nullable: true
+          description: 'When set, the permission is scoped to this camera. Always present for `camera.*` slugs, together with `location_id`.
+
+            '
+          example: null
+      example:
+        permission: camera.view
+        location_id: 12
+        camera_id: 345
+    SpaceObject:
+      type: object
+      title: Space
+      properties:
+        id:
+          type: integer
+          description: Space ID.
+          example: 7
+        name:
+          type: string
+          description: Display name of the space.
+          example: My Organisation
+        is_default:
+          type: boolean
+          description: Whether this is the user's default space.
+          example: true
+      required:
+      - id
+      - name
+      - is_default
+      example:
+        id: 7
+        name: My Organisation
+        is_default: true
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+  responses:
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

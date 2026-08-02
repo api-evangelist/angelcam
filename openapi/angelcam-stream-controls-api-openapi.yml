@@ -1,0 +1,344 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service stream-controls API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: stream-controls
+  x-displayName: Recording stream controls
+  description: 'You normally don''t have to know the `streamer_domain` and `stream_id` path parameter, but use the generated endpoint URLs as reported by the `stream_controls` field in a create-stream response. Those URLs correspond to the following endpoints.
+
+    * base_url: [Recording stream info](#tag/stream-controls/operation/recordings-stream-info)
+
+    * play: [Play stream](#tag/stream-controls/operation/recordings-stream-play)
+
+    * pause: [Pause stream](#tag/stream-controls/operation/recordings-stream-pause)
+
+    * speed: [Set plyback stream](#tag/stream-controls/operation/recordings-stream-speed)
+
+
+
+    ## Syncing stream and timeline
+
+    Due to various reasons, the time a user spends watching a stream doesn''t necessarily have to match the time actually
+
+    elapsed in the recorded video (i.e. a 5-minute long stream takes 6 minutes to watch on a user''s slow mobile network
+
+    connection due to lag).
+
+
+    Periodically calling endpoint, [recordings stream info](#tag/stream-controls/operation/recordings-stream-info) comes in handy in this case, because it
+
+    synchronizes the time shown to the user in your UI, with the current time of the stream. This endpoint tells you the
+
+    exact time where the stream is positioned at the current moment.
+
+    '
+paths:
+  /recording/streams/{stream_id}/:
+    get:
+      servers:
+      - url: https://{streamer_domain}
+        variables:
+          streamer_domain:
+            default: rec-streamer-eu-central-1.angelcam.com
+            description: Streamer server name.
+      operationId: recordings-stream-info
+      summary: Retrieve recording stream info
+      tags:
+      - stream-controls
+      security: []
+      parameters:
+      - name: stream_id
+        in: path
+        required: true
+        description: Stream ID.
+        example: 63d57a30-e167-4b39-b098-102ab99e136d
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingStreamInfoResponse'
+        '404':
+          description: Not Found
+  /recording/streams/{stream_id}/pause/:
+    post:
+      servers:
+      - url: https://{streamer_domain}
+        variables:
+          streamer_domain:
+            default: rec-streamer-eu-central-1.angelcam.com
+            description: Streamer server name.
+      operationId: recordings-stream-pause
+      summary: Pause recording stream
+      tags:
+      - stream-controls
+      security: []
+      parameters:
+      - name: stream_id
+        in: path
+        required: true
+        description: Stream ID.
+        example: 63d57a30-e167-4b39-b098-102ab99e136d
+        schema:
+          type: string
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '404':
+          description: Not Found
+  /recording/streams/{stream_id}/play/:
+    post:
+      servers:
+      - url: https://{streamer_domain}
+        variables:
+          streamer_domain:
+            default: rec-streamer-eu-central-1.angelcam.com
+            description: Streamer server name.
+      operationId: recordings-stream-play
+      summary: Play recording stream
+      tags:
+      - stream-controls
+      security: []
+      parameters:
+      - name: stream_id
+        in: path
+        required: true
+        description: Stream ID.
+        example: 63d57a30-e167-4b39-b098-102ab99e136d
+        schema:
+          type: string
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '404':
+          description: Not Found
+  /recording/streams/{stream_id}/speed/:
+    post:
+      servers:
+      - url: https://{streamer_domain}
+        variables:
+          streamer_domain:
+            default: rec-streamer-eu-central-1.angelcam.com
+            description: Streamer server name.
+      operationId: recordings-stream-speed
+      summary: Set playback speed
+      description: 'If you''re looking to modify the playback speed in your application, there''s an essential step that you need to keep in mind. You must send a request to our streaming service via this endpoint to prepare the HLS playlist at the desired speed.
+
+
+        Keep in mind, however, that altering the playback speed does not only change how fast the video plays, but also affects the bitrate. For instance, if you increase the playback speed to twice (2x) the normal speed, the bitrate will also double. The implications of this are significant. A higher bitrate requires faster internet speeds to maintain smooth playback. So, if your users do not have a fast enough internet connection, they might experience buffering or interruptions during playback.
+
+        '
+      tags:
+      - stream-controls
+      security: []
+      parameters:
+      - name: stream_id
+        in: path
+        required: true
+        description: Stream ID.
+        example: 63d57a30-e167-4b39-b098-102ab99e136d
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: speed
+              required:
+              - speed
+              properties:
+                speed:
+                  type: number
+                  enum:
+                  - 1
+                  - 2
+                  - 4
+                  - 8
+                  - 16
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+components:
+  responses:
+    EmptyResponse:
+      description: Empty response.
+  schemas:
+    RecordingStreamInfoResponse:
+      type: object
+      title: Recording stream information
+      properties:
+        current_position:
+          type: string
+          format: date-time
+          description: Current time in a stream.
+        speed:
+          type: number
+          description: Speed of the stream playback, 1 means the original speed
+      example:
+        current_time: '2024-01-16T00:00:59.146606443+00:00'
+        speed: 1
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

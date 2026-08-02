@@ -1,0 +1,37 @@
+# Angelcam API
+
+> Angelcam is a cloud video-surveillance platform that connects any IP camera (via ONVIF and the open-source Arrow connector) to the cloud for live viewing, cloud recording, clip sharing, two-way audio, and Remote Technical Surveillance (RTS) event notifications. The RESTful API is HTTPS-only JSON, organised around Spaces, and secured with OAuth2 or a Personal Access Token.
+
+- Base URL: https://api.angelcam.com/v1 (trailing slash required on all URLs)
+- Auth: OAuth2 (authorization code) or Personal Access Token — Authorization: PersonalAccessToken {token}
+- Pagination: limit/offset with count/next/previous/results (default limit 100)
+- Rate limits: 30 requests/minute, 1000 requests/hour (HTTP 429)
+
+## Docs
+- Developer portal: https://developers.angelcam.com/
+- Authentication guide: https://developers.angelcam.com/guides/authentication/
+- API conventions: https://developers.angelcam.com/guides/api-conventions/
+- Key concepts (spaces): https://developers.angelcam.com/guides/key-concepts/
+- Status page: https://status.angelcam.com
+- Help center: https://help.angelcam.com
+
+## Specs
+- OpenAPI 3.0.0: https://developers.angelcam.com/openapi.yaml
+- Repo OpenAPI: openapi/angelcam-openapi-original.yml
+
+## Artifacts
+- Authentication: authentication/angelcam-authentication.yml
+- OAuth scopes: scopes/angelcam-scopes.yml
+- Conventions: conventions/angelcam-conventions.yml
+- Error catalog: errors/angelcam-problem-types.yml
+- Rate limits: rate-limits/angelcam-rate-limits.yml
+- Lifecycle: lifecycle/angelcam-lifecycle.yml
+- Data model: data-model/angelcam-data-model.yml
+- Conformance: conformance/angelcam-conformance.yml
+- Agentic access: agentic-access/angelcam-agentic-access.yml
+- Webhooks (RTS notifications): asyncapi/angelcam-webhooks.yml
+- MCP (candidate): mcp/angelcam-mcp.yml
+- Agent skills: skills/_index.yml
+
+## Source code
+- Angelcam Connector (Arrow client, Rust): https://github.com/angelcam/arrow-client

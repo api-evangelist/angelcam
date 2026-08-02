@@ -1,0 +1,27 @@
+generated: '2026-07-17'
+method: searched
+source: https://developers.angelcam.com/
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 2026.06.11
+  docs: https://developers.angelcam.com/guides/api-conventions/
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: 'No formal deprecation/Sunset (RFC 8594) policy published; deprecated operations are flagged deprecated:
+    true in the OpenAPI.'
+  deprecated_operations:
+  - openapi/angelcam-openapi-original.yml#my-cameras-recording-info-deprecated
+  - openapi/angelcam-openapi-original.yml#my-cameras-recording-download-deprecated
+  - openapi/angelcam-openapi-original.yml#my-cameras-recording-start-deprecated
+  - openapi/angelcam-openapi-original.yml#my-cameras-recording-stop-deprecated
+  - openapi/angelcam-openapi-original.yml#my-cameras-recording-stream-deprecated
+  - openapi/angelcam-openapi-original.yml#my-cameras-recording-timeline-deprecated
+  - openapi/angelcam-openapi-original.yml#my-cameras-guests
+  - openapi/angelcam-openapi-original.yml#shared-cameras-list
+  deprecated_operation_count: 22
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.angelcam.com

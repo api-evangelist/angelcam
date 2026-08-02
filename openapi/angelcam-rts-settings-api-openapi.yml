@@ -1,0 +1,416 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service rts_settings API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: rts_settings
+  x-displayName: Settings
+  description: 'Global Real Time Security (RTS) settings for your account.
+
+    The main setting is `incident_ttl`, which controls how long (in [ISO 8601 duration format](#section/Angelcam-API/Time-and-duration-formats)) an open incident stays active before it is automatically closed when no new events are received.
+
+    '
+paths:
+  /rts/:
+    get:
+      operationId: rts-settings-retrieve
+      summary: RTS settings
+      tags:
+      - rts_settings
+      security:
+      - OAuth2:
+        - rts_settings_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RTSSettingsObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+    put:
+      operationId: rts-settings-update
+      summary: Update RTS settings
+      tags:
+      - rts_settings
+      security:
+      - OAuth2:
+        - rts_settings_manage
+      - PersonalAccessToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: RTS settings
+              properties:
+                incident_ttl:
+                  type: string
+                  enum:
+                  - PT1M
+                  - PT3M
+                  - PT5M
+                  - PT10M
+                  - PT30M
+                  - PT1H
+                  description: ISO 8601 duration format. The value represents the minimal delay between two events triggered by the same sensor that has to pass before Angelcam sends another notification to the user.
+              example:
+                incident_ttl: PT1M
+      responses:
+        '200':
+          description: RTSSettings object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RTSSettingsObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /rts/arm/:
+    post:
+      operationId: rts-arm
+      summary: Arm RTS
+      tags:
+      - rts_settings
+      parameters:
+      - name: location_id
+        in: query
+        required: false
+        description: Location ID to arm.
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      - name: delay
+        in: query
+        required: false
+        description: Arming delay in seconds. If specified, the location will be armed after the specified delay.
+        schema:
+          type: integer
+          minimum: 0
+        example: 30
+      security:
+      - OAuth2:
+        - rts_arming_manage
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /rts/disarm/:
+    post:
+      operationId: rts-disarm
+      summary: Disarm RTS
+      tags:
+      - rts_settings
+      parameters:
+      - name: location_id
+        in: query
+        required: false
+        description: Location ID to disarm.
+        schema:
+          type: integer
+          minimum: 1
+        example: 1
+      - name: delay
+        in: query
+        required: false
+        description: Disarming delay in seconds. If specified, the location will be disarmed after the specified delay.
+        schema:
+          type: integer
+          minimum: 0
+        example: 30
+      security:
+      - OAuth2:
+        - rts_arming_manage
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+components:
+  schemas:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    RTSSettingsObject:
+      type: object
+      title: RTS Settings object
+      properties:
+        incident_ttl:
+          type: string
+          enum:
+          - PT1M
+          - PT3M
+          - PT5M
+          - PT10M
+          - PT30M
+          - PT1H
+          description: ISO 8601 duration format. The value represents the minimal delay between two events triggered by the same sensor that has to pass before Angelcam sends another notification to the user.
+        is_armed:
+          type: boolean
+          description: If set to `false` user will not reveive any notifications about sensor events. This field shows global state.
+          deprecated: true
+        next_arming:
+          type: string
+          format: date-time
+          nullable: true
+          description: Next scheduled global arming time.
+          deprecated: true
+        next_disarming:
+          type: string
+          format: date-time
+          nullable: true
+          description: Next scheduled global disarming time.
+          deprecated: true
+      required:
+      - incident_ttl
+      - is_armed
+      - next_arming
+      - next_disarming
+      example:
+        incident_ttl: PT1M
+        is_armed: true
+        next_arming: '2025-06-28T23:03:00Z'
+        next_disarming: null
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+  responses:
+    EmptyResponse:
+      description: Empty response.
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

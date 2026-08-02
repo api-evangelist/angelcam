@@ -1,0 +1,35 @@
+generated: '2026-07-17'
+method: generated
+source: openapi/angelcam-openapi-original.yml
+skills:
+- file: angelcam-watch-camera.md
+  name: Watch an Angelcam live camera stream
+  api: openapi/angelcam-openapi-original.yml
+  operations:
+  - my-cameras-list
+  - my-cameras-detail
+- file: angelcam-clip-and-share.md
+  name: Create and share an Angelcam recording clip
+  api: openapi/angelcam-openapi-original.yml
+  operations:
+  - my-cameras-recordings-list
+  - my-cameras-recording-timeline
+  - my-cameras-clips-create
+  - my-cameras-clips-share
+- file: angelcam-pair-arrow-client.md
+  name: Pair an Angelcam Arrow connector and add a camera
+  api: openapi/angelcam-openapi-original.yml
+  operations:
+  - arrow-client-pairing-request
+  - arrow-clients-list
+  - arrow-client-scan-network
+  - arrow-client-services
+  - add-arrow-service
+- file: angelcam-rts-notifications.md
+  name: Set up Angelcam RTS event notifications (webhook)
+  api: openapi/angelcam-openapi-original.yml
+  operations:
+  - rts-notification-method-create
+  - rts-notification-rule-create
+  - rts-notifications-methods
+  - rts-notifications-rules

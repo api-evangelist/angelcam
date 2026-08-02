@@ -1,0 +1,32 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/angelcam-openapi-original.yml
+standards:
+- id: oauth2
+  conforms: true
+  evidence: OpenAPI securitySchemes declares oauth2 (authorizationCode + password flows) at my.angelcam.com/oauth
+- id: oidc
+  conforms: false
+  evidence: no openid-configuration; no openIdConnect scheme
+- id: rest-json
+  conforms: true
+  evidence: HTTPS-only JSON REST API, 90 paths
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: error bodies carry title/detail/status (problem-details shape) but are served as application/json,
+    not application/problem+json
+- id: pagination-limit-offset
+  conforms: true
+  evidence: list responses use count/next/previous/results with limit/offset params
+- id: iso8601-datetime
+  conforms: true
+  evidence: timestamps and durations use ISO 8601
+- id: onvif
+  conforms: true
+  evidence: ONVIF camera onboarding via Arrow connector (github.com/angelcam/arrow-client, onvif-client)
+- id: idempotency
+  conforms: false
+  evidence: no idempotency-key header documented
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404

@@ -1,0 +1,493 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service camera-guest API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: camera-guest
+  x-displayName: Manage camera guests
+  description: 'You can share your camera with a guest, this means, you allow guests to view stream from your camera. There is also an option to share also recordings together with live stream.
+
+
+    When you adding new guest, you just need their email. Then we send them an email informing them that you share camera with them. In case when there was no account with given email we precreate an account for these guest.
+
+    '
+paths:
+  /cameras/{camera_id}/guests/:
+    get:
+      deprecated: true
+      operationId: my-cameras-guests
+      summary: Retrieve camera guests list
+      tags:
+      - camera-guest
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - name: limit
+        in: query
+        required: false
+        description: 'Limit result set. Example: `1`.'
+        schema:
+          type: integer
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        description: 'Return results starting at `offset`. Example: `10`.'
+        schema:
+          type: integer
+          minimum: 1
+      security:
+      - OAuth2:
+        - camera_guest_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Returns camera guests list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraGuestListResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    post:
+      deprecated: true
+      operationId: my-cameras-guest-create
+      summary: Create camera guest
+      tags:
+      - camera-guest
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: guest
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                permissions:
+                  $ref: '#/components/schemas/CameraGuestPermissionObject'
+      security:
+      - OAuth2:
+        - camera_guest_manage
+      - PersonalAccessToken: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraGuestObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /cameras/{camera_id}/guests/{guest_id}/:
+    get:
+      deprecated: true
+      operationId: my-cameras-guest
+      summary: Retrieve camera guest
+      tags:
+      - camera-guest
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - $ref: '#/components/parameters/guestId'
+      security:
+      - OAuth2:
+        - camera_guest_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Camera guest object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraGuestObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    put:
+      deprecated: true
+      operationId: my-cameras-guest-update
+      summary: Update camera guest
+      tags:
+      - camera-guest
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - $ref: '#/components/parameters/guestId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: guest
+              properties:
+                permissions:
+                  $ref: '#/components/schemas/CameraGuestPermissionObject'
+      security:
+      - OAuth2:
+        - camera_guest_manage
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CameraGuestObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    delete:
+      deprecated: true
+      operationId: my-cameras-guest-remove
+      summary: Remove camera guest
+      tags:
+      - camera-guest
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - $ref: '#/components/parameters/guestId'
+      security:
+      - OAuth2:
+        - camera_guest_manage
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  parameters:
+    guestId:
+      name: guest_id
+      in: path
+      required: true
+      description: Guest ID
+      example: 4
+      schema:
+        type: integer
+        minimum: 1
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+  schemas:
+    CameraGuestListResponse:
+      type: object
+      deprecated: true
+      title: Camera guests list
+      properties:
+        count:
+          type: integer
+          description: Count of all camera guests
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: List of camera guests
+          items:
+            $ref: '#/components/schemas/CameraGuestObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    CameraGuestObject:
+      type: object
+      deprecated: true
+      title: Guest object
+      properties:
+        id:
+          type: integer
+          description: Guest id
+        first_name:
+          description: Guest's first or given name.
+          nullable: true
+          type: string
+        last_name:
+          description: Guest's last or family name.
+          nullable: true
+          type: string
+        email:
+          type: string
+          format: email
+          description: Guest's email.
+        permissions:
+          $ref: '#/components/schemas/CameraGuestPermissionObject'
+      required:
+      - email
+      - permissions
+      example:
+        id: 35
+        first_name: Saint
+        last_name: Michael
+        email: michael@angelcam.com
+        permisions:
+          can_view_rec: true
+          can_create_clips: false
+          can_view_all_clips: false
+          share_notifications: false
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    CameraGuestPermissionObject:
+      type: object
+      deprecated: true
+      title: Guest permission
+      properties:
+        can_view_rec:
+          type: boolean
+          description: The guest can view camera recordings.
+          x-example: false
+        can_create_clips:
+          type: boolean
+          description: The guest can create clips and view clips created by themselves. This option also implies `can_view_rec`.
+          x-example: false
+        can_view_all_clips:
+          type: boolean
+          description: The guest can view clips created by any user.
+          x-example: false
+        share_notifications:
+          type: boolean
+          description: Share RTS notifications for a given camera.
+          x-example: false
+  responses:
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

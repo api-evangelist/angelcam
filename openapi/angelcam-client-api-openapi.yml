@@ -1,0 +1,599 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service client API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: client
+  x-displayName: Clients
+  description: 'Endpoints for reseller users to manage their clients.
+
+    A reseller can create two types of client accounts:
+
+    * **Full account** — the client has full control over their cameras and services. * **Limited account** — the client has read-only access. They can view their cameras and streams but cannot make any changes. A client can upgrade from limited to full at any time, which also revokes the reseller''s access to their space.
+
+    A reseller automatically has access to their clients'' spaces (cameras, recordings, streams). A client — whether full or limited — can revoke this access at any time.
+
+    '
+paths:
+  /clients/:
+    get:
+      operationId: my-clients-list
+      summary: Retrieve clients list
+      tags:
+      - client
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        description: 'Limit result set. Example: `1`.'
+        schema:
+          type: integer
+          minimum: 1
+      - name: offset
+        in: query
+        required: false
+        description: 'Return results starting at `offset`. Example: `10`.'
+        schema:
+          type: integer
+          minimum: 1
+      security:
+      - OAuth2:
+        - client_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Returns client list.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientListResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+    post:
+      operationId: create-client
+      summary: Creates new client account
+      description: 'Creates a new client account. After successful creation client receives an email with link for account activation.
+
+        '
+      tags:
+      - client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - first_name
+              - last_name
+              - email
+              properties:
+                first_name:
+                  type: string
+                  description: Clients first name
+                last_name:
+                  type: string
+                  description: Clients last name
+                email:
+                  type: string
+                  format: email
+                  description: Clients email
+                phone:
+                  type: string
+                  description: Clients phone number
+                invoice_to:
+                  type: string
+                  enum:
+                  - me
+                  - client
+                  default: me
+                  description: All services are invoice to reseller (me) or directly to client.
+                limited_account:
+                  type: boolean
+                  default: false
+                  description: 'Limited clients cannot connect new cameras or purchase any services, by themselves.
+
+                    '
+                allowed_access:
+                  type: boolean
+                  default: true
+                  description: 'This option can be used to give away access to the client user account. A client action is required in order to get the access again.
+
+                    '
+                activated:
+                  type: boolean
+                  default: false
+                  description: 'Create the client account as already activated (i.e. do not send the activation email). A special permission is required for the reseller account in order to use this option.
+
+                    '
+                password:
+                  type: string
+                  description: 'Create the client account with a given default password. A special permission is required for the reseller account in order to use this option.
+
+                    '
+              example:
+                first_name: Joe
+                last_name: Parker
+                email: joe@angelcam.com
+                phone: +1 111 222 333
+                invoice_to: me
+                limited_account: false
+      security:
+      - OAuth2:
+        - client_create
+      - PersonalAccessToken: []
+      responses:
+        '201':
+          description: Newly created client object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /clients/{client_id}/:
+    get:
+      operationId: my-client-detail
+      summary: Retrieve client
+      tags:
+      - client
+      parameters:
+      - $ref: '#/components/parameters/clientId'
+      security:
+      - OAuth2:
+        - client_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Client object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    put:
+      operationId: update-client
+      summary: Update client account
+      tags:
+      - client
+      parameters:
+      - $ref: '#/components/parameters/clientId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: client
+              properties:
+                first_name:
+                  type: string
+                  description: Clients first name
+                last_name:
+                  type: string
+                  description: Clients last name
+                phone:
+                  type: string
+                  description: Clients phone number
+                invoice_to:
+                  type: string
+                  enum:
+                  - me
+                  - client
+                  description: All services are invoice to reseller (me) or directly to client.
+                limited_account:
+                  type: boolean
+                  description: 'Limited clients cannot connect new cameras or purchase any services, by themselves.
+
+                    '
+                allowed_access:
+                  type: boolean
+                  description: 'This option can be used to give away access to the client user account. A client action is required in order to get the access again. (It is only possible to change this value from true to false using this endpoint.)
+
+                    '
+                password:
+                  type: string
+                  description: 'Set password for the client account. A special permission is required for the reseller account in order to use this option.
+
+                    '
+              example:
+                first_name: Joe
+                last_name: Parker
+                phone: +1 111 222 333
+                invoice_to: client
+                limited_account: false
+      security:
+      - OAuth2:
+        - client_manage
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Client object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientObject'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /clients/{client_id}/invite/:
+    post:
+      operationId: my-client-invite
+      summary: Resend invitation email
+      description: "For resending an invitation email. This is useful in case when client does not receive the first invitation email,\n so client get new chance to activate their account and set a password.\n"
+      tags:
+      - client
+      parameters:
+      - $ref: '#/components/parameters/clientId'
+      security:
+      - OAuth2:
+        - client_create
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  schemas:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ClientListResponse:
+      type: object
+      title: Client list
+      properties:
+        count:
+          type: integer
+          description: Count of client
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: List of clients of reseller
+          items:
+            $ref: '#/components/schemas/ClientObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ClientObject:
+      type: object
+      title: Client object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Client ID
+        first_name:
+          type: string
+          description: Clients first name
+        last_name:
+          type: string
+          description: Clients last name
+        email:
+          type: string
+          format: email
+          description: Clients email
+        phone:
+          description: Clients phone number
+          nullable: true
+          type: string
+        invoice_to:
+          type: string
+          enum:
+          - me
+          - client
+          description: All services are invoice to reseller (me) or directly to client.
+        limited_account:
+          type: boolean
+          description: 'Limited clients cannot connect new cameras or purchase any services, by themselves.
+
+            '
+        allowed_access:
+          type: boolean
+          description: 'This field indicates if reseller can access clients cameras. Defualt is true, but client can refuse access.
+
+            '
+        activated_at:
+          format: datetime
+          description: Datetime, when client activated their account, or null in a case when the account is not activated yet at all.
+          nullable: true
+          type: string
+      required:
+      - id
+      - first_name
+      - last_name
+      - email
+      - phone
+      - invoice_to
+      - limited_account
+      - allowed_access
+      - activated_at
+      example:
+        id: 42
+        first_name: Joe
+        last_name: Parker
+        email: joe@angelcam.com
+        phone: +1 111 222 333
+        invoice_to: client
+        limited_account: false
+        allowed_access: true
+        confiremd_at: null
+  responses:
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    EmptyResponse:
+      description: Empty response.
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+  parameters:
+    clientId:
+      name: client_id
+      in: path
+      required: true
+      description: Client ID
+      example: 6
+      schema:
+        type: integer
+        minimum: 1
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

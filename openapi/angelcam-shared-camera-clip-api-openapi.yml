@@ -1,0 +1,597 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service shared-camera-clip API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: shared-camera-clip
+  x-displayName: Shared recording clips
+  description: 'Recording clips on cameras shared with you. Everything works the same as [My recording clips](#tag/clip) — just replace `cameras` with `shared-cameras` in the endpoint URLs.
+
+    '
+paths:
+  /shared-cameras/{camera_id}/clips/:
+    get:
+      deprecated: true
+      operationId: shared-cameras-clips-list
+      summary: Retrieve camera clips list
+      tags:
+      - shared-camera-clip
+      description: Retrieve a list of recording clips for a given shared camera
+      security:
+      - OAuth2:
+        - recording_clips_access
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - name: created_by
+        in: query
+        required: false
+        description: Filter results only to clips created by given users. A comma separated list of user IDs is expected. No whitespace characters are permited. The asterisk (`*`) character can be used to list all clips. By default the endpoint returns only clips created by the current user.
+        example: 1,2,3
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedCameraClipListResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    post:
+      deprecated: true
+      operationId: shared-cameras-clips-create
+      summary: Create clip
+      tags:
+      - shared-camera-clip
+      description: Create a recording clip on a given shared camera
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: clip
+              required:
+              - name
+              - start
+              - end
+              properties:
+                name:
+                  type: string
+                  description: Clip name
+                start:
+                  type: string
+                  format: date-time
+                  description: Start time of clip (ISO 8601)
+                end:
+                  type: string
+                  format: date-time
+                  description: End time of clip (ISO 8601)
+              example:
+                name: Frontdoor loitering
+                start: '2017-01-01T00:00:00.000Z'
+                end: '2017-01-01T00:25:00.000Z'
+      security:
+      - OAuth2:
+        - recording_clips_access
+        - recording_clips_create
+      - PersonalAccessToken: []
+      responses:
+        '201':
+          description: Clip request was received and clip processing will start
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedCameraClipObject'
+        '400':
+          description: No recording data exists for given timeframe, requested clip lenght exceeds 3 hours or there's another error in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400Invalid'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+  /shared-cameras/{camera_id}/clips/{clip_id}/:
+    get:
+      deprecated: true
+      operationId: shared-cameras-clips-detail
+      summary: Retrieve a single clip
+      tags:
+      - shared-camera-clip
+      description: Retrieves the details for a given recording clip
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - $ref: '#/components/parameters/clipId'
+      security:
+      - OAuth2:
+        - recording_clips_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedCameraClipObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /shared-cameras/{camera_id}/clips/{clip_id}/stream/:
+    get:
+      deprecated: true
+      operationId: shared-cameras-clips-stream
+      summary: Retrieve a clip stream
+      tags:
+      - shared-camera-clip
+      description: Retrieves stream of a recording clip
+      parameters:
+      - $ref: '#/components/parameters/cameraId'
+      - $ref: '#/components/parameters/clipId'
+      - name: start
+        in: query
+        required: true
+        description: 'Start time of a stream. Example: `2016-03-19T08:00:00Z`.'
+        example: '2017-01-01T00:00:00.000Z'
+        schema:
+          type: string
+          format: date-time
+      security:
+      - OAuth2:
+        - recording_clips_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingStreamResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  schemas:
+    RecordingStreamResponse:
+      type: object
+      title: Recording stream object
+      properties:
+        url:
+          type: string
+          description: URL of a stream.
+          example: 'https://rec-streamer-eu-central-1.angelcam.com/streams/cefa6471a38f469585b46675fc992614/playlist.m3u8
+
+            '
+        format:
+          type: string
+          enum:
+          - hls
+          - mjpeg
+          description: Stream format.
+          example: hls
+        stream_info:
+          deprecated: true
+          type: string
+          description: URL of a recorded stream info endpoint.
+          example: https://api.angelcam.com/v1/recording/stream/rec-streamer-eu-central-1/cefa6471a38f469585b46675fc992614/
+        stream_controls:
+          type: object
+          description: 'Links allowing to synchronize and control stream playback. See [more](#tag/stream-controls).
+
+            '
+          properties:
+            base_url:
+              type: string
+              description: URL for retrieving the current stream position and playback speed.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/
+
+                '
+            play:
+              type: string
+              description: URL for resuming the stream playback.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/play/
+
+                '
+            pause:
+              type: string
+              description: URL for pausing the stream playback.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/pause/
+
+                '
+            speed:
+              type: string
+              description: URL for changing the stream playback speed.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/speed/
+
+                '
+      example:
+        url: https://rec-streamer-eu-central-1.angelcam.com/streams/df0600b7487a44d480217db7713720d3/playlist.m3u8
+        format: hls
+        stream_controls:
+          base_url: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/
+          play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
+          pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
+          speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error400Invalid:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 400 Bad Request
+      example:
+        title: invalid
+        detail: Invalid hash
+        status: 400
+    SharedCameraClipObject:
+      type: object
+      title: Clip object
+      properties:
+        id:
+          type: string
+          minimum: 1
+          description: Clip UUID
+        created_by:
+          type: integer
+          description: User who created the clip
+        created_at:
+          type: string
+          minimum: 1
+          description: Time when the clip was created
+        name:
+          type: string
+          minimum: 1
+          description: Clip name
+        status:
+          type: string
+          description: Status of clip processing
+          enum:
+          - PENDING
+          - BUILDING
+          - READY
+          - ERROR
+        start:
+          type: string
+          minimum: 1
+          description: Start time of the clip
+        end:
+          type: string
+          minimum: 1
+          description: End time of the clip
+        download_url:
+          type: string
+          description: URL for download of the clip as TS/MP4 file (TS for HLS cameras, MP4 for MJPEG cameras). The URL contains security token valid for a limited time.
+      required:
+      - id
+      - created_by
+      - created_at
+      - download_url
+      - end
+      - name
+      - start
+      - status
+      example:
+        id: b9aad334-07ba-4660-9f18-041875ec1ea4
+        created_by: 1
+        name: Frontdoor loitering
+        status: READY
+        start: '2017-01-01T00:00:20.000Z'
+        end: '2017-01-01T00:25:20.000Z'
+        created_at: '2017-02-01T02:37:21.000Z'
+        download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    SharedCameraClipListResponse:
+      type: object
+      title: Clip list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all clips
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: List of clips for the camera
+          items:
+            $ref: '#/components/schemas/SharedCameraClipObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: b9aad334-07ba-4660-9f18-041875ec1ea4
+          created_by: 1
+          name: Frontdoor loitering
+          status: READY
+          start: '2017-01-01T00:00:20.000Z'
+          end: '2017-01-01T00:25:20.000Z'
+          created_at: '2017-02-01T02:37:21.000Z'
+          download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
+  parameters:
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+    clipId:
+      name: clip_id
+      in: path
+      required: true
+      description: Clip UUID
+      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
+      schema:
+        type: string
+        format: uuid
+  responses:
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

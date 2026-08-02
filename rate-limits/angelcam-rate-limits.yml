@@ -1,0 +1,16 @@
+generated: '2026-07-17'
+method: searched
+source: https://developers.angelcam.com/guides/api-conventions/
+scope: per user account
+rate_limits:
+- name: per-minute
+  limit_count: 30
+  window: 1 minute
+  enforced_status: 429
+- name: per-hour
+  limit_count: 1000
+  window: 1 hour
+  enforced_status: 429
+signal: HTTP 429 with wait time in JSON detail field
+headers: []
+increase: contact support to raise limits

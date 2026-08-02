@@ -1,0 +1,12 @@
+generated: '2026-07-17'
+method: derived
+source: arazzo/*.yml
+workflows:
+- file: angelcam-watch-live-camera.yml
+  workflowId: watch-live-camera
+  title: Watch a live camera
+  summary: List cameras and retrieve one camera plus its live-stream URLs.
+- file: angelcam-create-and-share-clip.yml
+  workflowId: create-and-share-clip
+  title: Create and share a clip
+  summary: List recordings, read a timeline, create a clip, and email it.

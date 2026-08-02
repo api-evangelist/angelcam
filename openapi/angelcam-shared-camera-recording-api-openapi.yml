@@ -1,0 +1,556 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service shared-camera-recording API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: shared-camera-recording
+  x-displayName: Shared cameras recording
+  description: 'Everything is same as in recording for my own cameras. Just replace `cameras` by `shared-cameras` in every endpoints url.
+
+    '
+paths:
+  /shared-cameras/{camera_id}/recording/:
+    get:
+      deprecated: true
+      operationId: shared-cameras-recordings-info
+      summary: General shared recording information
+      tags:
+      - shared-camera-recording
+      parameters:
+      - $ref: '#/components/parameters/sharedCameraId'
+      security:
+      - OAuth2:
+        - recording_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: Returns general recording information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /shared-cameras/{camera_id}/recording/stream/:
+    get:
+      deprecated: true
+      operationId: shared-cameras-recordings-stream
+      summary: Retrieve recording stream for shared camera
+      description: Create and return recorded stream of shared camera for a specified time
+      tags:
+      - shared-camera-recording
+      parameters:
+      - $ref: '#/components/parameters/sharedCameraId'
+      - name: start
+        in: query
+        required: true
+        description: 'Start time of a stream. Example: `2016-03-19T08:00:00Z`.'
+        example: '2017-01-01T00:00:00.000Z'
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        in: query
+        required: false
+        description: 'End time of a stream. If missing, stream will play till the very end of recorded footage. Example: `2016-03-19T14:00:00Z.`
+
+          '
+        example: '2017-01-01T00:10:00.000Z'
+        schema:
+          type: string
+          format: date-time
+      security:
+      - OAuth2:
+        - recording_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingStreamResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /shared-cameras/{camera_id}/recording/timeline/:
+    get:
+      deprecated: true
+      operationId: shared-cameras-recordings-timeline
+      summary: Retrieve timeline of records for given shared camera
+      tags:
+      - shared-camera-recording
+      description: 'Please keep in mind that maximum length of timeline is 1 day.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/sharedCameraId'
+      - name: start
+        in: query
+        required: true
+        description: 'Start time of a timeline. Example: `2016-03-19T08:00:00Z`.'
+        example: '2017-01-01T00:00:00.000Z'
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        in: query
+        required: true
+        description: 'End time of a timeline. Example: `2016-03-19T14:00:00Z.`'
+        example: '2017-01-01T00:10:00.000Z'
+        schema:
+          type: string
+          format: date-time
+      security:
+      - OAuth2:
+        - recording_access
+      - PersonalAccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingTimelineResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidParams'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+components:
+  schemas:
+    RecordingStreamResponse:
+      type: object
+      title: Recording stream object
+      properties:
+        url:
+          type: string
+          description: URL of a stream.
+          example: 'https://rec-streamer-eu-central-1.angelcam.com/streams/cefa6471a38f469585b46675fc992614/playlist.m3u8
+
+            '
+        format:
+          type: string
+          enum:
+          - hls
+          - mjpeg
+          description: Stream format.
+          example: hls
+        stream_info:
+          deprecated: true
+          type: string
+          description: URL of a recorded stream info endpoint.
+          example: https://api.angelcam.com/v1/recording/stream/rec-streamer-eu-central-1/cefa6471a38f469585b46675fc992614/
+        stream_controls:
+          type: object
+          description: 'Links allowing to synchronize and control stream playback. See [more](#tag/stream-controls).
+
+            '
+          properties:
+            base_url:
+              type: string
+              description: URL for retrieving the current stream position and playback speed.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/
+
+                '
+            play:
+              type: string
+              description: URL for resuming the stream playback.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/play/
+
+                '
+            pause:
+              type: string
+              description: URL for pausing the stream playback.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/pause/
+
+                '
+            speed:
+              type: string
+              description: URL for changing the stream playback speed.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/speed/
+
+                '
+      example:
+        url: https://rec-streamer-eu-central-1.angelcam.com/streams/df0600b7487a44d480217db7713720d3/playlist.m3u8
+        format: hls
+        stream_controls:
+          base_url: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/
+          play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
+          pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
+          speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    RecordingResponse:
+      type: object
+      title: Recording information
+      required:
+      - id
+      - status
+      - retention
+      - deactivated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Recording ID
+        status:
+          type: string
+          enum:
+          - READY
+          - CONNECTING
+          - RECORDING
+          - STOPPING
+          - ERROR
+          description: 'Recording status values have the following meaning:
+
+            * `READY` - Not recording (recording is ready to be started)
+
+            * `CONNECTING` - Recorder is trying to connect to the stream (this usually indicates camera connectivity problems; the recorder keeps trying to connect).
+
+            * `RECORDING` - Recorder is connected to the stream and records are being created
+
+            * `STOPPING` - Recording is stopping
+
+            * `ERROR` - Error occurred when recording (this indicates a possible issue with Angelcam infrastructure)
+
+            '
+        retention:
+          description: 'Retention period in ISO 8601 duration format tells how long in past we store the footage. Example: P7D means 7 days.
+
+            '
+          nullable: true
+          type: string
+        record_queue_capacity:
+          description: 'Capacity of the record queue in seconds, maxium amount of seconds to be recorded in total, unlimited if null
+
+            '
+          nullable: true
+          type: number
+        deactivated_at:
+          type: string
+          format: datetime
+          nullable: true
+          description: Datetime when recording service has been deactivated, if null then recording is active.
+        recording_start:
+          type: string
+          format: datetime
+          nullable: true
+          description: Recording footage start datetime, if null there is no recording footage
+        recording_end:
+          type: string
+          format: datetime
+          nullable: true
+          description: Recording footage end datetime, if null there is no recording footage
+      example:
+        id: df5fcd78-6114-4750-b23a-cec3c3febc5b
+        status: RECORDING
+        retention: P7D
+        deactivated_at: null
+        record_queue_capacity: null
+        recording_start: '2024-05-02T10:32:11.000Z'
+        recording_end: 2024-05-07T16:58:7.5400Z
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SegmentObject:
+      type: object
+      title: Segment object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+        end:
+          type: string
+          format: date-time
+          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
+    RecordingTimelineResponse:
+      type: object
+      title: Recording timeline object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
+
+            '
+        end:
+          type: string
+          format: date-time
+          description: 'End time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
+
+            '
+        segments:
+          type: array
+          description: Array of recording segments.
+          items:
+            $ref: '#/components/schemas/SegmentObject'
+      example:
+        start: '2017-01-01T00:00:00.000Z'
+        end: '2017-01-01T03:32:19.000Z'
+        segments:
+        - start: '2017-06-09T00:00:18.000Z'
+          end: '2017-06-09T03:25:28.000Z'
+        - start: '2017-06-09T04:19:42.000Z'
+          end: 2017-06-09T010:39:31Z
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+  responses:
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  parameters:
+    sharedCameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 21
+      schema:
+        type: integer
+        minimum: 1
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client

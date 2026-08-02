@@ -1,0 +1,34 @@
+generated: '2026-07-17'
+method: searched
+source: openapi/angelcam-openapi-original.yml
+summary:
+  types:
+  - apiKey
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - authorizationCode
+  - password
+schemes:
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://my.angelcam.com/oauth/authorize/
+    tokenUrl: https://my.angelcam.com/oauth/token/
+    scopes: 38
+  - flow: password
+    tokenUrl: https://api.angelcam.com/oauth/token/
+    scopes: 40
+  description: See the Authentication section above for full documentation.
+  sources:
+  - openapi/angelcam-openapi-original.yml
+- name: PersonalAccessToken
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'Enter your token as: `PersonalAccessToken {your-token}`'
+  sources:
+  - openapi/angelcam-openapi-original.yml
+docs: https://developers.angelcam.com/guides/authentication/

@@ -1,0 +1,45 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/angelcam-openapi-original.yml
+format: problem-details-like (title/detail/status, application/json)
+envelope:
+  fields:
+  - title
+  - detail
+  - status
+  schema: ErrorGeneric
+  content_type: application/json
+problems:
+- status: 400
+  title: Invalid request / invalid parameters
+  schema: Error400InvalidParams
+  occurrences: 59
+- status: 401
+  title: Unauthorized — missing or invalid credentials
+  schema: Error401Unauthorized
+  occurrences: 118
+- status: 403
+  title: Permission denied — token lacks the required scope
+  schema: Error403PermissionDenied
+  occurrences: 116
+- status: 404
+  title: Resource not found (or service not active on camera)
+  schema: Error404NotFound
+  occurrences: 86
+- status: 405
+  title: Method not allowed
+  schema: Error405MethodNotAllowed
+  occurrences: 1
+- status: 429
+  title: Too many requests — rate limit exceeded
+  schema: Error429TooManyRequests
+  occurrences: 2
+  remediation: 'Back off; wait time is in the detail field. Limits: 30/min, 1000/hour.'
+- status: 502
+  title: Bad gateway (upstream camera/stream error)
+  schema: Error502BadGateway
+  occurrences: 4
+- status: 503
+  title: Service unavailable
+  schema: Error503ServiceUnavailable
+  occurrences: 1

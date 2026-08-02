@@ -1,0 +1,987 @@
+openapi: 3.0.0
+info:
+  version: 2026.06.11
+  title: Angelcam active-service arrow-clients API
+  contact:
+    email: support@angelcam.com
+  x-logo:
+    url: ./assets/logo-angelcam.svg
+  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
+
+    '
+servers:
+- url: https://api.angelcam.com/v1
+tags:
+- name: arrow-clients
+  x-displayName: Arrow clients
+  description: 'Manage [Arrow clients](https://github.com/angelcam/arrow-client) — pair them with your account, inspect exposed services, and send commands.
+
+    **Pairing:** restart the device (pairing mode is active for the first 20 minutes after start), POST to `arrow-clients/` to get the UUID, then poll `arrow-clients/{uuid}/` until status is `online`.
+
+    **Arrow proxy:** use the transparent HTTP proxy or HTTP CONNECT proxy to reach services behind an Arrow client. Both require a `Host: {SERVICE_ID}-{ARROW_UUID}` header and a `Proxy-Authorization: Bearer` token from the Arrow client detail endpoint.
+
+    '
+paths:
+  /arrow-clients/:
+    get:
+      operationId: arrow-clients-list
+      summary: List paired Arrow clients
+      description: Get a list of Arrow clients paired with the current user account.
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_access
+      - PersonalAccessToken: []
+      parameters:
+      - name: mac
+        in: query
+        required: false
+        description: 'If set, the endpoint will return only Arrow clients with a given MAC address. You can use either the colon or the dash separated format or you can omit the separator completely.
+
+          '
+        example: 11-22-33-aa-bb-cc
+        schema:
+          type: string
+          format: mac
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowClientsResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+    post:
+      operationId: arrow-client-pairing-request
+      summary: Request pairing of an Arrow client
+      description: 'Request pairing of a given Arrow client with the current user account. One of the `uuid`, `angelbox_id` or `mac` parameter is required. In case the Arrow client has been paired already, the API will check if the current user can access the client. If the user can access the client, the API will respond with UUID of the client (i.e. the standard response). Otherwise, the API will respond with "Permission Denied".
+
+
+        Pairing via MAC address is only available upon request, otherwise API responds with "Permission Denied". When using MAC there will be MAC adress in the response instead of UUID.
+
+        '
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_manage
+      - PersonalAccessToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  format: uuid
+                  description: UUID of the paired Arrow client
+                angelbox_id:
+                  type: string
+                  description: AngelBox ID
+                mac:
+                  type: string
+                  format: MAC address
+                  description: MAC address of the Arrow client
+              example:
+                uuid: 75b62326-eca3-4424-ab68-48e7da47e847
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowClientPairingResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /arrow-clients/{mac}/:
+    get:
+      operationId: arrow-client-detail-mac
+      summary: Arrow client detail (MAC address pairing)
+      description: Get detailed information about a given Arrow client, it can be used **just during the paring process via MAC address**. When you know uuid of the client, use [Arrow client detail API endpoint](#operation/arrow-client-detail) endpoint instead.
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_access
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientMAC'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowClientDetailObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /arrow-clients/{uuid}/:
+    get:
+      operationId: arrow-client-detail
+      summary: Arrow client detail
+      description: Get detailed information about a given Arrow client.
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_access
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowClientDetailObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    delete:
+      operationId: arrow-client-unpair
+      summary: Unpair Arrow client
+      tags:
+      - arrow-clients
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      security:
+      - OAuth2:
+        - arrow_client_manage
+      - PersonalAccessToken: []
+      responses:
+        '204':
+          description: No content
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+  /arrow-clients/{uuid}/reset-service-table/:
+    post:
+      operationId: arrow-client-reset-service-table
+      summary: Reset service table
+      description: 'Remove all automatically discovered and/or custom services from the client''s service table.
+
+        '
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_manage
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full:
+                  type: boolean
+                  description: 'When `true`, all non-static services will be removed. Otherwise, only discovered services will be removed.
+
+                    '
+                  example: false
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+        '502':
+          $ref: '#/components/responses/Error502BadGateway'
+  /arrow-clients/{uuid}/scan-network/:
+    post:
+      operationId: arrow-client-scan-network
+      summary: Scan network
+      description: 'Trigger a scan of the local network that the Arrow client is connected to. The scan discovers cameras and other services available on that network.
+
+
+        The scan runs asynchronously — this endpoint returns immediately. To check whether the scan is still in progress, poll the [Arrow client detail](#operation/arrow-client-detail) endpoint and inspect the `scanning` field. Discovered services appear in the [Arrow client services](#operation/arrow-client-services) list once the scan completes.
+
+
+        The API responds with 502 Bad Gateway if the Arrow client is offline or unreachable.
+
+        '
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_manage
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+        '502':
+          $ref: '#/components/responses/Error502BadGateway'
+  /arrow-clients/{uuid}/services/:
+    get:
+      operationId: arrow-client-services
+      summary: List Arrow services
+      description: Get a list of services visible and available to a given Arrow client.
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_access
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowClientServicesResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    post:
+      operationId: add-arrow-service
+      summary: Add Arrow service
+      description: 'Add a custom service to the Arrow client service table.
+
+
+        This method is supported only if the `add_custom_service` capability is
+
+        signaled by the Arrow client. It can be used to access IP cameras in
+
+        the target network if the automatic service discovery does not find
+
+        them. The Arrow client will verify that the IP address belongs to the
+
+        same local network it is connected to. Other IP addresses will be
+
+        rejected for security reasons.
+
+        '
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_manage
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArrowClientAddServiceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowClientAddServiceResponse'
+        '400':
+          $ref: '#/components/responses/Error400InvalidBody'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+        '405':
+          $ref: '#/components/responses/Error405MethodNotAllowed'
+        '502':
+          $ref: '#/components/responses/Error502BadGateway'
+  /arrow-clients/{uuid}/services/{service_id}/:
+    get:
+      operationId: arrow-client-service-detail
+      summary: Retrieve Arrow service
+      description: Get details about a service visible and available to a given Arrow client.
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_access
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      - $ref: '#/components/parameters/arrowClientServiceId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrowServiceObject'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+    delete:
+      operationId: arrow-client-service-delete
+      summary: Delete Arrow service
+      description: 'Delete given Arrow service from the client''s service table.
+
+
+        Note that it is only possible to delete services that were added via the [corresponding API call](#tag/arrow-clients/operation/add-arrow-service). If the same service was also discovered by the network scanner, it will remain available as long as it is still visible for the network scanner.
+
+        '
+      tags:
+      - arrow-clients
+      security:
+      - OAuth2:
+        - arrow_client_manage
+      - PersonalAccessToken: []
+      parameters:
+      - $ref: '#/components/parameters/arrowClientId'
+      - $ref: '#/components/parameters/arrowClientServiceId'
+      responses:
+        '204':
+          $ref: '#/components/responses/EmptyResponse'
+        '401':
+          $ref: '#/components/responses/Error401Unauthorized'
+        '403':
+          $ref: '#/components/responses/Error403PermissionDenied'
+        '404':
+          $ref: '#/components/responses/Error404NotFound'
+        '502':
+          $ref: '#/components/responses/Error502BadGateway'
+components:
+  schemas:
+    Error502BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 502 Bad Gateway
+      example:
+        title: bad_gateway
+        detail: Bad Gateway
+        status: 502
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ArrowClientListObject:
+      type: object
+      title: Paired Arrow client
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: UUID of the Arrow client
+        mac:
+          type: string
+          format: mac
+          description: MAC address of the device running the Arrow client
+        ip:
+          type: string
+          description: Public IP address of the device running the Arrow client
+      required:
+      - uuid
+      - mac
+      - ip
+      example:
+        uuid: 75b62326-eca3-4424-ab68-48e7da47e847
+        mac: 12:34:56:78:9a:bc
+        ip: 1.1.1.1
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ArrowClientDetailObject:
+      type: object
+      title: Arrow client
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: UUID of the Arrow client
+          nullable: true
+        mac:
+          type: string
+          format: mac
+          description: MAC address of the device running the Arrow client
+          nullable: true
+        ip:
+          type: string
+          description: Public IP address of the device running the Arrow client
+        status:
+          type: string
+          enum:
+          - online
+          - offline
+          - not_paired
+          description: 'Current availability of the Arrow client. The `not_paired` value means that there is an active pairing request for this client, however, the client has not reached Angelcam servers yet.
+
+            '
+        scanning:
+          type: boolean
+          description: 'True if the client is currently scanning the target network, false otherwise
+
+            '
+        proxy:
+          type: object
+          description: 'Arrow proxy addresses and credentials (see
+
+            [the description](#tag/arrow-clients/Arrow-proxy) for more details)
+
+            '
+          properties:
+            connect:
+              type: object
+              description: HTTP CONNECT proxy addresses
+              properties:
+                http:
+                  type: string
+                  description: HTTP address of the Arrow proxy
+                https:
+                  type: string
+                  description: HTTPS address of the Arrow proxy
+            transparent:
+              type: object
+              description: Transparent HTTP proxy addresses
+              properties:
+                http:
+                  type: string
+                  description: HTTP address of the Arrow proxy
+                https:
+                  type: string
+                  description: HTTPS address of the Arrow proxy
+            token:
+              type: string
+              description: Arrow proxy access token
+        capabilities:
+          type: object
+          description: Features supported by the Arrow client
+          properties:
+            add_custom_service:
+              type: boolean
+              description: True if adding custom services via API is supported.
+      required:
+      - uuid
+      - mac
+      - status
+      example:
+        uuid: 75b62326-eca3-4424-ab68-48e7da47e847
+        mac: 12:34:56:78:9a:bc
+        ip: 1.1.1.1
+        status: online
+        scanning: true
+        proxy:
+          connect:
+            http: m1-eu1.angelcam.com:8920
+            https: m1-eu1.angelcam.com:8940
+          transparent:
+            http: m1-eu1.angelcam.com:8921
+            https: m1-eu1.angelcam.com:8941
+          token: xxx.yyy.zzz
+        capabilities:
+          add_custom_service: true
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    ArrowClientAddServiceRequest:
+      type: object
+      title: New Arrow service
+      properties:
+        type:
+          type: string
+          enum:
+          - http
+          - rtsp
+          description: Type of the target service
+        ip:
+          type: string
+          description: local IP address
+        port:
+          type: integer
+          description: service port
+      required:
+      - type
+      - ip
+      - port
+      example:
+        type: rtsp
+        ip: 192.168.1.100
+        port: 554
+    ArrowClientPairingResponse:
+      type: object
+      title: Arrow client pairing response
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: UUID of the paired Arrow client
+        mac:
+          type: string
+          format: MAC address
+          description: MAC address of the paired Arrow client
+      example:
+        uuid: 75b62326-eca3-4424-ab68-48e7da47e847
+    ArrowClientAddServiceResponse:
+      type: object
+      title: Arrow client add service response
+      properties:
+        service_id:
+          type: string
+          description: Arrow service ID
+      required:
+      - service_id
+      example:
+        service_id: abcd
+    Error405MethodNotAllowed:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 405 Method Not Allowed
+      example:
+        title: method_not_allowed
+        detail: Method Not Allowed
+        status: 405
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    ArrowClientsResponse:
+      type: object
+      title: A list of Arrow clients
+      properties:
+        count:
+          type: integer
+          description: Number of all clients
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: A list of Arrow clients
+          items:
+            $ref: '#/components/schemas/ArrowClientListObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    ArrowClientServicesResponse:
+      type: object
+      title: A list of Arrow services
+      properties:
+        count:
+          type: integer
+          description: Number of all services
+        next:
+          format: uri
+          description: Next page from pagination
+          nullable: true
+          type: string
+        previous:
+          format: uri
+          description: Previous page from pagination
+          nullable: true
+          type: string
+        results:
+          type: array
+          description: A list of Arrow services
+          items:
+            $ref: '#/components/schemas/ArrowServiceObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ArrowServiceObject:
+      type: object
+      title: Arrow service
+      properties:
+        id:
+          type: string
+          description: Arrow service ID
+        type:
+          type: string
+          enum:
+          - http
+          - rtsp
+          description: Type of the service.
+        mac:
+          type: string
+          format: mac
+          description: 'MAC address of the device providing this service. The MAC address will be valid only for services discovered via the network scan. In all other cases, it will be a fake MAC address starting with `FF:FF` prefix.
+
+            '
+        ip:
+          type: string
+          description: 'IP address used by the corresponding Arrow client to connect to the service (i.e. local IP address of the service).
+
+            '
+        port:
+          type: integer
+          description: 'Port number used by the corresponding Arrow client to connect to the service (i.e. the port which the service is listening on).
+
+            '
+        flags:
+          type: object
+          description: Service flags.
+          properties:
+            static:
+              type: boolean
+              description: If `true`, the service is fixed and cannot be deleted.
+            discovered:
+              type: boolean
+              description: If `true`, the service was discovered by the network scanner.
+            custom:
+              type: boolean
+              description: If `true`, the service was added manually using the API.
+          required:
+          - static
+          - discovered
+          - custom
+        hints:
+          type: object
+          description: 'Various hints that may help with service identification. Please note that the hints are best-effort only. They may not be always correct.
+
+            '
+          properties:
+            camera:
+              type: boolean
+              description: 'If `true`, the service appears to be an RTSP server of an IP camera or an HTTP server of an IP camera providing an MJPEG stream.
+
+                '
+            locked:
+              type: boolean
+              description: 'The field is present only if the `camera` field is `true` and it indicates that the service may require authentication.
+
+                '
+            stream:
+              type: string
+              nullable: true
+              description: 'The field is present only if the `camera` field is `true` and it indicates that there is likely a video stream on the given endpoint.
+
+                '
+          required:
+          - camera
+        camera_ids:
+          type: array
+          items:
+            type: integer
+          description: A list of cameras (their IDs) which use this service.
+      required:
+      - id
+      - type
+      - mac
+      - ip
+      - port
+      - camera_ids
+      example:
+        id: 21af
+        type: rtsp
+        mac: ff:ff:7f:00:00:01
+        ip: 127.0.0.1
+        port: 554
+        hints:
+          camera: true
+          locked: true
+          stream: null
+        flags:
+          static: false
+          discovered: true
+          custom: false
+        camera_ids: []
+  responses:
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error405MethodNotAllowed:
+      description: The specified method is not allowed for the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error405MethodNotAllowed'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    EmptyResponse:
+      description: Empty response.
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error502BadGateway:
+      description: Unable to contact the target gateway.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error502BadGateway'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+  parameters:
+    arrowClientId:
+      name: uuid
+      in: path
+      required: true
+      description: Arrow client UUID
+      example: c95227c4-218c-4dee-899d-f3fa2ce9c39b
+      schema:
+        type: string
+        format: uuid
+    arrowClientMAC:
+      name: mac
+      in: path
+      required: true
+      description: Arrow client MAC address
+      example: 12:34:56:78:90:AB
+      schema:
+        type: string
+        format: MAC address
+    arrowClientServiceId:
+      name: service_id
+      in: path
+      required: true
+      description: Arrow client service ID
+      example: 1ab2
+      schema:
+        type: string
+        format: hex
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: 'See the Authentication section above for full documentation.
+
+        '
+      flows:
+        authorizationCode:
+          authorizationUrl: https://my.angelcam.com/oauth/authorize/
+          tokenUrl: https://my.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            public_cameras_access: Permission to access public cameras
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+        password:
+          tokenUrl: https://api.angelcam.com/oauth/token/
+          scopes:
+            user_access: Permission to access user information
+            user_delete: Permission to delete the current user account
+            camera_access: Permission to list cameras and to get details of a specific camera
+            camera_create: Permission to create cameras
+            camera_manage: Permission to update cameras
+            camera_delete: Permission to delete cameras
+            camera_guest_access: Permission to access camera guest
+            camera_guest_manage: Permission to manage camera guest
+            arrow_client_access: Permission to access Arrow clients
+            arrow_client_manage: Permission to manage Arrow clients
+            event_access: Permission to access events
+            recording_access: Permission to access camera recordings
+            recording_start_stop: Permission to start and stop recording on camera
+            recording_clips_access: Permission to access recording clips
+            recording_clips_create: Permission to create recording clips
+            recording_clips_share: Permission to share recording clips
+            sensor_access: Permission to list sensors and to get details of a specific sensor
+            sensor_manage: Permission to create, update and delete sensors
+            broadcasting_access: Permission to see general broadcasting information and access broadcasting streams
+            broadcasting_start_stop: Permission to start and stop public broadcasting on camera
+            client_access: Permission to list resellers clients and get details of a specific client
+            client_create: Permission to create client account
+            client_manage: Permission to update clients detail
+            streams_detect: Permission to detect camera streams
+            sites_access: Permission to access sites
+            sites_manage: Permission to create, update and delete sites
+            services_access: Permission to access available services
+            trials_access: Permission to access available trials
+            trials_activate: Permission to activate a trial
+            active_services_access: Permission to access active services
+            active_services_manage: Permission to manage active services
+            orders_access: Permission to access orders
+            messages_access: Permission to access RTS messages
+            messages_manage: Permission to manage RTS messages
+            rts_settings_access: Permission to access RTS settings
+            rts_settings_manage: Permission to manage RTS settings
+            rts_arming_manage: Permission to arm and disarm RTS
+            incidents_access: Permission to access Incidents
+            space_access: Permission to list and activate spaces
+            space_permissions_access: Permission to view space permissions
+    PersonalAccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Enter your token as: `PersonalAccessToken {your-token}`
+
+        '
+x-tagGroups:
+- name: General
+  tags:
+  - user
+  - space
+  - location
+- name: Camera management
+  tags:
+  - camera
+  - shared-camera
+  - camera-guest
+  - camera-stream-detection
+  - arrow-clients
+  - angelcameras
+- name: Recording
+  tags:
+  - recording
+  - stream-controls
+  - shared-camera-recording
+  - clip
+  - shared-camera-clip
+- name: Broadcasting
+  tags:
+  - broadcasting
+  - public-camera
+- name: Events & Sensors
+  tags:
+  - event
+  - sensor
+- name: Speaker management
+  tags:
+  - speakers
+  - audio-message
+- name: RTS
+  tags:
+  - incidents
+  - rts_settings
+  - rts_messages
+  - rts_notification_methods
+  - rts_notification_rules
+- name: Billing
+  tags:
+  - service
+  - active-service
+  - order
+- name: Clients
+  tags:
+  - client
