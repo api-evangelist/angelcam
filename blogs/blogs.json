@@ -2,6 +2,13 @@
   "repo": "angelcam",
   "feeds": [
     {
+      "source": "https://help.angelcam.com/feed.xml",
+      "feed_url": "https://help.angelcam.com/feed.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://help.angelcam.com",
       "feed_url": "https://help.angelcam.com/feed.xml",
       "title": "",
@@ -9,6 +16,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-08-01T15:49:00Z"
+  "post_count": 25,
+  "fetched": "2026-08-06T14:08:46Z"
 }
