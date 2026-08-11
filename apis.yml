@@ -1266,6 +1266,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/angelcam-openapi-overlay.yaml
 - type: DeveloperPortal
   url: https://developers.angelcam.com/
 - type: Documentation
