@@ -1,0 +1,2292 @@
+{
+  "item": [
+    {
+      "id": "6997647a-29f2-4f5b-b504-002c6bcdb3e6",
+      "name": "speakers",
+      "description": {
+        "content": "Manage speakers and trigger audio playback. See the [Speakers guide](/guides/speakers/) for setup instructions, including how to configure an AngelBox as a speaker.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4bfd0d87-fe42-4150-b261-088f35d66c7e",
+          "name": "Retrieve speaker list",
+          "request": {
+            "name": "Retrieve speaker list",
+            "description": {},
+            "url": {
+              "path": [
+                "speakers",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Limit result set. Example: `1`."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "Return results starting at `offset`. Example: `10`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a69cdfbc-d18d-4022-9983-7329ec085bf5",
+              "name": "List of speakers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 6264,\n  \"next\": \"https://lkwbhVXubmqFrMMmPhCuNsc.ilSvnZ7mTKoykIZfF,lz2C5D7\",\n  \"previous\": null,\n  \"results\": [\n    {\n      \"id\": 7054,\n      \"name\": \"string\",\n      \"setup\": \"arrow\",\n      \"protocol\": \"basic\",\n      \"endpoint\": \"https://He.cghxdoN83rEVRMZmt0w6Jf,ghOT55ImfjmM79tyZ68PkuXmV8OpsWU2uZTbm0GbbOs\",\n      \"arrow_client\": null,\n      \"arrow_service_id\": \"string\",\n      \"username\": \"string\"\n    },\n    {\n      \"id\": 6301,\n      \"name\": \"string\",\n      \"setup\": \"arrow\",\n      \"protocol\": \"basic\",\n      \"endpoint\": \"https://OWPbjqx.qycdx7s6HZ3zkgoHsyzkkB+6gsAYp2qAfKr+h15\",\n      \"arrow_client\": null,\n      \"arrow_service_id\": \"string\",\n      \"username\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cf813c4-35af-4ac3-b78d-71a0e7ba81da",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 6098\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5842d34-1155-4a8d-bcfd-337e862b949b",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "728d8995-e0ca-4448-8100-ed1b86f42cef",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "99c3934f-26f1-4c6c-9032-e1c9e5ba8c5f",
+          "name": "Connect new speaker",
+          "request": {
+            "name": "Connect new speaker",
+            "description": {},
+            "url": {
+              "path": [
+                "speakers",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c2cba887-2115-430d-b927-6e4cda4ae72e",
+              "name": "Newly created speaker object.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"id\": 3925,\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55aea210-2621-4715-9330-d56b2d19b395",
+              "name": "Body payload is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 6098\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba09f039-8044-40e4-9558-b0c9ca031d53",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccab1160-cdf8-4634-951e-84a04ea40ee3",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "436cffdb-7f10-42ea-92d6-6a7f449ad601",
+          "name": "Retrieve speaker detail",
+          "request": {
+            "name": "Retrieve speaker detail",
+            "description": {},
+            "url": {
+              "path": [
+                "speakers",
+                ":speaker_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "speaker_id",
+                  "description": "(Required) Speaker ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "031fbc9e-75ed-49c6-9338-cfaf648d8fae",
+              "name": "Speaker.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"id\": 3925,\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecf2db49-65a1-4ab9-9787-108037ccc0b0",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f06e71e4-d737-4848-a7a3-97ba0b7ef145",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef96ae0a-1d48-4bbd-b9fb-61baec94bb7c",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7c4c2f9c-ce16-422c-bc32-9fc3e6f2d513",
+          "name": "Update existing speaker",
+          "request": {
+            "name": "Update existing speaker",
+            "description": {},
+            "url": {
+              "path": [
+                "speakers",
+                ":speaker_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "speaker_id",
+                  "description": "(Required) Speaker ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "69250859-7103-4d90-b9b6-619a53b97577",
+              "name": "Updated speaker object.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"id\": 3925,\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6a2f1a7-555b-45af-8bc7-731ebe43569b",
+              "name": "Body payload is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 6098\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0dd38da4-7942-4927-bd75-5321d4d12cd6",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be6aa434-56c6-44f1-8757-0e88987daf8e",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d3adb00-32ff-444b-bcb8-ffa40b61bf19",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"setup\": \"<string>\",\n  \"protocol\": \"<string>\",\n  \"endpoint\": \"<uri>\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"arrow_service_id\": \"<string,null>\",\n  \"username\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e3ed75ca-750a-4abd-a773-e10619605430",
+          "name": "Start audio playback",
+          "request": {
+            "name": "Start audio playback",
+            "description": {
+              "content": "Play a given audio message or return a WebRTC signaling URL if no message ID is given.\n\n### Live audio playback using WebRTC\n\nEvery [WebRTC signaling](#section/Angelcam-API/WebRTC-signaling) session for live audio playback starts by sending an SDP offer from the client to the corresponding Angelcam server followed by one or more local ICE candidates. The server then responds with an SDP answer followed by one or more of its local ICE candidates. The candidate exchange should conclude by sending a `null` candidate by each side to the other peer to signal that there are no more local ICE candidates. There is no lock-step mechanism for sending the ICE candidates. All available local candidates should be sent to the other peer immediately after sending the SDP offer/answer.\n\n#### STUN/TURN servers\n\nNo external STUN or TURN servers are required as all Angelcam servers have a public IP address and, therefore, the `host` ICE candidates on the server side are always reachable. The client's server-reflexive candidates, if needed, are then discovered once the client contacts the server via the server's `host` candidates.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "speakers",
+                ":speaker_id",
+                "play",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "speaker_id",
+                  "description": "(Required) Speaker ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8ac66df8-2a49-44a0-bcd0-dc42602f7171",
+              "name": "WebRTC signaling URL.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "play",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"webrtc_signaling_url\": \"wss://m1-eu1.angelcam.com/speakers/123/web-rtc/\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d88a4715-cd47-4a82-aac0-524e17fbdc4e",
+              "name": "Empty response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "play",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bc585c17-0336-4b27-b9cf-a9b896b950ba",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "play",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d89b2201-309a-4335-ae84-b159206656c4",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "play",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d137530b-3142-4f64-90c6-8d28fc66d6b6",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "play",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1cc3b8f6-1d5a-4421-a12c-d63f48d6de9b",
+              "name": "Service unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "play",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<integer,null>\",\n  \"repeat\": false,\n  \"stop_after\": \"<integer,null>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"bad_gateway\",\n  \"detail\": \"Bad Gateway\",\n  \"status\": 502\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ddd66cf6-eeb0-4c0c-a021-1e844d0bcbf1",
+          "name": "Stop audio playback",
+          "request": {
+            "name": "Stop audio playback",
+            "description": {},
+            "url": {
+              "path": [
+                "speakers",
+                ":speaker_id",
+                "stop",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "speaker_id",
+                  "description": "(Required) Speaker ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8a3087f1-2dc9-4d16-9950-51f49c1a8568",
+              "name": "Empty response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "stop",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "87ea080b-bc2a-4c9e-afd3-f2e394961820",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "stop",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a81e3923-c0cf-491c-a04e-7b1dfeaa3994",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "stop",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f24243c7-b586-430d-a326-6c76a7cff47d",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "stop",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "775bf631-c64a-4502-924d-968daeda458b",
+          "name": "Test speaker connection",
+          "request": {
+            "name": "Test speaker connection",
+            "description": {
+              "content": "On success, the endpoint returns HTTP 204; otherwise, HTTP 400 with a detail about the connection issue is returned.\n\n_Note that this is just a connectivity test. Successful connectivity test does not mean that the speaker itself works (i.e. that it's able to play audio)._\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "speakers",
+                ":speaker_id",
+                "test",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "speaker_id",
+                  "description": "(Required) Speaker ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "48f3bff6-af1c-4634-8e97-88a0e091f341",
+              "name": "Empty response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "test",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f0b83eed-6f54-45d3-bfab-2bbcb071671c",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "test",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 6098\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11183d52-e7bf-4908-8f24-8b5f358cbf30",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "test",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2b278d5d-6ae7-42a4-8586-d4c760a14220",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "test",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2038909c-edde-4a42-8545-00e84f874166",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "speakers",
+                    ":speaker_id",
+                    "test",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "speaker_id",
+                      "description": "(Required) Speaker ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.angelcam.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "94e35f8d-686c-415a-9d56-225548287d92",
+    "name": "Angelcam active-service Speakers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.\n\n\nContact Support:\n Email: support@angelcam.com",
+      "type": "text/plain"
+    }
+  }
+}

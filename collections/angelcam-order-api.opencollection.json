@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Order API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "order",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve list of orders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/billing/orders/",
+            "params": [
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Filtering by order state"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve list of orders"
+        },
+        {
+          "info": {
+            "name": "Retrieve order detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/billing/orders/:order_id/",
+            "params": [
+              {
+                "name": "order_id",
+                "value": "3",
+                "type": "path",
+                "description": "Order ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve order detail"
+        },
+        {
+          "info": {
+            "name": "Retrieve list of items on order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/billing/orders/:order_id/items/",
+            "params": [
+              {
+                "name": "order_id",
+                "value": "3",
+                "type": "path",
+                "description": "Order ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve list of items on order"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

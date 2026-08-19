@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service incidents API
+  title: Angelcam active-service Incidents API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -116,6 +116,59 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    SnapshotObject:
+      title: Snapshot object
+      properties:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
+      required:
+      - url
+      - created_at
+      example:
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     IncidentObject:
       type: object
       title: Incident object
@@ -128,28 +181,33 @@ components:
           type: string
           description: Time when incident was created, format `%Y-%m-%dT%H:%M:%SZ`
         verified_at:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Time when incident was verified, format `%Y-%m-%dT%H:%M:%SZ`
         closed_at:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Time when incident was closed, format `%Y-%m-%dT%H:%M:%SZ`
         first_event_occurred_at:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Time when first event (triggering one) occured, format `%Y-%m-%dT%H:%M:%SZ`
         last_event_occurred_at:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Time when last event durign of incident occured, format `%Y-%m-%dT%H:%M:%SZ`
         event_count:
           type: number
           minimum: 1
           description: Number of events during incident
         incident_sharing_url:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: URL that can be used for incident verification by third parties. The URL leads to a web page where all cameras from the affected site can be viewed (live streams + the last two hours of recording). The URL is valid for one hour after the corresponding incident is created. This field will be `null` if the URL is no longer valid.
         snapshot:
           $ref: '#/components/schemas/SnapshotObject'
@@ -175,20 +233,14 @@ components:
         snapshot:
           url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
           created_at: '2019-08-09T13:23:24.000Z'
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -213,14 +265,6 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     IncidentListResponse:
       type: object
       title: Incident list
@@ -232,13 +276,15 @@ components:
         next:
           format: uri
           description: Next page from pagination
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         previous:
           format: uri
           description: Previous page from pagination
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         results:
           type: array
           description: List of incidents
@@ -265,56 +311,19 @@ components:
           snapshot:
             url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
             created_at: '2019-08-09T13:23:24.000Z'
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    SnapshotObject:
-      title: Snapshot object
-      properties:
-        url:
-          format: uri
-          description: URL of the snapshot image
-          nullable: true
-          type: string
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
-      required:
-      - url
-      - created_at
-      example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      nullable: true
-      type: object
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
   responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error404NotFound:
       description: The specified resource was not found
       content:

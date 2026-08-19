@@ -1,0 +1,573 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Recording API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "recording",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "General recording information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recording/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-info) instead.**\n"
+        },
+        {
+          "info": {
+            "name": "Download a given recording section",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recording/download/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of the download. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of the download. Example: `2016-03-19T14:00:00Z.`"
+              },
+              {
+                "name": "filename",
+                "value": "clip",
+                "type": "query",
+                "description": "Filename suggestion for the download. The filename extension will be added automatically.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint will construct a download URL for a specified recording section of a given camera. If there are no records within the section, the download URL will be still returned, however, the URL will respond with HTTP 404. If there are any gaps within the specified recording section, they will be skipped.\n\nPlease keep in mind that the maximum downloadable length is 3 hours.\n\n**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-camer"
+        },
+        {
+          "info": {
+            "name": "Start recording on given camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recording/start/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "duration",
+                "value": "30",
+                "type": "query",
+                "description": "Time in seconds after which recording will be stopped. In case multiple auto stop recording requests are received on same camera the one which ends later will be applied. If this endpoint is called without this parameter recording will not be stopped automatically and if there's scheduled auto stop it will be canceled."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-start) instead.**\n"
+        },
+        {
+          "info": {
+            "name": "Stop recording on given camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recording/stop/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-stop) instead.**\n"
+        },
+        {
+          "info": {
+            "name": "Create and return recorded stream for a specified time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recording/stream/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a stream. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of a stream. If missing, stream will play till the very end of recorded footage. Example: `2016-03-19T14:00:00Z.`\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-stream) instead.**\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve timeline of records for given camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recording/timeline/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a timeline. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of a timeline. Example: `2016-03-19T14:00:00Z.`"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Please keep in mind that maximum length of timeline is 1 day.\n\n**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-timeline) instead.**\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve recordings on a given camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/recordings/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve recordings on a given camera"
+        },
+        {
+          "info": {
+            "name": "Retrieve recording stream info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/stream/:streamer_name/:streamer_id/",
+            "params": [
+              {
+                "name": "streamer_name",
+                "value": "rec-streamer-eu-central-1",
+                "type": "path",
+                "description": "Streamer server name."
+              },
+              {
+                "name": "streamer_id",
+                "value": "61c59a859e9244a19713fdfec6e50184",
+                "type": "path",
+                "description": "Stream ID."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/stream-controls/operation/recordings-stream-info) instead.**\n"
+        },
+        {
+          "info": {
+            "name": "General recording information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "General recording information"
+        },
+        {
+          "info": {
+            "name": "Download a given recording section",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/download/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of the download. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of the download. Example: `2016-03-19T14:00:00Z.`"
+              },
+              {
+                "name": "filename",
+                "value": "clip",
+                "type": "query",
+                "description": "Filename suggestion for the download. The filename extension will be added automatically.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "This endpoint will construct a download URL for a specified recording section of a given camera. If there are no records within the section, the download URL will be still returned, however, the URL will respond with HTTP 404. If there are any gaps within the specified recording section, they will be skipped.\n\nPlease keep in mind that the maximum downloadable length is 3 hours.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve recording snapshot URL at a specified time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/snapshot/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              },
+              {
+                "name": "datetime",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Time at which to retrieve snapshot. Example: `2016-03-19T08:00:00Z`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve recording snapshot URL at a specified time"
+        },
+        {
+          "info": {
+            "name": "Start recording",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/start/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              },
+              {
+                "name": "start_from",
+                "value": "2024-07-10T00:00:00.000Z",
+                "type": "query",
+                "description": "All available media starting from a given timestamp will be recorded. This also includes any media buffered by Angelcam Cloud infrastructure and the media source itself (e.g. IP camera). This parameter becomes handy in situations when you only want to record certain events but you need the recording to start a few seconds before the event itself. If this endpoint is called without this parameter, only media generated after the recording start command are recorded."
+              },
+              {
+                "name": "stop_at",
+                "value": "2024-07-10T00:01:00.000Z",
+                "type": "query",
+                "description": "Time at which the recording will be stopped. In case multiple auto-stop recording requests are received on the same recording, the one which ends later will be applied. If this endpoint is called without this parameter, the recording will not be stopped automatically, and if there's a scheduled auto stop, it will be canceled. This parameter is mutually exclusive with the `duration` parameter."
+              },
+              {
+                "name": "duration",
+                "value": "30",
+                "type": "query",
+                "description": "Time in seconds after which the recording will be stopped (counting from the moment the request is received by Angelcam API). In case multiple auto-stop recording requests are received on the same recording, the one that ends later will be applied. If this endpoint is called without this parameter, the recording will not be stopped automatically, and if there's a scheduled auto stop, it will be canceled. This parameter is mutually exclusive with the `stop_at` parameter."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "### Event recording\n\nIf you only wish to record events instead of 24/7 coverage, you can use a combination of the `start_from` and `stop_at` or `duration` parameters. Setting `start_from` a few seconds before now will ensure that any buffered media starting from the given timestamp will be recorded. Note that this means that Angelcam Cloud is already connected to the media source (e.g. IP camera) or that the media source itself is able to hold media in an internal buffer for some amount of time "
+        },
+        {
+          "info": {
+            "name": "Stop recording",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/stop/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Stop recording"
+        },
+        {
+          "info": {
+            "name": "Create and return recorded stream for a specified time",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/stream/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a stream. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of a stream. If missing, stream will play till the very end of recorded footage. Example: `2016-03-19T14:00:00Z.`\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create and return recorded stream for a specified time"
+        },
+        {
+          "info": {
+            "name": "Retrieve timeline of records for given recording",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/:recording_id/timeline/",
+            "params": [
+              {
+                "name": "recording_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Recording UUID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a timeline. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of a timeline. Example: `2016-03-19T14:00:00Z.`"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Please keep in mind that maximum length of timeline is 1 day.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

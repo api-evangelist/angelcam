@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Stream Controls API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "stream-controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve recording stream info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/recording/streams/:stream_id/",
+            "params": [
+              {
+                "name": "stream_id",
+                "value": "63d57a30-e167-4b39-b098-102ab99e136d",
+                "type": "path",
+                "description": "Stream ID."
+              }
+            ]
+          },
+          "docs": "Retrieve recording stream info"
+        },
+        {
+          "info": {
+            "name": "Pause recording stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/recording/streams/:stream_id/pause/",
+            "params": [
+              {
+                "name": "stream_id",
+                "value": "63d57a30-e167-4b39-b098-102ab99e136d",
+                "type": "path",
+                "description": "Stream ID."
+              }
+            ]
+          },
+          "docs": "Pause recording stream"
+        },
+        {
+          "info": {
+            "name": "Play recording stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/recording/streams/:stream_id/play/",
+            "params": [
+              {
+                "name": "stream_id",
+                "value": "63d57a30-e167-4b39-b098-102ab99e136d",
+                "type": "path",
+                "description": "Stream ID."
+              }
+            ]
+          },
+          "docs": "Play recording stream"
+        },
+        {
+          "info": {
+            "name": "Set playback speed",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/recording/streams/:stream_id/speed/",
+            "params": [
+              {
+                "name": "stream_id",
+                "value": "63d57a30-e167-4b39-b098-102ab99e136d",
+                "type": "path",
+                "description": "Stream ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "If you're looking to modify the playback speed in your application, there's an essential step that you need to keep in mind. You must send a request to our streaming service via this endpoint to prepare the HLS playlist at the desired speed.\n\nKeep in mind, however, that altering the playback speed does not only change how fast the video plays, but also affects the bitrate. For instance, if you increase the playback speed to twice (2x) the normal speed, the bitrate will also double. The implicati"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

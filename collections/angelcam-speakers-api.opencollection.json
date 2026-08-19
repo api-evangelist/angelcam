@@ -1,0 +1,231 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Speakers API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "speakers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve speaker list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/speakers/",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set. Example: `1`."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Return results starting at `offset`. Example: `10`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve speaker list"
+        },
+        {
+          "info": {
+            "name": "Connect new speaker",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/speakers/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Connect new speaker"
+        },
+        {
+          "info": {
+            "name": "Retrieve speaker detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/speakers/:speaker_id/",
+            "params": [
+              {
+                "name": "speaker_id",
+                "value": "1",
+                "type": "path",
+                "description": "Speaker ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve speaker detail"
+        },
+        {
+          "info": {
+            "name": "Update existing speaker",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.angelcam.com/v1/speakers/:speaker_id/",
+            "params": [
+              {
+                "name": "speaker_id",
+                "value": "1",
+                "type": "path",
+                "description": "Speaker ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update existing speaker"
+        },
+        {
+          "info": {
+            "name": "Start audio playback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/speakers/:speaker_id/play/",
+            "params": [
+              {
+                "name": "speaker_id",
+                "value": "1",
+                "type": "path",
+                "description": "Speaker ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Play a given audio message or return a WebRTC signaling URL if no message ID is given.\n\n### Live audio playback using WebRTC\n\nEvery [WebRTC signaling](#section/Angelcam-API/WebRTC-signaling) session for live audio playback starts by sending an SDP offer from the client to the corresponding Angelcam server followed by one or more local ICE candidates. The server then responds with an SDP answer followed by one or more of its local ICE candidates. The candidate exchange should conclude by sending "
+        },
+        {
+          "info": {
+            "name": "Stop audio playback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/speakers/:speaker_id/stop/",
+            "params": [
+              {
+                "name": "speaker_id",
+                "value": "1",
+                "type": "path",
+                "description": "Speaker ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Stop audio playback"
+        },
+        {
+          "info": {
+            "name": "Test speaker connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/speakers/:speaker_id/test/",
+            "params": [
+              {
+                "name": "speaker_id",
+                "value": "1",
+                "type": "path",
+                "description": "Speaker ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "On success, the endpoint returns HTTP 204; otherwise, HTTP 400 with a detail about the connection issue is returned.\n\n_Note that this is just a connectivity test. Successful connectivity test does not mean that the speaker itself works (i.e. that it's able to play audio)._\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service space API
+  title: Angelcam active-service Space API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -118,6 +118,14 @@ paths:
           description: Space not found or the user is not a member.
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -153,14 +161,38 @@ components:
         - permission: location.access
           location_id: 12
           camera_id: null
-    Error403PermissionDenied:
+    Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      title: Error 401 Unauthorized
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SpaceObject:
+      type: object
+      title: Space
+      properties:
+        id:
+          type: integer
+          description: Space ID.
+          example: 7
+        name:
+          type: string
+          description: Display name of the space.
+          example: My Organisation
+        is_default:
+          type: boolean
+          description: Whether this is the user's default space.
+          example: true
+      required:
+      - id
+      - name
+      - is_default
+      example:
+        id: 7
+        name: My Organisation
+        is_default: true
     AccessAssignmentObject:
       type: object
       title: Access assignment
@@ -197,15 +229,17 @@ components:
           - camera.broadcasting.manage
           - camera.timelapse.manage
         location_id:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           description: 'When set, the permission is scoped to this location. Always present for `location.*` and `camera.*` slugs.
 
             '
           example: 12
         camera_id:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           description: 'When set, the permission is scoped to this camera. Always present for `camera.*` slugs, together with `location_id`.
 
             '
@@ -214,51 +248,19 @@ components:
         permission: camera.view
         location_id: 12
         camera_id: 345
-    SpaceObject:
-      type: object
-      title: Space
-      properties:
-        id:
-          type: integer
-          description: Space ID.
-          example: 7
-        name:
-          type: string
-          description: Display name of the space.
-          example: My Organisation
-        is_default:
-          type: boolean
-          description: Whether this is the user's default space.
-          example: true
-      required:
-      - id
-      - name
-      - is_default
-      example:
-        id: 7
-        name: My Organisation
-        is_default: true
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
   responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   securitySchemes:
     OAuth2:
       type: oauth2

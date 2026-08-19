@@ -1,0 +1,1612 @@
+{
+  "item": [
+    {
+      "id": "6bf15e22-3fd9-422f-8c66-b8b94b09fe74",
+      "name": "camera-guest",
+      "description": {
+        "content": "You can share your camera with a guest, this means, you allow guests to view stream from your camera. There is also an option to share also recordings together with live stream.\n\nWhen you adding new guest, you just need their email. Then we send them an email informing them that you share camera with them. In case when there was no account with given email we precreate an account for these guest.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0d85fe96-b6d9-4f42-9a1c-7cfd16ac963d",
+          "name": "Retrieve camera guests list",
+          "request": {
+            "name": "Retrieve camera guests list",
+            "description": {},
+            "url": {
+              "path": [
+                "cameras",
+                ":camera_id",
+                "guests",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Limit result set. Example: `1`."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "Return results starting at `offset`. Example: `10`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4f463d85-52f0-49dd-93dc-cca77b905593",
+              "name": "Returns camera guests list.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 5364,\n  \"next\": null,\n  \"previous\": null,\n  \"results\": [\n    {\n      \"email\": \"at9r8S-WBOM@vrIqKmxdgXWgOYmCONhZaKdVJYFIL.gt\",\n      \"permissions\": {\n        \"can_view_rec\": true,\n        \"can_create_clips\": true,\n        \"can_view_all_clips\": false,\n        \"share_notifications\": true\n      },\n      \"id\": 4904,\n      \"first_name\": null,\n      \"last_name\": null\n    },\n    {\n      \"email\": \"wQW@AsLaaciRuULlvgRwFGJJuwiSUhD.khis\",\n      \"permissions\": {\n        \"can_view_rec\": true,\n        \"can_create_clips\": true,\n        \"can_view_all_clips\": false,\n        \"share_notifications\": false\n      },\n      \"id\": 6206,\n      \"first_name\": null,\n      \"last_name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "679ad6ac-1667-4ccf-82fa-1f22a9669aa6",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "119b68bc-06dd-475c-9f8e-76d39f4477a8",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "12beb651-4231-483b-8352-acf0f1aeda01",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9e3f514e-3356-4b5e-ab98-9e8c0c4d87b2",
+          "name": "Create camera guest",
+          "request": {
+            "name": "Create camera guest",
+            "description": {},
+            "url": {
+              "path": [
+                "cameras",
+                ":camera_id",
+                "guests",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<email>\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8ff882f3-fa35-49e0-b7a3-d63e3890dc56",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"email\": \"L5zeXgN9q31gCgT@cYBPlXTxAkEzqbM.nib\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  },\n  \"id\": 3223,\n  \"first_name\": null,\n  \"last_name\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3bb1a809-55ed-4a37-9b53-72724e2d712f",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e217d90c-abf0-46ed-87e1-7adeaef8c63e",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "503e1f4f-f123-4338-859e-7c79fff31fec",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "80046ab6-5fb0-4b78-a819-2bed1d46b4f1",
+          "name": "Retrieve camera guest",
+          "request": {
+            "name": "Retrieve camera guest",
+            "description": {},
+            "url": {
+              "path": [
+                "cameras",
+                ":camera_id",
+                "guests",
+                ":guest_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "guest_id",
+                  "description": "(Required) Guest ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1ad852d8-ac5e-4d11-a5c4-8b8898b94a19",
+              "name": "Camera guest object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"email\": \"L5zeXgN9q31gCgT@cYBPlXTxAkEzqbM.nib\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  },\n  \"id\": 3223,\n  \"first_name\": null,\n  \"last_name\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4571579-7aa0-4af9-9c3d-a5eba0454808",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57a9c3a5-5081-4124-866f-24a0cf2954de",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a57024dd-8f87-4dfd-9741-7cc7b9c01694",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ddf00ecc-4886-4fb0-8cbf-586f1811bec6",
+          "name": "Update camera guest",
+          "request": {
+            "name": "Update camera guest",
+            "description": {},
+            "url": {
+              "path": [
+                "cameras",
+                ":camera_id",
+                "guests",
+                ":guest_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "guest_id",
+                  "description": "(Required) Guest ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37c8779d-9e19-4ad6-998e-3d5318ae10ec",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"email\": \"L5zeXgN9q31gCgT@cYBPlXTxAkEzqbM.nib\",\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  },\n  \"id\": 3223,\n  \"first_name\": null,\n  \"last_name\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69dc6ef3-902e-4891-8c5c-1d143f3ff7f9",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d953ed6-6423-44b2-aec5-c6210f9b6cdc",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"can_view_rec\": \"<boolean>\",\n    \"can_create_clips\": \"<boolean>\",\n    \"can_view_all_clips\": \"<boolean>\",\n    \"share_notifications\": \"<boolean>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "64bfe539-db9b-4562-8270-c992a005df02",
+          "name": "Remove camera guest",
+          "request": {
+            "name": "Remove camera guest",
+            "description": {},
+            "url": {
+              "path": [
+                "cameras",
+                ":camera_id",
+                "guests",
+                ":guest_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "guest_id",
+                  "description": "(Required) Guest ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1260d887-431b-4f08-a063-0c186ef14f5c",
+              "name": "No content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "13928eef-2446-4b6f-aae1-20d65c8ab502",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a1aebb2-569d-4318-905e-5555fe409956",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd8fa8e0-e1a0-42ae-ab2b-8dbf343a52f0",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cameras",
+                    ":camera_id",
+                    "guests",
+                    ":guest_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "guest_id",
+                      "description": "(Required) Guest ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.angelcam.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "6dce7376-b85f-4108-8766-568632e0dfca",
+    "name": "Angelcam active-service Camera Guest API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.\n\n\nContact Support:\n Email: support@angelcam.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,353 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Arrow Clients API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "arrow-clients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List paired Arrow clients",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/arrow-clients/",
+            "params": [
+              {
+                "name": "mac",
+                "value": "11-22-33-aa-bb-cc",
+                "type": "query",
+                "description": "If set, the endpoint will return only Arrow clients with a given MAC address. You can use either the colon or the dash separated format or you can omit the separator completely.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a list of Arrow clients paired with the current user account."
+        },
+        {
+          "info": {
+            "name": "Request pairing of an Arrow client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/arrow-clients/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Request pairing of a given Arrow client with the current user account. One of the `uuid`, `angelbox_id` or `mac` parameter is required. In case the Arrow client has been paired already, the API will check if the current user can access the client. If the user can access the client, the API will respond with UUID of the client (i.e. the standard response). Otherwise, the API will respond with \"Permission Denied\".\n\nPairing via MAC address is only available upon request, otherwise API responds with"
+        },
+        {
+          "info": {
+            "name": "Arrow client detail (MAC address pairing)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:mac/",
+            "params": [
+              {
+                "name": "mac",
+                "value": "12:34:56:78:90:AB",
+                "type": "path",
+                "description": "Arrow client MAC address"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get detailed information about a given Arrow client, it can be used **just during the paring process via MAC address**. When you know uuid of the client, use [Arrow client detail API endpoint](#operation/arrow-client-detail) endpoint instead."
+        },
+        {
+          "info": {
+            "name": "Arrow client detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get detailed information about a given Arrow client."
+        },
+        {
+          "info": {
+            "name": "Unpair Arrow client",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Unpair Arrow client"
+        },
+        {
+          "info": {
+            "name": "Reset service table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/reset-service-table/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Remove all automatically discovered and/or custom services from the client's service table.\n"
+        },
+        {
+          "info": {
+            "name": "Scan network",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/scan-network/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Trigger a scan of the local network that the Arrow client is connected to. The scan discovers cameras and other services available on that network.\n\nThe scan runs asynchronously — this endpoint returns immediately. To check whether the scan is still in progress, poll the [Arrow client detail](#operation/arrow-client-detail) endpoint and inspect the `scanning` field. Discovered services appear in the [Arrow client services](#operation/arrow-client-services) list once the scan completes.\n\nThe API "
+        },
+        {
+          "info": {
+            "name": "List Arrow services",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/services/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get a list of services visible and available to a given Arrow client."
+        },
+        {
+          "info": {
+            "name": "Add Arrow service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/services/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Add a custom service to the Arrow client service table.\n\nThis method is supported only if the `add_custom_service` capability is\nsignaled by the Arrow client. It can be used to access IP cameras in\nthe target network if the automatic service discovery does not find\nthem. The Arrow client will verify that the IP address belongs to the\nsame local network it is connected to. Other IP addresses will be\nrejected for security reasons.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve Arrow service",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/services/:service_id/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              },
+              {
+                "name": "service_id",
+                "value": "1ab2",
+                "type": "path",
+                "description": "Arrow client service ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get details about a service visible and available to a given Arrow client."
+        },
+        {
+          "info": {
+            "name": "Delete Arrow service",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.angelcam.com/v1/arrow-clients/:uuid/services/:service_id/",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "Arrow client UUID"
+              },
+              {
+                "name": "service_id",
+                "value": "1ab2",
+                "type": "path",
+                "description": "Arrow client service ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete given Arrow service from the client's service table.\n\nNote that it is only possible to delete services that were added via the [corresponding API call](#tag/arrow-clients/operation/add-arrow-service). If the same service was also discovered by the network scanner, it will remain available as long as it is still visible for the network scanner.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

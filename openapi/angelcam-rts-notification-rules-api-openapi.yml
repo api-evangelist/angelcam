@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service rts_notification_rules API
+  title: Angelcam active-service Rts Notification Rules API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -145,6 +145,36 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     NotificationRuleChangeObject:
       type: object
       title: Http notification rule object
@@ -201,44 +231,56 @@ components:
         - 1
         - 2
         - 3
-    ErrorGeneric:
+    NotificationRuleListResponse:
       type: object
-      title: Error object
+      title: Notification rule list
       properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
+        count:
           type: integer
+          minimum: 0
+          description: Count of all notifications rules
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of notification rules
+          items:
+            $ref: '#/components/schemas/NotificationRuleObject'
       required:
-      - title
-      - detail
-      - status
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+      - count
+      - next
+      - previous
+      - results
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: 85
+          notification_method: 254
+          message_type: camera_status_online
+          allowed_cameras:
+          - 1
+          - 2
+          - 3
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     NotificationRuleObject:
       type: object
       title: Http notification rule object
@@ -300,71 +342,37 @@ components:
         - 1
         - 2
         - 3
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    NotificationRuleListResponse:
+    Error400InvalidParams:
       type: object
-      title: Notification rule list
+      title: Error 400 Invalid Parameters
       properties:
-        count:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
           type: integer
-          minimum: 0
-          description: Count of all notifications rules
-        next:
-          format: uri
-          description: Next page from pagination
-          nullable: true
-          type: string
-        previous:
-          format: uri
-          description: Previous page from pagination
-          nullable: true
-          type: string
-        results:
-          type: array
-          description: List of notification rules
-          items:
-            $ref: '#/components/schemas/NotificationRuleObject'
       required:
-      - count
-      - next
-      - previous
-      - results
+      - title
+      - detail
+      - status
       example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: 85
-          notification_method: 254
-          message_type: camera_status_online
-          allowed_cameras:
-          - 1
-          - 2
-          - 3
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
   responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -377,12 +385,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error400InvalidParams:
       description: Query params are invalid.
       content:

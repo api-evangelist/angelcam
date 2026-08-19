@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service recording API
+  title: Angelcam active-service Recording API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -627,125 +627,53 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    RecordingStreamInfoResponseDeprecated:
-      type: object
-      title: Recording stream information
-      properties:
-        current_time:
-          type: string
-          format: date-time
-          description: Current time in a stream.
-      example:
-        current_time: '2017-01-01T00:00:00.000Z'
+  parameters:
+    recordingId:
+      name: recording_id
+      in: path
+      required: true
+      description: Recording UUID
+      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
+      schema:
+        type: string
+        format: uuid
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    EmptyResponse:
+      description: Empty response.
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    SegmentObject:
-      type: object
-      title: Segment object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
-        end:
-          type: string
-          format: date-time
-          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
-    RecordingListResponse:
-      type: object
-      title: Recording list
-      properties:
-        count:
-          type: integer
-          description: Recording count
-        next:
-          format: uri
-          description: Next page from pagination
-          nullable: true
-          type: string
-        previous:
-          format: uri
-          description: Previous page from pagination
-          nullable: true
-          type: string
-        results:
-          type: array
-          description: List of recordings on a given camera
-          items:
-            $ref: '#/components/schemas/RecordingResponse'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    RecordingDownloadResponse:
-      type: object
-      title: Recording download
-      properties:
-        url:
-          type: string
-          format: url
-          description: Download URL
-      example:
-        url: https://rust-streamer-eu-central-1-07489f9b03f198b91.angelcam.com/recordings/7e65d945-fffc-42e7-b78d-dd6f5cea91ee/download/?start=2019%2D09%2D30T07%3A23%3A14%2E932%2B00%3A00&end=2019%2D09%2D30T07%3A53%3A57%2E016%2B00%3A00&token=eyJ0aW1lIjoxNTY5ODU3NjgzLCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E020b136d5da0d9518ed5428bfa01cadab1a139bf1e4f8e64a726fe3dfd40e541&filename=clip
-    RecordingTimelineResponse:
-      type: object
-      title: Recording timeline object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: 'Start time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
-
-            '
-        end:
-          type: string
-          format: date-time
-          description: 'End time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
-
-            '
-        segments:
-          type: array
-          description: Array of recording segments.
-          items:
-            $ref: '#/components/schemas/SegmentObject'
-      example:
-        start: '2017-01-01T00:00:00.000Z'
-        end: '2017-01-01T03:32:19.000Z'
-        segments:
-        - start: '2017-06-09T00:00:18.000Z'
-          end: '2017-06-09T03:25:28.000Z'
-        - start: '2017-06-09T04:19:42.000Z'
-          end: 2017-06-09T010:39:31Z
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
     RecordingStreamResponse:
       type: object
       title: Recording stream object
@@ -830,6 +758,95 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    RecordingDownloadResponse:
+      type: object
+      title: Recording download
+      properties:
+        url:
+          type: string
+          format: url
+          description: Download URL
+      example:
+        url: https://rust-streamer-eu-central-1-07489f9b03f198b91.angelcam.com/recordings/7e65d945-fffc-42e7-b78d-dd6f5cea91ee/download/?start=2019%2D09%2D30T07%3A23%3A14%2E932%2B00%3A00&end=2019%2D09%2D30T07%3A53%3A57%2E016%2B00%3A00&token=eyJ0aW1lIjoxNTY5ODU3NjgzLCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E020b136d5da0d9518ed5428bfa01cadab1a139bf1e4f8e64a726fe3dfd40e541&filename=clip
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SegmentObject:
+      type: object
+      title: Segment object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+        end:
+          type: string
+          format: date-time
+          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
+    RecordingListResponse:
+      type: object
+      title: Recording list
+      properties:
+        count:
+          type: integer
+          description: Recording count
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of recordings on a given camera
+          items:
+            $ref: '#/components/schemas/RecordingResponse'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
     RecordingResponse:
       type: object
       title: Recording information
@@ -868,28 +885,33 @@ components:
           description: 'Retention period in ISO 8601 duration format tells how long in past we store the footage. Example: P7D means 7 days.
 
             '
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         record_queue_capacity:
           description: 'Capacity of the record queue in seconds, maxium amount of seconds to be recorded in total, unlimited if null
 
             '
-          nullable: true
-          type: number
+          type:
+          - number
+          - 'null'
         deactivated_at:
-          type: string
+          type:
+          - string
+          - 'null'
           format: datetime
-          nullable: true
           description: Datetime when recording service has been deactivated, if null then recording is active.
         recording_start:
-          type: string
+          type:
+          - string
+          - 'null'
           format: datetime
-          nullable: true
           description: Recording footage start datetime, if null there is no recording footage
         recording_end:
-          type: string
+          type:
+          - string
+          - 'null'
           format: datetime
-          nullable: true
           description: Recording footage end datetime, if null there is no recording footage
       example:
         id: df5fcd78-6114-4750-b23a-cec3c3febc5b
@@ -899,60 +921,45 @@ components:
         record_queue_capacity: null
         recording_start: '2024-05-02T10:32:11.000Z'
         recording_end: 2024-05-07T16:58:7.5400Z
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
+    RecordingTimelineResponse:
+      type: object
+      title: Recording timeline object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
+
+            '
+        end:
+          type: string
+          format: date-time
+          description: 'End time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
+
+            '
+        segments:
+          type: array
+          description: Array of recording segments.
+          items:
+            $ref: '#/components/schemas/SegmentObject'
       example:
-        title: not_found
-        detail: Not Found
-        status: 404
-  responses:
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    EmptyResponse:
-      description: Empty response.
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-  parameters:
-    recordingId:
-      name: recording_id
-      in: path
-      required: true
-      description: Recording UUID
-      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
-      schema:
-        type: string
-        format: uuid
-    cameraId:
-      name: camera_id
-      in: path
-      required: true
-      description: Camera ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
+        start: '2017-01-01T00:00:00.000Z'
+        end: '2017-01-01T03:32:19.000Z'
+        segments:
+        - start: '2017-06-09T00:00:18.000Z'
+          end: '2017-06-09T03:25:28.000Z'
+        - start: '2017-06-09T04:19:42.000Z'
+          end: 2017-06-09T010:39:31Z
+    RecordingStreamInfoResponseDeprecated:
+      type: object
+      title: Recording stream information
+      properties:
+        current_time:
+          type: string
+          format: date-time
+          description: Current time in a stream.
+      example:
+        current_time: '2017-01-01T00:00:00.000Z'
   securitySchemes:
     OAuth2:
       type: oauth2

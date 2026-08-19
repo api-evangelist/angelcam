@@ -1,0 +1,1111 @@
+{
+  "item": [
+    {
+      "id": "29ea9211-c909-48e5-b421-14201481323a",
+      "name": "shared-camera-recording",
+      "description": {
+        "content": "Everything is same as in recording for my own cameras. Just replace `cameras` by `shared-cameras` in every endpoints url.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9d533897-6837-4723-9699-e8f4499c48d1",
+          "name": "General shared recording information",
+          "request": {
+            "name": "General shared recording information",
+            "description": {},
+            "url": {
+              "path": [
+                "shared-cameras",
+                ":camera_id",
+                "recording",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "30050e8a-2b85-4c6e-a3a3-f5b242a60a4f",
+              "name": "Returns general recording information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"11f94a48-7f89-6bc1-a220-c1f7106487e2\",\n  \"status\": \"STOPPING\",\n  \"retention\": null,\n  \"deactivated_at\": \"string\",\n  \"record_queue_capacity\": 6615.223665029023,\n  \"recording_start\": null,\n  \"recording_end\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b863c39-3d95-4e51-bb77-7e94fd2d7669",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "852d8ba7-e8df-44cb-adc2-7b3421064ff9",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "902c3126-96c8-4235-aa5b-b04967b54084",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "826d3828-61b5-4ad3-af73-fd3c53d1b238",
+          "name": "Retrieve recording stream for shared camera",
+          "request": {
+            "name": "Retrieve recording stream for shared camera",
+            "description": {
+              "content": "Create and return recorded stream of shared camera for a specified time",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shared-cameras",
+                ":camera_id",
+                "recording",
+                "stream",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start time of a stream. Example: `2016-03-19T08:00:00Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<dateTime>",
+                  "description": "End time of a stream. If missing, stream will play till the very end of recorded footage. Example: `2016-03-19T14:00:00Z.`\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e5ebee9d-d3b2-4c91-96dd-3a754be5ae7f",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "stream",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://rec-streamer-eu-central-1.angelcam.com/streams/df0600b7487a44d480217db7713720d3/playlist.m3u8\",\n  \"format\": \"hls\",\n  \"stream_controls\": {\n    \"base_url\": \"https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/\",\n    \"play\": \"https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/\",\n    \"pause\": \"https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/\",\n    \"speed\": \"https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94b4955d-53c9-440e-89b1-3ca11f9b7dab",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "stream",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 8102\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f18c095d-4aef-4e33-a656-28a94f47e4b5",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "stream",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee463fd7-2386-40f6-a761-827c158bbfca",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "stream",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "322b650c-0eee-431e-b4a5-312f73225579",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "stream",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "286d5024-2236-4814-8fe4-2ebd52acea3f",
+          "name": "Retrieve timeline of records for given shared camera",
+          "request": {
+            "name": "Retrieve timeline of records for given shared camera",
+            "description": {
+              "content": "Please keep in mind that maximum length of timeline is 1 day.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shared-cameras",
+                ":camera_id",
+                "recording",
+                "timeline",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start time of a timeline. Example: `2016-03-19T08:00:00Z`."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<dateTime>",
+                  "description": "(Required) End time of a timeline. Example: `2016-03-19T14:00:00Z.`"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "camera_id",
+                  "description": "(Required) Camera ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a6e95c43-88a9-4826-98f6-46719da1edc9",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "timeline",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"start\": \"1947-03-23T06:09:46.085Z\",\n  \"end\": \"2000-09-30T09:57:16.831Z\",\n  \"segments\": [\n    {\n      \"start\": \"1952-12-28T08:43:05.967Z\",\n      \"end\": \"1983-01-03T20:11:45.941Z\"\n    },\n    {\n      \"start\": \"1959-09-05T23:10:14.947Z\",\n      \"end\": \"1960-11-21T12:53:50.609Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f45ec961-7327-4ac3-91de-6b931835c7db",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "timeline",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 8102\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f93363c-562f-49f7-9ac4-5ff0493d6a31",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "timeline",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67a495f9-c059-4576-a121-7ea656868024",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "timeline",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3074afce-ee96-424b-a806-80e389e17292",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shared-cameras",
+                    ":camera_id",
+                    "recording",
+                    "timeline",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2017-01-01T00:00:00.000Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2017-01-01T00:10:00.000Z"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "camera_id",
+                      "description": "(Required) Camera ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.angelcam.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "57920a52-daf2-4f87-a5ca-679f6015a323",
+    "name": "Angelcam active-service Shared Camera Recording API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.\n\n\nContact Support:\n Email: support@angelcam.com",
+      "type": "text/plain"
+    }
+  }
+}

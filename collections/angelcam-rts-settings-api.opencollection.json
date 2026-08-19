@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Rts Settings API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "rts_settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "RTS settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/rts/",
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "RTS settings"
+        },
+        {
+          "info": {
+            "name": "Update RTS settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.angelcam.com/v1/rts/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update RTS settings"
+        },
+        {
+          "info": {
+            "name": "Arm RTS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/rts/arm/",
+            "params": [
+              {
+                "name": "location_id",
+                "value": "1",
+                "type": "query",
+                "description": "Location ID to arm."
+              },
+              {
+                "name": "delay",
+                "value": "30",
+                "type": "query",
+                "description": "Arming delay in seconds. If specified, the location will be armed after the specified delay."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Arm RTS"
+        },
+        {
+          "info": {
+            "name": "Disarm RTS",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/rts/disarm/",
+            "params": [
+              {
+                "name": "location_id",
+                "value": "1",
+                "type": "query",
+                "description": "Location ID to disarm."
+              },
+              {
+                "name": "delay",
+                "value": "30",
+                "type": "query",
+                "description": "Disarming delay in seconds. If specified, the location will be disarmed after the specified delay."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Disarm RTS"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

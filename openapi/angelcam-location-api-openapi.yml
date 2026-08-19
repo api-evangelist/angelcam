@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service location API
+  title: Angelcam active-service Location API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -86,17 +86,15 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  parameters:
-    locationId:
-      name: location_id
-      in: path
-      required: true
-      description: Location ID
-      example: 1
-      schema:
-        type: integer
-        minimum: 1
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -111,6 +109,112 @@ components:
       - title
       - detail
       - status
+    LocationObject:
+      type: object
+      title: Location object
+      properties:
+        id:
+          type: integer
+          description: Location ID
+        name:
+          type: string
+          description: Location name
+        description:
+          type:
+          - string
+          - 'null'
+          description: Location description/note
+        is_armed:
+          type: boolean
+          description: Whether the location is currently armed
+        next_arming:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Next scheduled arming time
+        next_disarming:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Next scheduled disarming time
+        cameras_count:
+          type: integer
+          description: Number of cameras associated with this location
+      required:
+      - id
+      - name
+      - is_armed
+      - next_arming
+      - next_disarming
+      - cameras_count
+      example:
+        id: 1
+        name: My house
+        description: Main bedroom
+        is_armed: true
+        next_arming: '2025-06-28T23:03:00Z'
+        next_disarming: null
+        cameras_count: 3
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    LocationListResponse:
+      type: object
+      title: Location list
+      properties:
+        count:
+          type: integer
+          description: Total number of locations
+          example: 2
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of locations
+          items:
+            $ref: '#/components/schemas/LocationObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 2
+        next: null
+        previous: null
+        results:
+        - id: 1
+          name: My house
+          description: Main bedroom
+          is_armed: true
+          next_arming: '2025-06-28T23:03:00Z'
+          next_disarming: null
+          cameras_count: 3
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -135,116 +239,13 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    LocationObject:
-      type: object
-      title: Location object
-      properties:
-        id:
-          type: integer
-          description: Location ID
-        name:
-          type: string
-          description: Location name
-        description:
-          type: string
-          nullable: true
-          description: Location description/note
-        is_armed:
-          type: boolean
-          description: Whether the location is currently armed
-        next_arming:
-          type: string
-          format: date-time
-          nullable: true
-          description: Next scheduled arming time
-        next_disarming:
-          type: string
-          format: date-time
-          nullable: true
-          description: Next scheduled disarming time
-        cameras_count:
-          type: integer
-          description: Number of cameras associated with this location
-      required:
-      - id
-      - name
-      - is_armed
-      - next_arming
-      - next_disarming
-      - cameras_count
-      example:
-        id: 1
-        name: My house
-        description: Main bedroom
-        is_armed: true
-        next_arming: '2025-06-28T23:03:00Z'
-        next_disarming: null
-        cameras_count: 3
-    LocationListResponse:
-      type: object
-      title: Location list
-      properties:
-        count:
-          type: integer
-          description: Total number of locations
-          example: 2
-        next:
-          format: uri
-          description: Next page from pagination
-          nullable: true
-          type: string
-        previous:
-          format: uri
-          description: Previous page from pagination
-          nullable: true
-          type: string
-        results:
-          type: array
-          description: List of locations
-          items:
-            $ref: '#/components/schemas/LocationObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 2
-        next: null
-        previous: null
-        results:
-        - id: 1
-          name: My house
-          description: Main bedroom
-          is_armed: true
-          next_arming: '2025-06-28T23:03:00Z'
-          next_disarming: null
-          cameras_count: 3
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
   responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -257,18 +258,22 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error400InvalidParams:
       description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+  parameters:
+    locationId:
+      name: location_id
+      in: path
+      required: true
+      description: Location ID
+      example: 1
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

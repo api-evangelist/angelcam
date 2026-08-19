@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service rts_notification_methods API
+  title: Angelcam active-service Rts Notification Methods API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -154,113 +154,15 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  parameters:
-    notificationMethodId:
-      name: method_id
-      in: path
-      required: true
-      description: Notification method ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
   schemas:
-    HttpNotificationMethodObject:
-      type: object
-      title: Http notification object
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          description: notification method ID
-        name:
-          type: string
-          description: notification method name
-        type:
-          type: string
-          enum:
-          - http
-          description: notification method type
-        http_method:
-          type: string
-          enum:
-          - GET
-          - POST
-          - PUT
-          description: HTTP method
-        url:
-          type: string
-          format: uri
-          description: URL to send the notification to, can be local when Arrow client is used
-        arrow_client:
-          type: string
-          format: uuid
-          description: Arrow client UUID we want to send the notification through
-          nullable: true
-        signature_private_key:
-          type: string
-          description: Private key to sign the notification
-          default: randomly generated
-      required:
-      - id
-      - name
-      - http_method
-      - type
-      - url
-      - arrow_client
-      - signature_private_key
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        id: 85
-        name: My server
-        type: http
-        http_method: POST
-        url: https://example.com/notify
-        signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
-    NotificationMethodListResponse:
-      type: object
-      title: Notification method list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all notifications methods
-        next:
-          format: uri
-          description: Next page from pagination
-          nullable: true
-          type: string
-        previous:
-          format: uri
-          description: Previous page from pagination
-          nullable: true
-          type: string
-        results:
-          type: array
-          description: List of notification methods
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/HttpNotificationMethodObject'
-            - $ref: '#/components/schemas/EmailNotificationMethodObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: 85
-          name: My Email
-          type: email
-          email: email@example.com
-        - id: 254
-          name: My Server
-          type: http
-          http_method: POST
-          url: https://example.com/notify
-          signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -329,37 +231,14 @@ components:
         name: My email
         type: email
         email: email@example.com
-    Error403PermissionDenied:
+    Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      title: Error 404 Not Found
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    EmailNotificationMethodChangeObject:
-      type: object
-      title: Email notification object
-      properties:
-        name:
-          type: string
-          description: notification method name
-        type:
-          type: string
-          enum:
-          - email
-          description: notification method type
-        email:
-          type: string
-          format: email
-          description: email address
-      required:
-      - type
-      - email
-      example:
-        name: My email
-        type: email
-        email: email@example.com
+        title: not_found
+        detail: Not Found
+        status: 404
     HttpNotificationMethodChangeObject:
       type: object
       title: Http notification object
@@ -385,10 +264,11 @@ components:
           format: uri
           description: URL to send the notification to, can be local when Arrow client is used
         arrow_client:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uuid
           description: Arrow client UUID we want to send the notification through
-          nullable: true
         signature_private_key:
           type: string
           description: Private key to sign the notification
@@ -410,15 +290,135 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
+    NotificationMethodListResponse:
+      type: object
+      title: Notification method list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all notifications methods
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of notification methods
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/HttpNotificationMethodObject'
+            - $ref: '#/components/schemas/EmailNotificationMethodObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
       example:
-        title: not_found
-        detail: Not Found
-        status: 404
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: 85
+          name: My Email
+          type: email
+          email: email@example.com
+        - id: 254
+          name: My Server
+          type: http
+          http_method: POST
+          url: https://example.com/notify
+          signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
+    EmailNotificationMethodChangeObject:
+      type: object
+      title: Email notification object
+      properties:
+        name:
+          type: string
+          description: notification method name
+        type:
+          type: string
+          enum:
+          - email
+          description: notification method type
+        email:
+          type: string
+          format: email
+          description: email address
+      required:
+      - type
+      - email
+      example:
+        name: My email
+        type: email
+        email: email@example.com
+    HttpNotificationMethodObject:
+      type: object
+      title: Http notification object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: notification method ID
+        name:
+          type: string
+          description: notification method name
+        type:
+          type: string
+          enum:
+          - http
+          description: notification method type
+        http_method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          description: HTTP method
+        url:
+          type: string
+          format: uri
+          description: URL to send the notification to, can be local when Arrow client is used
+        arrow_client:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Arrow client UUID we want to send the notification through
+        signature_private_key:
+          type: string
+          description: Private key to sign the notification
+          default: randomly generated
+      required:
+      - id
+      - name
+      - http_method
+      - type
+      - url
+      - arrow_client
+      - signature_private_key
+      example:
+        id: 85
+        name: My server
+        type: http
+        http_method: POST
+        url: https://example.com/notify
+        signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
   responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -431,18 +431,22 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error400InvalidParams:
       description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+  parameters:
+    notificationMethodId:
+      name: method_id
+      in: path
+      required: true
+      description: Notification method ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

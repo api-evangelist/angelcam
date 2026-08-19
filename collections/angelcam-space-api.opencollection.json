@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Space API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "space",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List spaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/spaces/",
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns all spaces the authenticated user belongs to. Use the `is_default` flag to identify the user's default space. To operate within a specific space, pass the `X-Space-Id` request header with the desired space ID.\n"
+        },
+        {
+          "info": {
+            "name": "Get space detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/spaces/:space_id/",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "7",
+                "type": "path",
+                "description": "ID of the space."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns details of a specific space. The authenticated user must be a member of that space.\n"
+        },
+        {
+          "info": {
+            "name": "Get space permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/spaces/:space_id/permissions/",
+            "params": [
+              {
+                "name": "space_id",
+                "value": "7",
+                "type": "path",
+                "description": "ID of the space."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns all permissions the authenticated user has within the given space. The user must be a member of that space. Includes both permissions assigned directly to the user and those inherited through group membership.\nEach permission entry may be scoped to the whole space, a specific location, or a specific camera. See the [Spaces section](#tag/space) for the full list of permission slugs and scoping rules.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

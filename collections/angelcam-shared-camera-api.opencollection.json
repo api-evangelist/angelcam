@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Shared Camera API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shared-camera",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve shared camera list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set. Example: `1`."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Return results starting at `offset`. Example: `10`."
+              },
+              {
+                "name": "refresh_rate",
+                "value": "",
+                "type": "query",
+                "description": "Set a maximum number of keyframes sent in MJPEG stream per second. For example if you want to have MJPEG stream with keyframe sent every 10 seconds, post value 0.1."
+              },
+              {
+                "name": "max_width",
+                "value": "",
+                "type": "query",
+                "description": "Maximum width of MJPEG stream and LIVE SNAPSHOT."
+              },
+              {
+                "name": "max_height",
+                "value": "",
+                "type": "query",
+                "description": "Maximum height of MJPEG stream and LIVE SNAPSHOT."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve shared camera list"
+        },
+        {
+          "info": {
+            "name": "Retrieve shared camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "21",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "refresh_rate",
+                "value": "",
+                "type": "query",
+                "description": "Set a maximum number of keyframes sent in MJPEG stream per second. For example if you want to have MJPEG stream with keyframe sent every 10 seconds, post value 0.1."
+              },
+              {
+                "name": "max_width",
+                "value": "",
+                "type": "query",
+                "description": "Maximum width of MJPEG stream and LIVE SNAPSHOT."
+              },
+              {
+                "name": "max_height",
+                "value": "",
+                "type": "query",
+                "description": "Maximum height of MJPEG stream and LIVE SNAPSHOT."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve shared camera"
+        },
+        {
+          "info": {
+            "name": "Remove shared camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "21",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Remove shared camera"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1292 @@
+{
+  "item": [
+    {
+      "id": "6fa361ed-b1a0-4a2d-b9c8-321c772e4f3d",
+      "name": "rts_notification_methods",
+      "description": {
+        "content": "Manage notification methods — email and HTTP webhook. HTTP methods send a signed POST to your URL with a JSON payload on each notification. See the [Webhooks guide](/guides/webhooks/) for payload fields and signature verification.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "466ffdf3-7c23-46fc-b6f5-2ccf3247534d",
+          "name": "Retrieve notifications methods",
+          "request": {
+            "name": "Retrieve notifications methods",
+            "description": {
+              "content": "Retrieves list of user notification methods",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rts",
+                "notifications",
+                "methods",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Limit result set. Example: `1`."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "Return results starting at `offset`. Example: `10`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2d1ef2c1-180b-4b19-930c-2f37cfbcd27c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 8962,\n  \"next\": null,\n  \"previous\": \"https://Jp.aeG3dz9AwHsU7l+xtOOVXmyM+k,9DCNbYe-imN07eAmZKahamN6\",\n  \"results\": [\n    {\n      \"id\": 5596,\n      \"name\": \"string\",\n      \"http_method\": \"PUT\",\n      \"type\": \"http\",\n      \"url\": \"http://c.phribkrqFzhWr4osSB7kC01331n1s+DFvpKaMex.F9heDLkQ1eic0-z7v0EzC,U\",\n      \"arrow_client\": null,\n      \"signature_private_key\": \"randomly generated\"\n    },\n    {\n      \"id\": 1201,\n      \"name\": \"string\",\n      \"http_method\": \"PUT\",\n      \"type\": \"http\",\n      \"url\": \"https://QIRlNSznnrISIvkUGnKWIB.zfgjRyK9ZVzFhomY\",\n      \"arrow_client\": \"6a678583-0d9b-458a-a0d4-722f39ad23fd\",\n      \"signature_private_key\": \"randomly generated\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70d7fabf-0e6d-44e0-98b9-b31bd28ff543",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 507\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc985110-3d41-423c-9f4e-ae5e9e9525f4",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2adbf9ad-4cf4-4773-afbe-a1131fcd84a2",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba5adef4-a6e9-4f0b-86a9-989a60178840",
+          "name": "Create notification method",
+          "request": {
+            "name": "Create notification method",
+            "description": {
+              "content": "Create notification method",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rts",
+                "notifications",
+                "methods",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"name\": \"<string>\",\n  \"http_method\": \"POST\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"signature_private_key\": \"randomly generated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c5d6e2b0-0234-498b-9b87-c2b7fc2c0593",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 219,\n  \"name\": \"string\",\n  \"http_method\": \"PUT\",\n  \"type\": \"http\",\n  \"url\": \"http://yAfM.uphrcrkEv2UvWi3sdI5pY5GRQd8\",\n  \"arrow_client\": \"90a8297b-acb3-f26f-afec-8479ef8381e5\",\n  \"signature_private_key\": \"randomly generated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a2929d6-5347-4b3f-a07d-2552c7e47940",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 507\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05622be5-3bc3-4b72-a322-87f86d38819b",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "018810b2-213f-47aa-8be8-31b26495cfdb",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "72015955-a58f-4f9e-b75f-4d01ff65c016",
+          "name": "Retrieve notification method detail",
+          "request": {
+            "name": "Retrieve notification method detail",
+            "description": {
+              "content": "Retrieve notification method detail",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rts",
+                "notifications",
+                "methods",
+                ":method_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "method_id",
+                  "description": "(Required) Notification method ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b736ebeb-f1a8-4e57-ac63-a00753298454",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 219,\n  \"name\": \"string\",\n  \"http_method\": \"PUT\",\n  \"type\": \"http\",\n  \"url\": \"http://yAfM.uphrcrkEv2UvWi3sdI5pY5GRQd8\",\n  \"arrow_client\": \"90a8297b-acb3-f26f-afec-8479ef8381e5\",\n  \"signature_private_key\": \"randomly generated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0bd03fe9-ec1f-49c7-9081-58e1d9783813",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9930af38-ac00-482f-acb0-1dc7ab6898dc",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d97b8c1e-87db-4fdf-a7dd-776268092b26",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e252235-4f9f-4f18-9553-7c447cfef51f",
+          "name": "Update notification method",
+          "request": {
+            "name": "Update notification method",
+            "description": {
+              "content": "Update notification method",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "rts",
+                "notifications",
+                "methods",
+                ":method_id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "method_id",
+                  "description": "(Required) Notification method ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "user_access user_delete camera_access camera_create camera_manage camera_delete camera_guest_access camera_guest_manage public_cameras_access arrow_client_access arrow_client_manage event_access recording_access recording_start_stop recording_clips_access recording_clips_create recording_clips_share sensor_access sensor_manage broadcasting_access broadcasting_start_stop client_access client_create client_manage streams_detect sites_access sites_manage services_access trials_access trials_activate active_services_access active_services_manage orders_access messages_access messages_manage incidents_access space_access space_permissions_access"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://my.angelcam.com/oauth/token/"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://my.angelcam.com/oauth/authorize/"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"name\": \"<string>\",\n  \"http_method\": \"POST\",\n  \"arrow_client\": \"<string,null-uuid>\",\n  \"signature_private_key\": \"randomly generated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4fb6d1ea-4e4b-41c6-b875-2b9608dbc073",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 219,\n  \"name\": \"string\",\n  \"http_method\": \"PUT\",\n  \"type\": \"http\",\n  \"url\": \"http://yAfM.uphrcrkEv2UvWi3sdI5pY5GRQd8\",\n  \"arrow_client\": \"90a8297b-acb3-f26f-afec-8479ef8381e5\",\n  \"signature_private_key\": \"randomly generated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "303fbba6-b07d-4c95-ba6a-45eb5af0a6eb",
+              "name": "Query params are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"string\",\n  \"detail\": {},\n  \"status\": 507\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "455a2e38-6570-447c-9072-60824f055ff3",
+              "name": "Missing or invalid authorization.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_authenticated\",\n  \"detail\": \"Authentication credentials were not provided\",\n  \"status\": 401\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8f8ef54-5796-4811-a697-e543498eb9e5",
+              "name": "Missing permission.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"permission_denied\",\n  \"detail\": \"You do not have permission to perform this action.\",\n  \"status\": 403\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26afe071-a4de-47d0-be48-5c27d5b37e5e",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "rts",
+                    "notifications",
+                    "methods",
+                    ":method_id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "method_id",
+                      "description": "(Required) Notification method ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"My server\",\n  \"type\": \"http\",\n  \"http_method\": \"POST\",\n  \"url\": \"https://example.com/notify\",\n  \"signature_private_key\": \"CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"not_found\",\n  \"detail\": \"Not Found\",\n  \"status\": 404\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.angelcam.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8f196e4a-1dc0-4917-ad24-6abc90bb6d0b",
+    "name": "Angelcam active-service Rts Notification Methods API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.\n\n\nContact Support:\n Email: support@angelcam.com",
+      "type": "text/plain"
+    }
+  }
+}

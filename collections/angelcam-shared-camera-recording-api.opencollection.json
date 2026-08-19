@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Shared Camera Recording API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shared-camera-recording",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "General shared recording information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/recording/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "21",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "General shared recording information"
+        },
+        {
+          "info": {
+            "name": "Retrieve recording stream for shared camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/recording/stream/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "21",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a stream. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of a stream. If missing, stream will play till the very end of recorded footage. Example: `2016-03-19T14:00:00Z.`\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create and return recorded stream of shared camera for a specified time"
+        },
+        {
+          "info": {
+            "name": "Retrieve timeline of records for given shared camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/recording/timeline/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "21",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a timeline. Example: `2016-03-19T08:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "2017-01-01T00:10:00.000Z",
+                "type": "query",
+                "description": "End time of a timeline. Example: `2016-03-19T14:00:00Z.`"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Please keep in mind that maximum length of timeline is 1 day.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

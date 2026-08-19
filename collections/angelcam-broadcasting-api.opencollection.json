@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Broadcasting API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "broadcasting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "General broadcasting information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/broadcasting/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "General broadcasting information"
+        },
+        {
+          "info": {
+            "name": "Start public broadcasting on given camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/broadcasting/start/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Start public broadcasting on given camera"
+        },
+        {
+          "info": {
+            "name": "Stop public broadcasting on given camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/broadcasting/stop/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Stop public broadcasting on given camera"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service API
+  title: Angelcam Active Service API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -254,10 +254,11 @@ paths:
               - camera_id
               properties:
                 camera_id:
-                  type: integer
+                  type:
+                  - integer
+                  - 'null'
                   description: ID of the camera to be used for the service, if null, the service will be unassigned
                   example: 3
-                  nullable: true
               example:
                 camera_id: 3
       security:
@@ -281,6 +282,14 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -295,6 +304,45 @@ components:
       - title
       - detail
       - status
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ServiceObject:
+      type: object
+      title: Service object
+      properties:
+        type:
+          type: string
+          description: Type of service
+          enum:
+          - cloud-recording
+          - broadcasting
+          - timelapse
+          - user-service
+          - event-recording
+          - live-view
+          example: cloud-recording
+        code:
+          type: string
+          description: Code of service, this code together with type is unique identifier of service
+          example: 3-days
+      required:
+      - type
+      - code
+    UsageDetailObject:
+      type: object
+      title: Usage detail
+      description: In case of camera service show info for what camera the service is used.
+      properties:
+        camera_id:
+          type: integer
+        camera_name:
+          type: string
     ActiveServiceListResponse:
       type: object
       title: Active service list
@@ -305,13 +353,15 @@ components:
         next:
           format: uri
           description: Next page from pagination
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         previous:
           format: uri
           description: Previous page from pagination
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         results:
           type: array
           description: List of services available for user
@@ -322,6 +372,29 @@ components:
       - next
       - previous
       - results
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ActiveServiceUsageObject:
+      type: object
+      title: Service object
+      properties:
+        id:
+          type: integer
+        in_use:
+          type: boolean
+          description: Says if service is in use for example by a camera
+        usage_detail:
+          $ref: '#/components/schemas/UsageDetailObject'
+      required:
+      - id
+      - in_use
+      - usage_detail
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -346,22 +419,6 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
     ActiveServiceObject:
       type: object
       title: Service object
@@ -371,16 +428,15 @@ components:
         current_service:
           $ref: '#/components/schemas/ServiceObject'
           description: Current service
-          nullable: true
         renew_service:
           $ref: '#/components/schemas/ServiceObject'
           description: Pending service (the service that will be activated at the next renewal)
-          nullable: true
         renew_period:
-          type: string
+          type:
+          - string
+          - 'null'
           format: duration
           example: P1M
-          nullable: true
         valid_until:
           type: string
           format: datetime
@@ -397,88 +453,33 @@ components:
       - valid_until
       - in_use
       - usage_detail
-    ServiceObject:
-      type: object
-      title: Service object
-      properties:
-        type:
-          type: string
-          description: Type of service
-          enum:
-          - cloud-recording
-          - broadcasting
-          - timelapse
-          - user-service
-          - event-recording
-          - live-view
-          example: cloud-recording
-        code:
-          type: string
-          description: Code of service, this code together with type is unique identifier of service
-          example: 3-days
-      required:
-      - type
-      - code
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    UsageDetailObject:
-      type: object
-      title: Usage detail
-      description: In case of camera service show info for what camera the service is used.
-      properties:
-        camera_id:
-          type: integer
-        camera_name:
-          type: string
-    ActiveServiceUsageObject:
-      type: object
-      title: Service object
-      properties:
-        id:
-          type: integer
-        in_use:
-          type: boolean
-          description: Says if service is in use for example by a camera
-        usage_detail:
-          $ref: '#/components/schemas/UsageDetailObject'
-          nullable: true
-      required:
-      - id
-      - in_use
-      - usage_detail
   responses:
-    EmptyResponse:
-      description: Empty response.
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    EmptyResponse:
+      description: Empty response.
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
     Error400InvalidParams:
       description: Query params are invalid.
       content:

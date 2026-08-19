@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service speakers API
+  title: Angelcam active-service Speakers API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -171,16 +171,18 @@ paths:
               type: object
               properties:
                 message:
-                  type: integer
-                  nullable: true
+                  type:
+                  - integer
+                  - 'null'
                   description: audio message ID
                 repeat:
                   type: boolean
                   default: false
                   description: repeat the audio message
                 stop_after:
-                  type: integer
-                  nullable: true
+                  type:
+                  - integer
+                  - 'null'
                   description: Duration in seconds after which the playback will automatically stop. This is required when repeat is `true` to prevent infinite playback.
       responses:
         '200':
@@ -258,17 +260,15 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  parameters:
-    speakerId:
-      name: speaker_id
-      in: path
-      required: true
-      description: Speaker ID
-      example: 1
-      schema:
-        type: integer
-        minimum: 1
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -283,46 +283,6 @@ components:
       - title
       - detail
       - status
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
     Error503ServiceUnavailable:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -331,6 +291,14 @@ components:
         title: bad_gateway
         detail: Bad Gateway
         status: 502
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     SpeakerObject:
       type: object
       title: Speaker object
@@ -354,14 +322,16 @@ components:
           - basic
           description: Audio protocol
         arrow_client:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uuid
           description: UUID of arrow client client used for speaker connection, required when setup=arrow
-          nullable: true
         arrow_service_id:
-          type: string
+          type:
+          - string
+          - 'null'
           description: hexadecimal id of arrow service, can contain leading zeros, required when setup=arrow
-          nullable: true
         endpoint:
           type: string
           format: uri
@@ -386,14 +356,6 @@ components:
         arrow_client: 75b62326-eca3-4424-ab68-48e7da47e847
         arrow_service_id: 00af
         endpoint: /api/v1/audio/play
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
     SpeakerListResponse:
       type: object
       title: Speaker list
@@ -404,13 +366,15 @@ components:
         next:
           format: uri
           description: Next page from pagination
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         previous:
           format: uri
           description: Previous page from pagination
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         results:
           type: array
           description: List of speakers
@@ -421,45 +385,87 @@ components:
       - next
       - previous
       - results
-  responses:
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    EmptyResponse:
-      description: Empty response.
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+  responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    EmptyResponse:
+      description: Empty response.
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
     Error503ServiceUnavailable:
       description: Service unavailable
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error503ServiceUnavailable'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+  parameters:
+    speakerId:
+      name: speaker_id
+      in: path
+      required: true
+      description: Speaker ID
+      example: 1
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

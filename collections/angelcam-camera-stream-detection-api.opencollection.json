@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Camera Stream Detection API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "camera-stream-detection",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start stream detection",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/cameras/stream-detection/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve `session_id` which can be used for [querying stream detection result](#operation/stream-detection-result).\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve stream detection result",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/stream-detection/:session_id/",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "c95227c4-218c-4dee-899d-f3fa2ce9c39b",
+                "type": "path",
+                "description": "`session_id` that you received from [start stream detection endpoint](#operation/stream-detection-start)\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve stream detection result"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

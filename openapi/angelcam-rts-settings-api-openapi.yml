@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service rts_settings API
+  title: Angelcam active-service Rts Settings API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -152,6 +152,14 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -166,6 +174,56 @@ components:
       - title
       - detail
       - status
+    RTSSettingsObject:
+      type: object
+      title: RTS Settings object
+      properties:
+        incident_ttl:
+          type: string
+          enum:
+          - PT1M
+          - PT3M
+          - PT5M
+          - PT10M
+          - PT30M
+          - PT1H
+          description: ISO 8601 duration format. The value represents the minimal delay between two events triggered by the same sensor that has to pass before Angelcam sends another notification to the user.
+        is_armed:
+          type: boolean
+          description: If set to `false` user will not reveive any notifications about sensor events. This field shows global state.
+          deprecated: true
+        next_arming:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Next scheduled global arming time.
+          deprecated: true
+        next_disarming:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Next scheduled global disarming time.
+          deprecated: true
+      required:
+      - incident_ttl
+      - is_armed
+      - next_arming
+      - next_disarming
+      example:
+        incident_ttl: PT1M
+        is_armed: true
+        next_arming: '2025-06-28T23:03:00Z'
+        next_disarming: null
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -190,77 +248,21 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    RTSSettingsObject:
-      type: object
-      title: RTS Settings object
-      properties:
-        incident_ttl:
-          type: string
-          enum:
-          - PT1M
-          - PT3M
-          - PT5M
-          - PT10M
-          - PT30M
-          - PT1H
-          description: ISO 8601 duration format. The value represents the minimal delay between two events triggered by the same sensor that has to pass before Angelcam sends another notification to the user.
-        is_armed:
-          type: boolean
-          description: If set to `false` user will not reveive any notifications about sensor events. This field shows global state.
-          deprecated: true
-        next_arming:
-          type: string
-          format: date-time
-          nullable: true
-          description: Next scheduled global arming time.
-          deprecated: true
-        next_disarming:
-          type: string
-          format: date-time
-          nullable: true
-          description: Next scheduled global disarming time.
-          deprecated: true
-      required:
-      - incident_ttl
-      - is_armed
-      - next_arming
-      - next_disarming
-      example:
-        incident_ttl: PT1M
-        is_armed: true
-        next_arming: '2025-06-28T23:03:00Z'
-        next_disarming: null
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
   responses:
-    EmptyResponse:
-      description: Empty response.
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    EmptyResponse:
+      description: Empty response.
     Error400InvalidParams:
       description: Query params are invalid.
       content:

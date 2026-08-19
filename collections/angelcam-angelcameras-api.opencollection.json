@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Angelcameras API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "angelcameras",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get AngelCamera firmware",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/angelcamera/latest-firmware/:board/",
+            "params": [
+              {
+                "name": "board",
+                "value": "c3c9429e42c76e50f0f300267a7ac733",
+                "type": "path",
+                "description": "AngelCamera board ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Get the latest firmware for a given AngelCamera model."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

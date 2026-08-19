@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service shared-camera-clip API
+  title: Angelcam active-service Shared Camera Clip API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -177,6 +177,79 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    SharedCameraClipListResponse:
+      type: object
+      title: Clip list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all clips
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of clips for the camera
+          items:
+            $ref: '#/components/schemas/SharedCameraClipObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: b9aad334-07ba-4660-9f18-041875ec1ea4
+          created_by: 1
+          name: Frontdoor loitering
+          status: READY
+          start: '2017-01-01T00:00:20.000Z'
+          end: '2017-01-01T00:25:20.000Z'
+          created_at: '2017-02-01T02:37:21.000Z'
+          download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
     RecordingStreamResponse:
       type: object
       title: Recording stream object
@@ -237,52 +310,14 @@ components:
           play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
           pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
           speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    Error403PermissionDenied:
+    Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      title: Error 401 Unauthorized
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     Error400Invalid:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -347,63 +382,55 @@ components:
         end: '2017-01-01T00:25:20.000Z'
         created_at: '2017-02-01T02:37:21.000Z'
         download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    SharedCameraClipListResponse:
+    Error400InvalidParams:
       type: object
-      title: Clip list
+      title: Error 400 Invalid Parameters
       properties:
-        count:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
           type: integer
-          minimum: 0
-          description: Count of all clips
-        next:
-          format: uri
-          description: Next page from pagination
-          nullable: true
-          type: string
-        previous:
-          format: uri
-          description: Previous page from pagination
-          nullable: true
-          type: string
-        results:
-          type: array
-          description: List of clips for the camera
-          items:
-            $ref: '#/components/schemas/SharedCameraClipObject'
       required:
-      - count
-      - next
-      - previous
-      - results
+      - title
+      - detail
+      - status
       example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: b9aad334-07ba-4660-9f18-041875ec1ea4
-          created_by: 1
-          name: Frontdoor loitering
-          status: READY
-          start: '2017-01-01T00:00:20.000Z'
-          end: '2017-01-01T00:25:20.000Z'
-          created_at: '2017-02-01T02:37:21.000Z'
-          download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     cameraId:
       name: camera_id
@@ -423,31 +450,6 @@ components:
       schema:
         type: string
         format: uuid
-  responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,0 +1,162 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Shared Camera Clip API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shared-camera-clip",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve camera clips list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/clips/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "created_by",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Filter results only to clips created by given users. A comma separated list of user IDs is expected. No whitespace characters are permited. The asterisk (`*`) character can be used to list all clips. By default the endpoint returns only clips created by the current user."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve a list of recording clips for a given shared camera"
+        },
+        {
+          "info": {
+            "name": "Create clip",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/clips/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create a recording clip on a given shared camera"
+        },
+        {
+          "info": {
+            "name": "Retrieve a single clip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/clips/:clip_id/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "clip_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Clip UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves the details for a given recording clip"
+        },
+        {
+          "info": {
+            "name": "Retrieve a clip stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/shared-cameras/:camera_id/clips/:clip_id/stream/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "clip_id",
+                "value": "cd13975b-0b08-48f5-bd39-3f7d2a0c935a",
+                "type": "path",
+                "description": "Clip UUID"
+              },
+              {
+                "name": "start",
+                "value": "2017-01-01T00:00:00.000Z",
+                "type": "query",
+                "description": "Start time of a stream. Example: `2016-03-19T08:00:00Z`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves stream of a recording clip"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

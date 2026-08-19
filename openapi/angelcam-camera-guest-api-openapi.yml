@@ -1,7 +1,7 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service camera-guest API
+  title: Angelcam active-service Camera Guest API
   contact:
     email: support@angelcam.com
   x-logo:
@@ -183,89 +183,15 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  parameters:
-    guestId:
-      name: guest_id
-      in: path
-      required: true
-      description: Guest ID
-      example: 4
-      schema:
-        type: integer
-        minimum: 1
-    cameraId:
-      name: camera_id
-      in: path
-      required: true
-      description: Camera ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
   schemas:
-    CameraGuestListResponse:
-      type: object
-      deprecated: true
-      title: Camera guests list
-      properties:
-        count:
-          type: integer
-          description: Count of all camera guests
-        next:
-          format: uri
-          description: Next page from pagination
-          nullable: true
-          type: string
-        previous:
-          format: uri
-          description: Previous page from pagination
-          nullable: true
-          type: string
-        results:
-          type: array
-          description: List of camera guests
-          items:
-            $ref: '#/components/schemas/CameraGuestObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    CameraGuestObject:
-      type: object
-      deprecated: true
-      title: Guest object
-      properties:
-        id:
-          type: integer
-          description: Guest id
-        first_name:
-          description: Guest's first or given name.
-          nullable: true
-          type: string
-        last_name:
-          description: Guest's last or family name.
-          nullable: true
-          type: string
-        email:
-          type: string
-          format: email
-          description: Guest's email.
-        permissions:
-          $ref: '#/components/schemas/CameraGuestPermissionObject'
-      required:
-      - email
-      - permissions
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        id: 35
-        first_name: Saint
-        last_name: Michael
-        email: michael@angelcam.com
-        permisions:
-          can_view_rec: true
-          can_create_clips: false
-          can_view_all_clips: false
-          share_notifications: false
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -280,22 +206,36 @@ components:
       - title
       - detail
       - status
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+    CameraGuestListResponse:
+      type: object
+      deprecated: true
+      title: Camera guests list
+      properties:
+        count:
+          type: integer
+          description: Count of all camera guests
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of camera guests
+          items:
+            $ref: '#/components/schemas/CameraGuestObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -325,6 +265,70 @@ components:
           type: boolean
           description: Share RTS notifications for a given camera.
           x-example: false
+    CameraGuestObject:
+      type: object
+      deprecated: true
+      title: Guest object
+      properties:
+        id:
+          type: integer
+          description: Guest id
+        first_name:
+          description: Guest's first or given name.
+          type:
+          - string
+          - 'null'
+        last_name:
+          description: Guest's last or family name.
+          type:
+          - string
+          - 'null'
+        email:
+          type: string
+          format: email
+          description: Guest's email.
+        permissions:
+          $ref: '#/components/schemas/CameraGuestPermissionObject'
+      required:
+      - email
+      - permissions
+      example:
+        id: 35
+        first_name: Saint
+        last_name: Michael
+        email: michael@angelcam.com
+        permisions:
+          can_view_rec: true
+          can_create_clips: false
+          can_view_all_clips: false
+          share_notifications: false
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+  parameters:
+    guestId:
+      name: guest_id
+      in: path
+      required: true
+      description: Guest ID
+      example: 4
+      schema:
+        type: integer
+        minimum: 1
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
   responses:
     Error403PermissionDenied:
       description: Missing permission.
@@ -332,18 +336,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   securitySchemes:
     OAuth2:
       type: oauth2

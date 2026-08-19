@@ -1,0 +1,241 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Camera API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "camera",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve camera list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set. Example: `1`."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Return results starting at `offset`. Example: `10`."
+              },
+              {
+                "name": "refresh_rate",
+                "value": "",
+                "type": "query",
+                "description": "Set a maximum number of frames per second sent in an MJPEG stream. For example, if you want to get an MJPEG stream with frame sent every 10 seconds, use value 0.1."
+              },
+              {
+                "name": "max_width",
+                "value": "",
+                "type": "query",
+                "description": "Maximum frame width for the MJPEG stream and LIVE SNAPSHOT."
+              },
+              {
+                "name": "max_height",
+                "value": "",
+                "type": "query",
+                "description": "Maximum frame height for the MJPEG stream and LIVE SNAPSHOT."
+              },
+              {
+                "name": "stream_expires_at",
+                "value": "2999-12-12T00%3A00%3A00Z",
+                "type": "query",
+                "description": "Date and time when the returned camera streams should stop. By default, the returned streams have no expiration allowing the consumer to pull them indefinitely.\n    \nDo not confuse this with expiration of the stream URLs themselves. The stream URLs have a short expiration in order to minimize the risk of leaking and this behavior cannot be changed. However, once a stream URL is used to establish a connection, the returned stream can be pulled indefinitely unless the `stream_expires_at` parameter is used.\n"
+              },
+              {
+                "name": "has_guests",
+                "value": "",
+                "type": "query",
+                "description": "1 for retrieving list of cameras that have been shared with someone, 0 for retrieving list of cameras that have not been shared with anyone. Leaving parameter empty will return list of all user cameras."
+              },
+              {
+                "name": "tags",
+                "value": "tag1,tag2",
+                "type": "query",
+                "description": "Filter cameras by tags. Multiple tags can be specified by separating them with a comma. When using multiple tags, any camera that has at least one of the specified tags will be returned."
+              },
+              {
+                "name": "ids",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Filter cameras by IDs. Multiple IDs can be specified by separating them with a comma."
+              },
+              {
+                "name": "location_id",
+                "value": "1",
+                "type": "query",
+                "description": "Filter cameras by location ID. Only cameras belonging to the specified location will be returned."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve camera list"
+        },
+        {
+          "info": {
+            "name": "Connect new camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/cameras/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Connect new camera"
+        },
+        {
+          "info": {
+            "name": "Retrieve camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "refresh_rate",
+                "value": "",
+                "type": "query",
+                "description": "Set a maximum number of frames per second sent in an MJPEG stream. For example, if you want to get an MJPEG stream with frame sent every 10 seconds, use value 0.1."
+              },
+              {
+                "name": "max_width",
+                "value": "",
+                "type": "query",
+                "description": "Maximum frame width for the MJPEG stream and LIVE SNAPSHOT."
+              },
+              {
+                "name": "max_height",
+                "value": "",
+                "type": "query",
+                "description": "Maximum frame height for the MJPEG stream and LIVE SNAPSHOT."
+              },
+              {
+                "name": "stream_expires_at",
+                "value": "2999-12-12T00%3A00%3A00Z",
+                "type": "query",
+                "description": "Date and time when the returned camera streams should stop. By default, the returned streams have no expiration allowing the consumer to pull them indefinitely.\n    \nDo not confuse this with expiration of the stream URLs themselves. The stream URLs have a short expiration in order to minimize the risk of leaking and this behavior cannot be changed. However, once a stream URL is used to establish a connection, the returned stream can be pulled indefinitely unless the `stream_expires_at` parameter is used.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve camera"
+        },
+        {
+          "info": {
+            "name": "Update camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update camera"
+        },
+        {
+          "info": {
+            "name": "Remove camera",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Remove camera"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

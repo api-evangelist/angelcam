@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Angelcam active-service Event API",
+    "version": "2026.06.11"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "event",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve camera event list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/cameras/:camera_id/events/",
+            "params": [
+              {
+                "name": "camera_id",
+                "value": "3",
+                "type": "path",
+                "description": "Camera ID"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Example: `2017-03-07T14:00:00Z`."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "Example: `2017-03-07T16:00:00Z`."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit result set. Example: `1`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "authorization_code",
+              "authorizationUrl": "https://my.angelcam.com/oauth/authorize/",
+              "accessTokenUrl": "https://my.angelcam.com/oauth/token/",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves list of events belonging to the specified camera"
+        },
+        {
+          "info": {
+            "name": "Create event by get request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.angelcam.com/v1/events/",
+            "params": [
+              {
+                "name": "hash",
+                "value": "50yxnlu2o2",
+                "type": "query",
+                "description": "Event API hash (a unique token for each camera found in My Angelcam dashboard or obtained\nvia Camera Resource) - used to authenticate the request and pair the event with corresponding\ncamera.\n"
+              },
+              {
+                "name": "title",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "In cases when it's not possible to send post request we allowed to create event by GET request. In general you should avoid using this method and rather prefer creating events via POST request.\n"
+        },
+        {
+          "info": {
+            "name": "Create event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.angelcam.com/v1/events/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint has rate limiting in place. The endpoint will accept at most 10 requests per minute\nfor a given hash (see [Nuts and bolts](#section/Angelcam-API/Nuts-and-bolts) for more details).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

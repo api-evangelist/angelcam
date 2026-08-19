@@ -1,0 +1,669 @@
+{
+  "item": [
+    {
+      "id": "f6f7e17c-3db3-4f55-aa75-55829b712f3f",
+      "name": "stream-controls",
+      "description": {
+        "content": "You normally don't have to know the `streamer_domain` and `stream_id` path parameter, but use the generated endpoint URLs as reported by the `stream_controls` field in a create-stream response. Those URLs correspond to the following endpoints.\n* base_url: [Recording stream info](#tag/stream-controls/operation/recordings-stream-info)\n* play: [Play stream](#tag/stream-controls/operation/recordings-stream-play)\n* pause: [Pause stream](#tag/stream-controls/operation/recordings-stream-pause)\n* speed: [Set plyback stream](#tag/stream-controls/operation/recordings-stream-speed)\n\n\n## Syncing stream and timeline\nDue to various reasons, the time a user spends watching a stream doesn't necessarily have to match the time actually\nelapsed in the recorded video (i.e. a 5-minute long stream takes 6 minutes to watch on a user's slow mobile network\nconnection due to lag).\n\nPeriodically calling endpoint, [recordings stream info](#tag/stream-controls/operation/recordings-stream-info) comes in handy in this case, because it\nsynchronizes the time shown to the user in your UI, with the current time of the stream. This endpoint tells you the\nexact time where the stream is positioned at the current moment.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5b287964-232a-4f52-b4c7-cb7d95d260d9",
+          "name": "Retrieve recording stream info",
+          "request": {
+            "name": "Retrieve recording stream info",
+            "description": {},
+            "url": {
+              "protocol": "https",
+              "port": "streamer_domain",
+              "path": [
+                "recording",
+                "streams",
+                ":stream_id",
+                ""
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "stream_id",
+                  "description": "(Required) Stream ID."
+                },
+                {
+                  "description": "Streamer server name.",
+                  "type": "any",
+                  "value": "rec-streamer-eu-central-1.angelcam.com",
+                  "key": "streamer_domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "da8e5725-bfe9-4b44-934d-c737d2ba24c3",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"current_time\": \"2024-01-16T00:00:59.146606443+00:00\",\n  \"speed\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10bde6fb-7160-4823-a118-3f16414c5393",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d098fa8-d277-43db-9fc4-151b14c98b35",
+          "name": "Pause recording stream",
+          "request": {
+            "name": "Pause recording stream",
+            "description": {},
+            "url": {
+              "protocol": "https",
+              "port": "streamer_domain",
+              "path": [
+                "recording",
+                "streams",
+                ":stream_id",
+                "pause",
+                ""
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "stream_id",
+                  "description": "(Required) Stream ID."
+                },
+                {
+                  "description": "Streamer server name.",
+                  "type": "any",
+                  "value": "rec-streamer-eu-central-1.angelcam.com",
+                  "key": "streamer_domain"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ba3db0b8-9d15-4b7f-8caf-150b8eee10f8",
+              "name": "Empty response.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "pause",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8b44fd55-9520-4859-9d90-f4c51a9491e3",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "pause",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bf54c414-a76c-4476-83cb-1ae59d384601",
+          "name": "Play recording stream",
+          "request": {
+            "name": "Play recording stream",
+            "description": {},
+            "url": {
+              "protocol": "https",
+              "port": "streamer_domain",
+              "path": [
+                "recording",
+                "streams",
+                ":stream_id",
+                "play",
+                ""
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "stream_id",
+                  "description": "(Required) Stream ID."
+                },
+                {
+                  "description": "Streamer server name.",
+                  "type": "any",
+                  "value": "rec-streamer-eu-central-1.angelcam.com",
+                  "key": "streamer_domain"
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5b306b39-1878-40de-82b6-59a3116f030d",
+              "name": "Empty response.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "play",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8f0f1be2-384a-4b24-8f62-74642ac5d9bf",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "play",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6813c3cf-c2c9-4a3e-8bac-b88767f9f0b0",
+          "name": "Set playback speed",
+          "request": {
+            "name": "Set playback speed",
+            "description": {
+              "content": "If you're looking to modify the playback speed in your application, there's an essential step that you need to keep in mind. You must send a request to our streaming service via this endpoint to prepare the HLS playlist at the desired speed.\n\nKeep in mind, however, that altering the playback speed does not only change how fast the video plays, but also affects the bitrate. For instance, if you increase the playback speed to twice (2x) the normal speed, the bitrate will also double. The implications of this are significant. A higher bitrate requires faster internet speeds to maintain smooth playback. So, if your users do not have a fast enough internet connection, they might experience buffering or interruptions during playback.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "protocol": "https",
+              "port": "streamer_domain",
+              "path": [
+                "recording",
+                "streams",
+                ":stream_id",
+                "speed",
+                ""
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "stream_id",
+                  "description": "(Required) Stream ID."
+                },
+                {
+                  "description": "Streamer server name.",
+                  "type": "any",
+                  "value": "rec-streamer-eu-central-1.angelcam.com",
+                  "key": "streamer_domain"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"speed\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e97516f2-a2c8-4afb-acc4-bbe86c5094ec",
+              "name": "Empty response.",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "speed",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"speed\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e80a6100-07a1-482f-aaa5-d8e03a912b3f",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "speed",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"speed\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6e7c1646-82de-4d4d-be72-583a4f9f5628",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "protocol": "https",
+                  "port": "streamer_domain",
+                  "path": [
+                    "recording",
+                    "streams",
+                    ":stream_id",
+                    "speed",
+                    ""
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "stream_id",
+                      "description": "(Required) Stream ID."
+                    },
+                    {
+                      "description": "Streamer server name.",
+                      "type": "any",
+                      "value": "rec-streamer-eu-central-1.angelcam.com",
+                      "key": "streamer_domain"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"speed\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.angelcam.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "53eca9a9-219b-41b0-a814-5885f2dcf340",
+    "name": "Angelcam active-service Stream Controls API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.\n\n\nContact Support:\n Email: support@angelcam.com",
+      "type": "text/plain"
+    }
+  }
+}

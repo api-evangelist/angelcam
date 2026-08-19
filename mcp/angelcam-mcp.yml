@@ -50,3 +50,9 @@ tools:
 - name: audio_playback_start
   description: Play audio through a speaker
   source_operation: openapi/angelcam-openapi-original.yml#audio-playback-start
+deployment:
+  mode: none
+  verified: derived
+  tools: 14
+  checked: '2026-08-12'
+  source: catalog MCP census
