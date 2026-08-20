@@ -32,6 +32,17 @@ modified: '2026-07-17'
 tags:
 - Company
 - Video Surveillance
+- Camera
+- IP Camera
+- Cloud Recording
+- Video Streaming
+- IoT
+- ONVIF
+- Security
+- Webhook
+tags_raw:
+- Company
+- Video Surveillance
 - Cameras
 - IP Camera
 - Cloud Recording
@@ -228,6 +239,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Broadcasting
+  tags_raw:
   - broadcasting
   properties:
   - type: OpenAPI
@@ -265,6 +278,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Camera
+  tags_raw:
   - camera
   properties:
   - type: OpenAPI
@@ -388,6 +403,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Clients
+  tags_raw:
   - client
   properties:
   - type: OpenAPI
@@ -444,6 +461,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Clip
+  tags_raw:
   - clip
   properties:
   - type: OpenAPI
@@ -501,6 +520,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Event
+  tags_raw:
   - event
   properties:
   - type: OpenAPI
@@ -545,6 +566,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Incidents
+  tags_raw:
   - incidents
   properties:
   - type: OpenAPI
@@ -589,6 +612,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Location
+  tags_raw:
   - location
   properties:
   - type: OpenAPI
@@ -623,6 +648,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Order
+  tags_raw:
   - order
   properties:
   - type: OpenAPI
@@ -704,6 +731,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Recording
+  tags_raw:
   - recording
   properties:
   - type: OpenAPI
@@ -740,7 +769,8 @@ apis:
     is created, we can send it to user using different notification methods based on notification rules.
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
-  tags:
+  tags: []
+  tags_raw:
   - rts_messages
   properties:
   - type: OpenAPI
@@ -777,7 +807,8 @@ apis:
     fields and signature verification.
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
-  tags:
+  tags: []
+  tags_raw:
   - rts_notification_methods
   properties:
   - type: OpenAPI
@@ -814,7 +845,8 @@ apis:
     send me an email".
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
-  tags:
+  tags: []
+  tags_raw:
   - rts_notification_rules
   properties:
   - type: OpenAPI
@@ -852,7 +884,8 @@ apis:
     an open incident stays active before it is automatically closed when no new events are received.
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
-  tags:
+  tags: []
+  tags_raw:
   - rts_settings
   properties:
   - type: OpenAPI
@@ -905,6 +938,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Sensor
+  tags_raw:
   - sensor
   properties:
   - type: OpenAPI
@@ -948,6 +983,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Service
+  tags_raw:
   - service
   properties:
   - type: OpenAPI
@@ -1096,6 +1133,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Space
+  tags_raw:
   - space
   properties:
   - type: OpenAPI
@@ -1132,6 +1171,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - Speakers
+  tags_raw:
   - speakers
   properties:
   - type: OpenAPI
@@ -1232,6 +1273,8 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
+  - User
+  tags_raw:
   - user
   properties:
   - type: OpenAPI
