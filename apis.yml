@@ -1321,6 +1321,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/angelcam-capability-edges.yml
+  name: AngelCam Business Capability Map
 - type: Overlay
   url: overlays/angelcam-openapi-overlay.yaml
 - type: DeveloperPortal

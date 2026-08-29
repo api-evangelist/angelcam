@@ -1,0 +1,26 @@
+slug: angelcam
+provider: AngelCam
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: active-service
+  spec_file: angelcam-active-service-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.75
+  evidence: POST /billing/active-services/  activate-service  Activate new service; DELETE .../  my-service-cancel  Cancel
+    active service; GET .../usage/  my-service-usage-detail
+  reason: Operations activate, change, cancel and meter usage of subscribed cloud-service plans under
+    /billing/ — the commercial subscription lifecycle for a SaaS video platform. Ambiguity between provisioning/modification/cancellation
+    sub-capabilities and metering, so L1 only.
