@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   summary: List cameras and retrieve the live-stream URLs for one.
 sourceDescriptions:
-- name: angelcam
-  url: ../openapi/angelcam-openapi-original.yml
+- name: cameraApi
+  url: ../openapi/angelcam-camera-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: watch-live-camera

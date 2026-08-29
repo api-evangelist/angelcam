@@ -4,8 +4,11 @@ info:
   version: 1.0.0
   summary: From a camera, list recordings, read a timeline, create a clip, and share it by email.
 sourceDescriptions:
-- name: angelcam
-  url: ../openapi/angelcam-openapi-original.yml
+- name: clipApi
+  url: ../openapi/angelcam-clip-api-openapi.yml
+  type: openapi
+- name: recordingApi
+  url: ../openapi/angelcam-recording-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: create-and-share-clip
