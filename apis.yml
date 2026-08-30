@@ -290,7 +290,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Camera
+  - camera
   tags_raw:
   - camera
   properties:
@@ -415,7 +415,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Clients
+  - client
   tags_raw:
   - client
   properties:
@@ -473,7 +473,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Clip
+  - clip
   tags_raw:
   - clip
   properties:
@@ -660,7 +660,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Order
+  - order
   tags_raw:
   - order
   properties:
@@ -743,7 +743,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Recording
+  - recording
   tags_raw:
   - recording
   properties:
@@ -950,7 +950,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Sensor
+  - sensor
   tags_raw:
   - sensor
   properties:
@@ -1145,7 +1145,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Space
+  - space
   tags_raw:
   - space
   properties:
@@ -1183,7 +1183,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Speakers
+  - speakers
   tags_raw:
   - speakers
   properties:
