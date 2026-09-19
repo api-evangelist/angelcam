@@ -995,7 +995,7 @@ apis:
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
   tags:
-  - Service
+  - Services
   tags_raw:
   - service
   properties:
