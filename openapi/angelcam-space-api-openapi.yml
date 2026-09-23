@@ -1,34 +1,28 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Space API
+  title: Angelcam Space API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: space
+- name: Space
   x-displayName: Spaces
   description: 'A **space** is the organisational unit in Angelcam — it owns all resources: cameras, locations, recordings, services, and billing. Every API request operates within a space context — by default the user''s default space, or a specific space selected via the `X-Space-Id` header.
 
-    See the [Key concepts guide](/guides/key-concepts/) for details on space context and permissions.
-
-    '
+    See the Key concepts guide for details on space context and permissions.'
 paths:
   /spaces/:
     get:
       operationId: list-spaces
       summary: List spaces
       tags:
-      - space
-      description: 'Returns all spaces the authenticated user belongs to. Use the `is_default` flag to identify the user''s default space. To operate within a specific space, pass the `X-Space-Id` request header with the desired space ID.
-
-        '
+      - Space
+      description: Returns all spaces the authenticated user belongs to. Use the `is_default` flag to identify the user's default space. To operate within a specific space, pass the `X-Space-Id` request header with the desired space ID.
       security:
       - OAuth2:
         - space_access
@@ -51,10 +45,8 @@ paths:
       operationId: get-space
       summary: Get space detail
       tags:
-      - space
-      description: 'Returns details of a specific space. The authenticated user must be a member of that space.
-
-        '
+      - Space
+      description: Returns details of a specific space. The authenticated user must be a member of that space.
       security:
       - OAuth2:
         - space_access
@@ -85,12 +77,10 @@ paths:
       operationId: get-space-permissions
       summary: Get space permissions
       tags:
-      - space
+      - Space
       description: 'Returns all permissions the authenticated user has within the given space. The user must be a member of that space. Includes both permissions assigned directly to the user and those inherited through group membership.
 
-        Each permission entry may be scoped to the whole space, a specific location, or a specific camera. See the [Spaces section](#tag/space) for the full list of permission slugs and scoping rules.
-
-        '
+        Each permission entry may be scoped to the whole space, a specific location, or a specific camera. See the Spaces section for the full list of permission slugs and scoping rules.'
       security:
       - OAuth2:
         - space_permissions_access
@@ -117,82 +107,20 @@ paths:
         '404':
           description: Space not found or the user is not a member.
 components:
-  schemas:
+  responses:
     Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    SpacePermissionsObject:
-      type: object
-      title: Space permissions
-      properties:
-        assignments:
-          type: array
-          description: 'All permissions effective for the authenticated user in the active space. Includes both directly assigned permissions and those inherited through group membership.
-
-            '
-          items:
-            $ref: '#/components/schemas/AccessAssignmentObject'
-      required:
-      - assignments
-      example:
-        assignments:
-        - permission: camera.view
-          location_id: 12
-          camera_id: 345
-        - permission: location.access
-          location_id: 12
-          camera_id: null
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    SpaceObject:
-      type: object
-      title: Space
-      properties:
-        id:
-          type: integer
-          description: Space ID.
-          example: 7
-        name:
-          type: string
-          description: Display name of the space.
-          example: My Organisation
-        is_default:
-          type: boolean
-          description: Whether this is the user's default space.
-          example: true
-      required:
-      - id
-      - name
-      - is_default
-      example:
-        id: 7
-        name: My Organisation
-        is_default: true
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+  schemas:
     AccessAssignmentObject:
       type: object
       title: Access assignment
@@ -248,19 +176,81 @@ components:
         permission: camera.view
         location_id: 12
         camera_id: 345
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
+    SpacePermissionsObject:
+      type: object
+      title: Space permissions
+      properties:
+        assignments:
+          type: array
+          description: 'All permissions effective for the authenticated user in the active space. Includes both directly assigned permissions and those inherited through group membership.
+
+            '
+          items:
+            $ref: '#/components/schemas/AccessAssignmentObject'
+      required:
+      - assignments
+      example:
+        assignments:
+        - permission: camera.view
+          location_id: 12
+          camera_id: 345
+        - permission: location.access
+          location_id: 12
+          camera_id: null
     Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    SpaceObject:
+      type: object
+      title: Space
+      properties:
+        id:
+          type: integer
+          description: Space ID.
+          example: 7
+        name:
+          type: string
+          description: Display name of the space.
+          example: My Organisation
+        is_default:
+          type: boolean
+          description: Whether this is the user's default space.
+          example: true
+      required:
+      - id
+      - name
+      - is_default
+      example:
+        id: 7
+        name: My Organisation
+        is_default: true
   securitySchemes:
     OAuth2:
       type: oauth2

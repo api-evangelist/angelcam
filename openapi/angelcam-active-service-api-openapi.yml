@@ -6,32 +6,13 @@ info:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
 - name: active-service
   x-displayName: My services
-  description: 'Endpoints for managing your activated services and assigning them to cameras.
-
-    A service must first be activated (purchased) for your account, then assigned to a specific camera before it takes effect on that camera.
-
-
-    ## Service lifecycle
-
-    1. **Find a service code.** Browse [available services](#operation/services) to get the `code` of the service you want.
-
-    2. **Activate the service** by calling [`POST /billing/active-services/`](#operation/activate-service). Provide the service `code` and a billing `period` — `P1M` for monthly or `P1Y` for annual billing.
-
-    3. **Assign to a camera** by calling [`PUT /billing/active-services/{id}/usage/`](#operation/my-service-usage-update) with the `camera_id`. Set `camera_id` to `null` to unassign.
-
-    4. **Upgrade or downgrade** at any time via [`PUT /billing/active-services/{id}/`](#operation/my-service-update). A downgrade takes effect at the end of the current billing period by default. Set `force_downgrade: true` to apply it immediately with prorated credit.
-
-    5. **Cancel** via [`DELETE /billing/active-services/{id}/`](#operation/my-service-cancel).
-
-    '
+  description: Endpoints for managing your activated services and assigning them to cameras.
 paths:
   /billing/active-services/:
     get:
@@ -68,9 +49,7 @@ paths:
       summary: Activate new service
       tags:
       - active-service
-      description: 'Purchase and activate a new service for your account. After activation, [assign the service to a camera](#operation/my-service-usage-update) using the returned active service `id`.
-
-        '
+      description: Purchase and activate a new service for your account. After activation, assign the service to a camera using the returned active service `id`.
       requestBody:
         content:
           application/json:
@@ -240,9 +219,7 @@ paths:
       summary: Change service usage
       tags:
       - active-service
-      description: 'Assign this active service to a camera, or unassign it by setting `camera_id` to `null`. A service must be assigned to a camera before it takes effect on that camera.
-
-        '
+      description: Assign this active service to a camera, or unassign it by setting `camera_id` to `null`. A service must be assigned to a camera before it takes effect on that camera.
       parameters:
       - $ref: '#/components/parameters/activeServiceId'
       requestBody:
@@ -282,104 +259,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    ServiceObject:
-      type: object
-      title: Service object
-      properties:
-        type:
-          type: string
-          description: Type of service
-          enum:
-          - cloud-recording
-          - broadcasting
-          - timelapse
-          - user-service
-          - event-recording
-          - live-view
-          example: cloud-recording
-        code:
-          type: string
-          description: Code of service, this code together with type is unique identifier of service
-          example: 3-days
-      required:
-      - type
-      - code
-    UsageDetailObject:
-      type: object
-      title: Usage detail
-      description: In case of camera service show info for what camera the service is used.
-      properties:
-        camera_id:
-          type: integer
-        camera_name:
-          type: string
-    ActiveServiceListResponse:
-      type: object
-      title: Active service list
-      properties:
-        count:
-          type: integer
-          description: Count of all services
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of services available for user
-          items:
-            $ref: '#/components/schemas/ActiveServiceObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
     ActiveServiceUsageObject:
       type: object
       title: Service object
@@ -419,6 +298,104 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ActiveServiceListResponse:
+      type: object
+      title: Active service list
+      properties:
+        count:
+          type: integer
+          description: Count of all services
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of services available for user
+          items:
+            $ref: '#/components/schemas/ActiveServiceObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    UsageDetailObject:
+      type: object
+      title: Usage detail
+      description: In case of camera service show info for what camera the service is used.
+      properties:
+        camera_id:
+          type: integer
+        camera_name:
+          type: string
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ServiceObject:
+      type: object
+      title: Service object
+      properties:
+        type:
+          type: string
+          description: Type of service
+          enum:
+          - cloud-recording
+          - broadcasting
+          - timelapse
+          - user-service
+          - event-recording
+          - live-view
+          example: cloud-recording
+        code:
+          type: string
+          description: Code of service, this code together with type is unique identifier of service
+          example: 3-days
+      required:
+      - type
+      - code
     ActiveServiceObject:
       type: object
       title: Service object
@@ -454,34 +431,34 @@ components:
       - in_use
       - usage_detail
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    EmptyResponse:
-      description: Empty response.
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidBody:
-      description: Body payload is invalid.
+    Error400InvalidParams:
+      description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
-    Error400InvalidParams:
-      description: Query params are invalid.
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
+    Error400InvalidBody:
+      description: Body payload is invalid.
       content:
         application/json:
           schema:

@@ -1,35 +1,29 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Recording API
+  title: Angelcam Recording API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: recording
+- name: Recording
   x-displayName: My cameras recording
   description: 'Cloud Recording endpoints. Requires the Cloud Recording service to be active on the camera — otherwise all endpoints return 404.
 
-    A camera can have multiple simultaneous recordings (e.g. continuous + event-only) with different retentions. The timeline endpoint returns _segments_ (continuous blocks of recorded video) for a given time range; maximum range per request is 24 hours.
-
-    '
+    A camera can have multiple simultaneous recordings (e.g. continuous + event-only) with different retentions. The timeline endpoint returns _segments_ (continuous blocks of recorded video) for a given time range; maximum range per request is 24 hours.'
 paths:
   /cameras/{camera_id}/recording/:
     get:
       deprecated: true
       operationId: my-cameras-recording-info-deprecated
       summary: General recording information
-      description: '**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-info) instead.**
-
-        '
+      description: '**This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/cameraId'
       security:
@@ -55,16 +49,14 @@ paths:
       operationId: my-cameras-recording-download-deprecated
       summary: Download a given recording section
       tags:
-      - recording
+      - Recording
       description: 'This endpoint will construct a download URL for a specified recording section of a given camera. If there are no records within the section, the download URL will be still returned, however, the URL will respond with HTTP 404. If there are any gaps within the specified recording section, they will be skipped.
 
 
         Please keep in mind that the maximum downloadable length is 3 hours.
 
 
-        **This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-download) instead.**
-
-        '
+        **This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       parameters:
       - $ref: '#/components/parameters/cameraId'
       - name: start
@@ -116,11 +108,9 @@ paths:
       deprecated: true
       operationId: my-cameras-recording-start-deprecated
       summary: Start recording on given camera
-      description: '**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-start) instead.**
-
-        '
+      description: '**This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/cameraId'
       - name: duration
@@ -149,11 +139,9 @@ paths:
       deprecated: true
       operationId: my-cameras-recording-stop-deprecated
       summary: Stop recording on given camera
-      description: '**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-stop) instead.**
-
-        '
+      description: '**This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/cameraId'
       security:
@@ -174,11 +162,9 @@ paths:
       deprecated: true
       operationId: my-cameras-recording-stream-deprecated
       summary: Create and return recorded stream for a specified time
-      description: '**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-stream) instead.**
-
-        '
+      description: '**This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/cameraId'
       - name: start
@@ -224,13 +210,11 @@ paths:
       operationId: my-cameras-recording-timeline-deprecated
       summary: Retrieve timeline of records for given camera
       tags:
-      - recording
+      - Recording
       description: 'Please keep in mind that maximum length of timeline is 1 day.
 
 
-        **This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/recording/operation/my-cameras-recording-timeline) instead.**
-
-        '
+        **This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       parameters:
       - $ref: '#/components/parameters/cameraId'
       - name: start
@@ -273,7 +257,7 @@ paths:
       operationId: my-cameras-recordings-list
       summary: Retrieve recordings on a given camera
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/cameraId'
       security:
@@ -298,11 +282,9 @@ paths:
       deprecated: true
       operationId: my-cameras-recordings-stream-info
       summary: Retrieve recording stream info
-      description: '**This endpoint is deprecated and will be removed in the future. Use [this endpoint](#tag/stream-controls/operation/recordings-stream-info) instead.**
-
-        '
+      description: '**This endpoint is deprecated and will be removed in the future. Use this endpoint instead.**'
       tags:
-      - recording
+      - Recording
       security:
       - OAuth2:
         - recording_access
@@ -340,7 +322,7 @@ paths:
       operationId: my-cameras-recording-info
       summary: General recording information
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/recordingId'
       security:
@@ -365,13 +347,11 @@ paths:
       operationId: my-cameras-recording-download
       summary: Download a given recording section
       tags:
-      - recording
+      - Recording
       description: 'This endpoint will construct a download URL for a specified recording section of a given camera. If there are no records within the section, the download URL will be still returned, however, the URL will respond with HTTP 404. If there are any gaps within the specified recording section, they will be skipped.
 
 
-        Please keep in mind that the maximum downloadable length is 3 hours.
-
-        '
+        Please keep in mind that the maximum downloadable length is 3 hours.'
       parameters:
       - $ref: '#/components/parameters/recordingId'
       - name: start
@@ -423,7 +403,7 @@ paths:
       operationId: my-cameras-recording-snapshot
       summary: Retrieve recording snapshot URL at a specified time
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/recordingId'
       - name: datetime
@@ -467,16 +447,14 @@ paths:
       operationId: my-cameras-recording-start
       summary: Start recording
       tags:
-      - recording
+      - Recording
       description: '### Event recording
 
 
         If you only wish to record events instead of 24/7 coverage, you can use a combination of the `start_from` and `stop_at` or `duration` parameters. Setting `start_from` a few seconds before now will ensure that any buffered media starting from the given timestamp will be recorded. Note that this means that Angelcam Cloud is already connected to the media source (e.g. IP camera) or that the media source itself is able to hold media in an internal buffer for some amount of time (RTSP/2.0 media source with Time-Duration media property is required).
 
 
-        The `stop_at` or `duration` parameters can be used then to stop the recording automatically at some point. To extend a recording, call this endpoint repeatedly with the same `duration` parameter or with an increased `stop_at` parameter. For example, let''s assume that the current time is `2024-07-10 10:00:00.000Z`. Calling this endpoint with `start_from=2024-07-10T09:59:30.000Z` and `duration=60` will tell Angelcam Cloud to record all available media starting from 30 seconds ago and to keep recording until 60 seconds from now. Calling this endpoint again after 30 seconds with the same parameters will extend the recording duration to 90 seconds from now.
-
-        '
+        The `stop_at` or `duration` parameters can be used then to stop the recording automatically at some point. To extend a recording, call this endpoint repeatedly with the same `duration` parameter or with an increased `stop_at` parameter. For example, let''s assume that the current time is `2024-07-10 10:00:00.000Z`. Calling this endpoint with `start_from=2024-07-10T09:59:30.000Z` and `duration=60` will tell Angelcam Cloud to record all available media starting from 30 seconds ago and to keep recording until 60 seconds from now. Calling this endpoint again after 30 seconds with the same parameters will extend the recording duration to 90 seconds from now.'
       parameters:
       - $ref: '#/components/parameters/recordingId'
       - name: start_from
@@ -519,7 +497,7 @@ paths:
       operationId: my-cameras-recording-stop
       summary: Stop recording
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/recordingId'
       security:
@@ -540,7 +518,7 @@ paths:
       operationId: my-cameras-recording-stream
       summary: Create and return recorded stream for a specified time
       tags:
-      - recording
+      - Recording
       parameters:
       - $ref: '#/components/parameters/recordingId'
       - name: start
@@ -585,10 +563,8 @@ paths:
       operationId: my-cameras-recording-timeline
       summary: Retrieve timeline of records for given recording
       tags:
-      - recording
-      description: 'Please keep in mind that maximum length of timeline is 1 day.
-
-        '
+      - Recording
+      description: Please keep in mind that maximum length of timeline is 1 day.
       parameters:
       - $ref: '#/components/parameters/recordingId'
       - name: start
@@ -627,53 +603,80 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  parameters:
-    recordingId:
-      name: recording_id
-      in: path
-      required: true
-      description: Recording UUID
-      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
-      schema:
-        type: string
-        format: uuid
-    cameraId:
-      name: camera_id
-      in: path
-      required: true
-      description: Camera ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
-  responses:
-    EmptyResponse:
-      description: Empty response.
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   schemas:
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    RecordingListResponse:
+      type: object
+      title: Recording list
+      properties:
+        count:
+          type: integer
+          description: Recording count
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of recordings on a given camera
+          items:
+            $ref: '#/components/schemas/RecordingResponse'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SegmentObject:
+      type: object
+      title: Segment object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+        end:
+          type: string
+          format: date-time
+          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
     RecordingStreamResponse:
       type: object
       title: Recording stream object
@@ -734,38 +737,14 @@ components:
           play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
           pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
           speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    Error403PermissionDenied:
+    Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      title: Error 404 Not Found
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        title: not_found
+        detail: Not Found
+        status: 404
     RecordingDownloadResponse:
       type: object
       title: Recording download
@@ -776,77 +755,45 @@ components:
           description: Download URL
       example:
         url: https://rust-streamer-eu-central-1-07489f9b03f198b91.angelcam.com/recordings/7e65d945-fffc-42e7-b78d-dd6f5cea91ee/download/?start=2019%2D09%2D30T07%3A23%3A14%2E932%2B00%3A00&end=2019%2D09%2D30T07%3A53%3A57%2E016%2B00%3A00&token=eyJ0aW1lIjoxNTY5ODU3NjgzLCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E020b136d5da0d9518ed5428bfa01cadab1a139bf1e4f8e64a726fe3dfd40e541&filename=clip
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    SegmentObject:
+    RecordingTimelineResponse:
       type: object
-      title: Segment object
+      title: Recording timeline object
       properties:
         start:
           type: string
           format: date-time
-          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+          description: 'Start time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
+
+            '
         end:
           type: string
           format: date-time
-          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
-    RecordingListResponse:
-      type: object
-      title: Recording list
-      properties:
-        count:
-          type: integer
-          description: Recording count
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
+          description: 'End time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
+
+            '
+        segments:
           type: array
-          description: List of recordings on a given camera
+          description: Array of recording segments.
           items:
-            $ref: '#/components/schemas/RecordingResponse'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    ErrorGeneric:
+            $ref: '#/components/schemas/SegmentObject'
+      example:
+        start: '2017-01-01T00:00:00.000Z'
+        end: '2017-01-01T03:32:19.000Z'
+        segments:
+        - start: '2017-06-09T00:00:18.000Z'
+          end: '2017-06-09T03:25:28.000Z'
+        - start: '2017-06-09T04:19:42.000Z'
+          end: 2017-06-09T010:39:31Z
+    RecordingStreamInfoResponseDeprecated:
       type: object
-      title: Error object
+      title: Recording stream information
       properties:
-        title:
+        current_time:
           type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+          format: date-time
+          description: Current time in a stream.
+      example:
+        current_time: '2017-01-01T00:00:00.000Z'
     RecordingResponse:
       type: object
       title: Recording information
@@ -921,45 +868,74 @@ components:
         record_queue_capacity: null
         recording_start: '2024-05-02T10:32:11.000Z'
         recording_end: 2024-05-07T16:58:7.5400Z
-    RecordingTimelineResponse:
-      type: object
-      title: Recording timeline object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: 'Start time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
-
-            '
-        end:
-          type: string
-          format: date-time
-          description: 'End time of timeline (the value you entered in the query parameter). Example: `2017-01-01T00:00:00Z`.
-
-            '
-        segments:
-          type: array
-          description: Array of recording segments.
-          items:
-            $ref: '#/components/schemas/SegmentObject'
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        start: '2017-01-01T00:00:00.000Z'
-        end: '2017-01-01T03:32:19.000Z'
-        segments:
-        - start: '2017-06-09T00:00:18.000Z'
-          end: '2017-06-09T03:25:28.000Z'
-        - start: '2017-06-09T04:19:42.000Z'
-          end: 2017-06-09T010:39:31Z
-    RecordingStreamInfoResponseDeprecated:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ErrorGeneric:
       type: object
-      title: Recording stream information
+      title: Error object
       properties:
-        current_time:
+        title:
           type: string
-          format: date-time
-          description: Current time in a stream.
-      example:
-        current_time: '2017-01-01T00:00:00.000Z'
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+  responses:
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
+  parameters:
+    recordingId:
+      name: recording_id
+      in: path
+      required: true
+      description: Recording UUID
+      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
+      schema:
+        type: string
+        format: uuid
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

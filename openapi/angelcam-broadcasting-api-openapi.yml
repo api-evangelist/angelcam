@@ -1,14 +1,12 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Broadcasting API
+  title: Angelcam Broadcasting API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
@@ -17,9 +15,7 @@ tags:
   description: 'Endpoints for managing broadcasting settings and retrieving broadcasting streams. If a camera doesn''t have the Broadcasting service activated, all camera broadcasting endpoints will return HTTP 404.
 
 
-    The broadcasting service can be used whenever you need more concurrent stream consumers. It does not necessarily mean that the stream from your camera has to be public.
-
-    '
+    The broadcasting service can be used whenever you need more concurrent stream consumers. It does not necessarily mean that the stream from your camera has to be public.'
 paths:
   /cameras/{camera_id}/broadcasting/:
     get:
@@ -90,28 +86,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -120,6 +94,22 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     BroadcastingResponse:
       type: object
       title: Broadcasting information
@@ -177,35 +167,41 @@ components:
       example:
         url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
         format: mjpeg
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
-    EmptyResponse:
-      description: Empty response.
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
   parameters:
     cameraId:
       name: camera_id

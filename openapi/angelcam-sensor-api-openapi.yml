@@ -1,27 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Sensor API
+  title: Angelcam Sensor API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: sensor
+- name: Sensor
   x-displayName: My sensors
-  description: "With sensor endpoints you can view, manage and connect sensors to the user account.\n\nSensor can be bind to one particular already connected [camera](#tag/camera) to mark received [events](#tag/event) on camera timeline. If camera that sensor is bind to has active [Cloud Recording](#tag/recording) event recording can be enabled using these endpoints. Event recording will not be applied in the case that the camera assigned to the sensor doesn't have Cloud Recording activated.\n\nTo specify event recording length [duration](#section/Angelcam-API/Time-and-duration-formats) format must be used and currently options for recording length are limited to:\n  - 30 seconds\n  - 1 minute\n  - 2 minutes\n  - 5 minutes\n\nEach sensor is given a unique email and unique hash. Those can be used to send [events](#tag/event) to Angelcam.\n"
+  description: With sensor endpoints you can view, manage and connect sensors to the user account.
 paths:
   /sensors/:
     get:
       operationId: my-sensors-list
       summary: Retrieve sensor list
       tags:
-      - sensor
+      - Sensor
       parameters:
       - name: limit
         in: query
@@ -58,7 +56,7 @@ paths:
       operationId: connect-sensors
       summary: Connect new sensor
       tags:
-      - sensor
+      - Sensor
       requestBody:
         content:
           application/json:
@@ -147,7 +145,7 @@ paths:
       operationId: my-sensors-detail
       summary: Retrieve sensor
       tags:
-      - sensor
+      - Sensor
       parameters:
       - $ref: '#/components/parameters/sensorId'
       security:
@@ -173,7 +171,7 @@ paths:
       operationId: my-sensors-update
       summary: Update sensor
       tags:
-      - sensor
+      - Sensor
       parameters:
       - $ref: '#/components/parameters/sensorId'
       requestBody:
@@ -266,7 +264,7 @@ paths:
       operationId: my-sensors-remove
       summary: Remove sensor
       tags:
-      - sensor
+      - Sensor
       parameters:
       - $ref: '#/components/parameters/sensorId'
       security:
@@ -284,68 +282,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     SensorListResponse:
       type: object
       title: My sensors list
@@ -375,6 +311,68 @@ components:
       - next
       - previous
       - results
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     SensorObject:
       type: object
       title: Sensor object
@@ -505,30 +503,30 @@ components:
         events_count_email: 0
         events_count_api: 5
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error400InvalidBody:
       description: Body payload is invalid.
       content:

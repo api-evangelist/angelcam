@@ -1,43 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Event API
+  title: Angelcam Event API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: event
+- name: Event
   x-displayName: Events
-  description: 'Events represent detections reported by cameras or sensors — typically motion detected by a camera or a trigger from an external sensor. Events are the building blocks for [RTS incidents](#tag/incidents) and camera timeline markers.
-
-
-    ## Sending events to Angelcam
-
-    When a camera or sensor detects something, it reports it to Angelcam by calling the event endpoint with its unique `hash` (found in the Angelcam dashboard or via the [Sensor](#tag/sensor) endpoints). Use `POST /v1/events/` in all cases where possible. A `GET /v1/events/` alternative exists solely for devices that are technically incapable of making POST requests (some older cameras). The rate limit for event submission is 10 requests per minute per hash.
-
-
-    ## Listing events
-
-    Pagination for event list endpoints works differently from other list endpoints: there is no `offset` parameter. Instead:
-
-    - Use the `next` link in the response to move to the next page. - Pagination is one-directional (forward only). - Use the `start` and `end` filters to narrow down the time range.
-
-    Events are returned ordered by `occurred_at` (newest first).
-
-    '
+  description: Events represent detections reported by cameras or sensors — typically motion detected by a camera or a trigger from an external sensor.
 paths:
   /cameras/{camera_id}/events/:
     get:
       operationId: camera-events
       summary: Retrieve camera event list
       tags:
-      - event
+      - Event
       description: Retrieves list of events belonging to the specified camera
       parameters:
       - $ref: '#/components/parameters/cameraId'
@@ -86,12 +68,10 @@ paths:
       operationId: events-create
       summary: Create event
       tags:
-      - event
+      - Event
       description: 'This endpoint has rate limiting in place. The endpoint will accept at most 10 requests per minute
 
-        for a given hash (see [Nuts and bolts](#section/Angelcam-API/Nuts-and-bolts) for more details).
-
-        '
+        for a given hash (see Nuts and bolts for more details).'
       requestBody:
         content:
           application/json:
@@ -141,10 +121,8 @@ paths:
       operationId: events-create-get
       summary: Create event by get request
       tags:
-      - event
-      description: 'In cases when it''s not possible to send post request we allowed to create event by GET request. In general you should avoid using this method and rather prefer creating events via POST request.
-
-        '
+      - Event
+      description: In cases when it's not possible to send post request we allowed to create event by GET request. In general you should avoid using this method and rather prefer creating events via POST request.
       parameters:
       - name: hash
         in: query
@@ -186,28 +164,30 @@ paths:
                 $ref: '#/components/schemas/Error429TooManyRequests'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -216,6 +196,14 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    Error429TooManyRequests:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 429 Too Many Requests
+      example:
+        title: rate_limited
+        detail: The rate limit has been reached
+        status: 429
     Error400Invalid:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -224,6 +212,51 @@ components:
         title: invalid
         detail: Invalid hash
         status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    EventListResponse:
+      type: object
+      title: Event list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all events
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of events owned by the user
+          items:
+            $ref: '#/components/schemas/EventObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     EventObject:
       type: object
       title: Event object
@@ -273,88 +306,21 @@ components:
         category: motion_detected
         received_at: '2018-10-24T11:21:59.000Z'
         occurred_at: '2018-10-24T11:21:39.000Z'
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    EventListResponse:
+    ErrorGeneric:
       type: object
-      title: Event list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all events
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of events owned by the user
-          items:
-            $ref: '#/components/schemas/EventObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    Error429TooManyRequests:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 429 Too Many Requests
-      example:
-        title: rate_limited
-        detail: The rate limit has been reached
-        status: 429
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error404NotFound:
       description: The specified resource was not found
       content:
@@ -367,6 +333,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     cameraId:
       name: camera_id

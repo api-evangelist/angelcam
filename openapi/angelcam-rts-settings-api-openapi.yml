@@ -1,14 +1,12 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Rts Settings API
+  title: Angelcam Rts Settings API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
@@ -16,9 +14,7 @@ tags:
   x-displayName: Settings
   description: 'Global Real Time Security (RTS) settings for your account.
 
-    The main setting is `incident_ttl`, which controls how long (in [ISO 8601 duration format](#section/Angelcam-API/Time-and-duration-formats)) an open incident stays active before it is automatically closed when no new events are received.
-
-    '
+    The main setting is `incident_ttl`, which controls how long (in ISO 8601 duration format) an open incident stays active before it is automatically closed when no new events are received.'
 paths:
   /rts/:
     get:
@@ -152,28 +148,30 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     RTSSettingsObject:
       type: object
       title: RTS Settings object
@@ -216,6 +214,14 @@ components:
         is_armed: true
         next_arming: '2025-06-28T23:03:00Z'
         next_disarming: null
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -224,51 +230,41 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    Error400InvalidParams:
+    ErrorGeneric:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
-    EmptyResponse:
-      description: Empty response.
     Error400InvalidParams:
       description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
   securitySchemes:
     OAuth2:
       type: oauth2

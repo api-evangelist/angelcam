@@ -1,14 +1,12 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Camera Stream Detection API
+  title: Angelcam Camera Stream Detection API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
@@ -20,9 +18,7 @@ paths:
     post:
       operationId: stream-detection-start
       summary: Start stream detection
-      description: 'Retrieve `session_id` which can be used for [querying stream detection result](#operation/stream-detection-result).
-
-        '
+      description: Retrieve `session_id` which can be used for querying stream detection result.
       tags:
       - camera-stream-detection
       requestBody:
@@ -105,6 +101,38 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
+    CameraStartStreamDetectionResponse:
+      type: object
+      title: Camera Start Stream Detection Response
+      properties:
+        session_id:
+          type: string
+      required:
+      - session_id
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -113,37 +141,6 @@ components:
         title: permission_denied
         detail: You do not have permission to perform this action.
         status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    CameraStreamDetectionPreview:
-      type: object
-      title: Camera preview
-      description: Camera preview that can be used to access the underlying stream in various ways. The preview is available only for 20 minutes.
-      properties:
-        live_snapshot:
-          type: string
-          format: url
-          description: A URL that can be used to retrieve a snapshot from the camera
-        streams:
-          type: array
-          description: A list of streams available for the preview
-          items:
-            $ref: '#/components/schemas/CameraStreamDetectionPreviewStream'
-      required:
-      - live_snapshot
-      - streams
     CameraStreamDetectionPreviewStream:
       type: object
       title: Camera preview stream
@@ -162,6 +159,31 @@ components:
       required:
       - format
       - url
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    CameraStreamDetectionPreview:
+      type: object
+      title: Camera preview
+      description: Camera preview that can be used to access the underlying stream in various ways. The preview is available only for 20 minutes.
+      properties:
+        live_snapshot:
+          type: string
+          format: url
+          description: A URL that can be used to retrieve a snapshot from the camera
+        streams:
+          type: array
+          description: A list of streams available for the preview
+          items:
+            $ref: '#/components/schemas/CameraStreamDetectionPreviewStream'
+      required:
+      - live_snapshot
+      - streams
     CameraStreamDetectionResponse:
       type: object
       title: Camera Result Stream Detection Response
@@ -218,65 +240,20 @@ components:
       - url
       - type
       - preview
-    CameraStartStreamDetectionResponse:
+    ErrorGeneric:
       type: object
-      title: Camera Start Stream Detection Response
-      properties:
-        session_id:
-          type: string
-      required:
-      - session_id
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     sessionId:
       name: session_id
@@ -289,6 +266,25 @@ components:
       schema:
         type: string
         format: uuid
+  responses:
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -1,33 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Location API
+  title: Angelcam Location API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: location
+- name: Location
   x-displayName: Locations
-  description: 'Endpoints for accessing and managing locations. Locations are used to organize cameras into groups. Every camera belongs to exactly one location, and every user has a root location whose ID is available from the [Current User Info](#tag/user) endpoint.
-
-    Locations can be **armed** or **disarmed**. When a location is armed, Real Time Security (RTS) will generate notifications for events on cameras in that location. Each location supports scheduled arming/disarming so notifications can be active only during certain hours.
-
-    > **Note:** Creating, editing, and deleting locations is currently only possible through the [My Angelcam](https://my.angelcam.com/) web UI. These API endpoints provide read access only.
-
-    '
+  description: Endpoints for accessing and managing locations.
 paths:
   /locations/:
     get:
       operationId: locations-list
       summary: Retrieve location list
       tags:
-      - location
+      - Location
       parameters:
       - name: limit
         in: query
@@ -65,7 +57,7 @@ paths:
       operationId: location-detail
       summary: Retrieve location details
       tags:
-      - location
+      - Location
       parameters:
       - $ref: '#/components/parameters/locationId'
       security:
@@ -87,6 +79,38 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -95,20 +119,56 @@ components:
         title: permission_denied
         detail: You do not have permission to perform this action.
         status: 403
-    ErrorGeneric:
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    LocationListResponse:
       type: object
-      title: Error object
+      title: Location list
       properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
+        count:
           type: integer
+          description: Total number of locations
+          example: 2
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of locations
+          items:
+            $ref: '#/components/schemas/LocationObject'
       required:
-      - title
-      - detail
-      - status
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 2
+        next: null
+        previous: null
+        results:
+        - id: 1
+          name: My house
+          description: Main bedroom
+          is_armed: true
+          next_arming: '2025-06-28T23:03:00Z'
+          next_disarming: null
+          cameras_count: 3
     LocationObject:
       type: object
       title: Location object
@@ -157,113 +217,45 @@ components:
         next_arming: '2025-06-28T23:03:00Z'
         next_disarming: null
         cameras_count: 3
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    LocationListResponse:
+    ErrorGeneric:
       type: object
-      title: Location list
-      properties:
-        count:
-          type: integer
-          description: Total number of locations
-          example: 2
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of locations
-          items:
-            $ref: '#/components/schemas/LocationObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 2
-        next: null
-        previous: null
-        results:
-        - id: 1
-          name: My house
-          description: Main bedroom
-          is_armed: true
-          next_arming: '2025-06-28T23:03:00Z'
-          next_disarming: null
-          cameras_count: 3
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error400InvalidParams:
       description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     locationId:
       name: location_id

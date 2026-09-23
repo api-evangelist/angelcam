@@ -1,26 +1,22 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Audio Message API
+  title: Angelcam Audio Message API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
 - name: audio-message
   x-displayName: Audio messages
-  description: 'Endpoints for managing audio messages. Audio messages are pre-recorded audio clips that can be played through [speakers](#tag/speakers).
+  description: 'Endpoints for managing audio messages. Audio messages are pre-recorded audio clips that can be played through speakers.
 
     Audio files are uploaded as Base64-encoded content. Supported formats: AAC (`audio/aac`), MP3 (`audio/mpeg`), WAV (`audio/wav`), OGG (`audio/ogg`), and WebM audio (`audio/webm`).
 
-    Keep audio files short — a few seconds is ideal. Large files will increase upload time and may affect playback reliability.
-
-    '
+    Keep audio files short — a few seconds is ideal. Large files will increase upload time and may affect playback reliability.'
 paths:
   /audio-messages/:
     get:
@@ -145,28 +141,38 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     AudioMessageWriteObject:
       type: object
       title: Audio message object
@@ -185,45 +191,6 @@ components:
         id: 157
         name: Alarm
         message: dGhlIGF1ZGlvIGZpbGUgY29udGVudCBnb2VzIGhlcmU=
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    AudioMessageObject:
-      type: object
-      title: Audio message object
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          description: Audio message ID
-        name:
-          type: string
-          description: Audio message name
-        message:
-          type: string
-          format: url
-          description: URL where the audio message content can be downloaded
-      required:
-      - id
-      - name
-      - message
-      example:
-        id: 157
-        name: Alarm
-        message: https://example.com/alarm.mp3
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
     AudioMessageListResponse:
       type: object
       title: Audio Message list
@@ -253,57 +220,86 @@ components:
       - next
       - previous
       - results
-    Error400InvalidParams:
+    AudioMessageObject:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Audio message object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: Audio message ID
+        name:
+          type: string
+          description: Audio message name
+        message:
+          type: string
+          format: url
+          description: URL where the audio message content can be downloaded
+      required:
+      - id
+      - name
+      - message
+      example:
+        id: 157
+        name: Alarm
+        message: https://example.com/alarm.mp3
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ErrorGeneric:
+      type: object
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidBody:
-      description: Body payload is invalid.
+    Error400InvalidParams:
+      description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
-    Error400InvalidParams:
-      description: Query params are invalid.
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidBody:
+      description: Body payload is invalid.
       content:
         application/json:
           schema:

@@ -1,29 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Camera API
+  title: Angelcam Camera API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: camera
+- name: Camera
   x-displayName: My cameras
-  description: 'Manage your cameras and access live streams, snapshots, and recordings. Supported codecs: H.264, H.265 (experimental), MJPEG. Live streams are limited to 10 concurrent consumers per camera — use the [broadcasting service](#tag/broadcasting) for higher concurrency.
-
-    '
+  description: 'Manage your cameras and access live streams, snapshots, and recordings. Supported codecs: H.264, H.265 (experimental), MJPEG. Live streams are limited to 10 concurrent consumers per camera — use the broadcasting service for higher concurrency.'
 paths:
   /cameras/:
     get:
       operationId: my-cameras-list
       summary: Retrieve camera list
       tags:
-      - camera
+      - Camera
       parameters:
       - name: limit
         in: query
@@ -111,7 +107,7 @@ paths:
       operationId: connect-cameras
       summary: Connect new camera
       tags:
-      - camera
+      - Camera
       requestBody:
         content:
           application/json:
@@ -187,7 +183,7 @@ paths:
       operationId: my-cameras-detail
       summary: Retrieve camera
       tags:
-      - camera
+      - Camera
       parameters:
       - $ref: '#/components/parameters/cameraId'
       - name: refresh_rate
@@ -236,7 +232,7 @@ paths:
       operationId: my-cameras-update
       summary: Update camera
       tags:
-      - camera
+      - Camera
       parameters:
       - $ref: '#/components/parameters/cameraId'
       requestBody:
@@ -308,7 +304,7 @@ paths:
       operationId: my-cameras-remove
       summary: Remove camera
       tags:
-      - camera
+      - Camera
       parameters:
       - $ref: '#/components/parameters/cameraId'
       security:
@@ -326,14 +322,45 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+    ApplicationObject:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - LSA
+          - CRA
+          - VVA
+          - VPA
+          - TLA
+      required:
+      - code
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        code: LSA
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     ErrorGeneric:
       type: object
       title: Error object
@@ -379,45 +406,14 @@ components:
         title: not_found
         detail: Not Found
         status: 404
-    StreamObject:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: Stream URL
-        format:
-          type: string
-          enum:
-          - hls
-          - mp4
-          - mpegts
-          - mjpeg
-        refresh_rate:
-          type: number
-          format: float
-          description: Stream refresh rate
-      required:
-      - url
-      - format
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
-        format: mjpeg
-    ApplicationObject:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - LSA
-          - CRA
-          - VVA
-          - VPA
-          - TLA
-      required:
-      - code
-      example:
-        code: LSA
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -559,71 +555,31 @@ components:
         tags:
         - office
         - entrance
-    Error400InvalidParams:
+    StreamObject:
       type: object
-      title: Error 400 Invalid Parameters
       properties:
-        title:
+        url:
           type: string
-        detail:
-          type: object
-        status:
-          type: integer
+          format: uri
+          description: Stream URL
+        format:
+          type: string
+          enum:
+          - hls
+          - mp4
+          - mpegts
+          - mjpeg
+        refresh_rate:
+          type: number
+          format: float
+          description: Stream refresh rate
       required:
-      - title
-      - detail
-      - status
+      - url
+      - format
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
+        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
+        format: mjpeg
   parameters:
-    cameraId:
-      name: camera_id
-      in: path
-      required: true
-      description: Camera ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
     streamExpiresAt:
       name: stream_expires_at
       in: query
@@ -633,6 +589,46 @@ components:
       schema:
         type: string
         format: date-time
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   securitySchemes:
     OAuth2:
       type: oauth2

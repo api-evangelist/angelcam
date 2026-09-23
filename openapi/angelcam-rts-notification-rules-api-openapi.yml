@@ -1,22 +1,18 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Rts Notification Rules API
+  title: Angelcam Rts Notification Rules API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
 - name: rts_notification_rules
   x-displayName: Notification rules
-  description: 'Endpoints for managing notification rules. Notification rule is a rule that defines when and how we should send message to user. For example, we can create rule that says: "When camera goes offline, send me an email".
-
-    '
+  description: 'Endpoints for managing notification rules. Notification rule is a rule that defines when and how we should send message to user. For example, we can create rule that says: "When camera goes offline, send me an email".'
 paths:
   /rts/notifications/rules/:
     get:
@@ -60,7 +56,6 @@ paths:
     post:
       operationId: rts-notification-rule-create
       summary: Create notification rule
-      description: Create notification rule
       tags:
       - rts_notification_rules
       security:
@@ -89,7 +84,6 @@ paths:
     get:
       operationId: rts-notification-rule-detail
       summary: Retrieve notification rule detail
-      description: Retrieve notification rule detail
       tags:
       - rts_notification_rules
       security:
@@ -114,7 +108,6 @@ paths:
     put:
       operationId: rts-notification-rule-update
       summary: Update notification rule
-      description: Update notification rule
       tags:
       - rts_notification_rules
       security:
@@ -145,28 +138,30 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -231,56 +226,6 @@ components:
         - 1
         - 2
         - 3
-    NotificationRuleListResponse:
-      type: object
-      title: Notification rule list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all notifications rules
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of notification rules
-          items:
-            $ref: '#/components/schemas/NotificationRuleObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: 85
-          notification_method: 254
-          message_type: camera_status_online
-          allowed_cameras:
-          - 1
-          - 2
-          - 3
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
     NotificationRuleObject:
       type: object
       title: Http notification rule object
@@ -342,55 +287,103 @@ components:
         - 1
         - 2
         - 3
-    Error400InvalidParams:
+    NotificationRuleListResponse:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Notification rule list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all notifications rules
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of notification rules
+          items:
+            $ref: '#/components/schemas/NotificationRuleObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: 85
+          notification_method: 254
+          message_type: camera_status_online
+          allowed_cameras:
+          - 1
+          - 2
+          - 3
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ErrorGeneric:
+      type: object
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error400InvalidParams:
       description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     notificationRuleId:
       name: rule_id

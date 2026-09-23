@@ -1,35 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Incidents API
+  title: Angelcam Incidents API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: incidents
+- name: Incidents
   x-displayName: Incidents
-  description: 'Endpoints for managing Real Time Security (RTS) incidents.
-
-    An incident is a security event that has been detected and may require attention. Incidents are created automatically when sensor events or camera status changes match an active [notification rule](#tag/rts_notification_rules).
-
-    Incidents go through the following states:
-
-    * **Open** — the incident has been created and not yet reviewed. * **Verified** — acknowledged as a genuine security event (`verified_at` is set). * **Closed** — the incident has been resolved (`closed_at` is set). An incident can be closed without being verified first (e.g. a false alarm).
-
-    '
+  description: Endpoints for managing Real Time Security (RTS) incidents.
 paths:
   /rts/incidents/:
     get:
       operationId: incidents
       summary: Retrieve incidents
       tags:
-      - incidents
+      - Incidents
       description: Retrieves list of user incidents
       parameters:
       - name: limit
@@ -92,9 +82,8 @@ paths:
     get:
       operationId: rts-incident-detail
       summary: Retrieve incident detail
-      description: Retrieve incident detail
       tags:
-      - incidents
+      - Incidents
       security:
       - OAuth2:
         - incidents_access
@@ -116,51 +105,30 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
-    SnapshotObject:
-      title: Snapshot object
-      properties:
-        url:
-          format: uri
-          description: URL of the snapshot image
-          type:
-          - string
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
-      required:
-      - url
-      - created_at
       example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      type:
-      - object
-      - 'null'
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -233,6 +201,37 @@ components:
         snapshot:
           url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
           created_at: '2019-08-09T13:23:24.000Z'
+    SnapshotObject:
+      title: Snapshot object
+      properties:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
+      required:
+      - url
+      - created_at
+      example:
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -241,30 +240,6 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     IncidentListResponse:
       type: object
       title: Incident list
@@ -311,31 +286,45 @@ components:
           snapshot:
             url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
             created_at: '2019-08-09T13:23:24.000Z'
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error400InvalidParams:
       description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     incidentId:
       name: incident_id

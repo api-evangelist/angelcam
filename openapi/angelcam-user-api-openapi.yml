@@ -1,18 +1,16 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service User API
+  title: Angelcam User API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: user
+- name: User
   x-displayName: User
 paths:
   /me/:
@@ -20,7 +18,7 @@ paths:
       operationId: me
       summary: Current user info
       tags:
-      - user
+      - User
       security:
       - OAuth2:
         - user_access
@@ -40,7 +38,7 @@ paths:
       operationId: me-delete
       summary: Delete current user
       tags:
-      - user
+      - User
       security:
       - OAuth2:
         - user_delete
@@ -54,28 +52,6 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     UserMeResponse:
       type: object
       title: User object
@@ -142,6 +118,14 @@ components:
         require_qualification: false
         available_features:
           live_view: true
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -150,19 +134,33 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     EmptyResponse:
       description: Empty response.
   securitySchemes:

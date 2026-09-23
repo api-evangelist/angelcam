@@ -1,29 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Speakers API
+  title: Angelcam Speakers API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: speakers
+- name: Speakers
   x-displayName: Speakers
-  description: 'Manage speakers and trigger audio playback. See the [Speakers guide](/guides/speakers/) for setup instructions, including how to configure an AngelBox as a speaker.
-
-    '
+  description: Manage speakers and trigger audio playback. See the Speakers guide for setup instructions, including how to configure an AngelBox as a speaker.
 paths:
   /speakers/:
     get:
       operationId: speaker-list
       summary: Retrieve speaker list
       tags:
-      - speakers
+      - Speakers
       parameters:
       - name: limit
         in: query
@@ -60,7 +56,7 @@ paths:
       operationId: connect-speakers
       summary: Connect new speaker
       tags:
-      - speakers
+      - Speakers
       requestBody:
         content:
           application/json:
@@ -90,7 +86,7 @@ paths:
       operationId: speaker-detail
       summary: Retrieve speaker detail
       tags:
-      - speakers
+      - Speakers
       security:
       - OAuth2:
         - speaker_access
@@ -112,7 +108,7 @@ paths:
       operationId: update-speaker
       summary: Update existing speaker
       tags:
-      - speakers
+      - Speakers
       requestBody:
         content:
           application/json:
@@ -144,7 +140,7 @@ paths:
       operationId: audio-playback-start
       summary: Start audio playback
       tags:
-      - speakers
+      - Speakers
       security:
       - OAuth2:
         - audio_messages_play
@@ -155,15 +151,13 @@ paths:
         ### Live audio playback using WebRTC
 
 
-        Every [WebRTC signaling](#section/Angelcam-API/WebRTC-signaling) session for live audio playback starts by sending an SDP offer from the client to the corresponding Angelcam server followed by one or more local ICE candidates. The server then responds with an SDP answer followed by one or more of its local ICE candidates. The candidate exchange should conclude by sending a `null` candidate by each side to the other peer to signal that there are no more local ICE candidates. There is no lock-step mechanism for sending the ICE candidates. All available local candidates should be sent to the other peer immediately after sending the SDP offer/answer.
+        Every WebRTC signaling session for live audio playback starts by sending an SDP offer from the client to the corresponding Angelcam server followed by one or more local ICE candidates. The server then responds with an SDP answer followed by one or more of its local ICE candidates. The candidate exchange should conclude by sending a `null` candidate by each side to the other peer to signal that there are no more local ICE candidates. There is no lock-step mechanism for sending the ICE candidates. All available local candidates should be sent to the other peer immediately after sending the SDP offer/answer.
 
 
         #### STUN/TURN servers
 
 
-        No external STUN or TURN servers are required as all Angelcam servers have a public IP address and, therefore, the `host` ICE candidates on the server side are always reachable. The client''s server-reflexive candidates, if needed, are then discovered once the client contacts the server via the server''s `host` candidates.
-
-        '
+        No external STUN or TURN servers are required as all Angelcam servers have a public IP address and, therefore, the `host` ICE candidates on the server side are always reachable. The client''s server-reflexive candidates, if needed, are then discovered once the client contacts the server via the server''s `host` candidates.'
       requestBody:
         content:
           application/json:
@@ -216,7 +210,7 @@ paths:
       operationId: audio-playback-stop
       summary: Stop audio playback
       tags:
-      - speakers
+      - Speakers
       security:
       - OAuth2:
         - audio_messages_play
@@ -239,11 +233,9 @@ paths:
       description: 'On success, the endpoint returns HTTP 204; otherwise, HTTP 400 with a detail about the connection issue is returned.
 
 
-        _Note that this is just a connectivity test. Successful connectivity test does not mean that the speaker itself works (i.e. that it''s able to play audio)._
-
-        '
+        _Note that this is just a connectivity test. Successful connectivity test does not mean that the speaker itself works (i.e. that it''s able to play audio)._'
       tags:
-      - speakers
+      - Speakers
       security:
       - OAuth2:
         - speaker_access
@@ -261,36 +253,30 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
-    Error503ServiceUnavailable:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 502 Bad Gateway
       example:
-        title: bad_gateway
-        detail: Bad Gateway
-        status: 502
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -356,6 +342,14 @@ components:
         arrow_client: 75b62326-eca3-4424-ab68-48e7da47e847
         arrow_service_id: 00af
         endpoint: /api/v1/audio/play
+    Error503ServiceUnavailable:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 502 Bad Gateway
+      example:
+        title: bad_gateway
+        detail: Bad Gateway
+        status: 502
     SpeakerListResponse:
       type: object
       title: Speaker list
@@ -385,6 +379,14 @@ components:
       - next
       - previous
       - results
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -393,65 +395,55 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    Error400InvalidParams:
+    ErrorGeneric:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    EmptyResponse:
-      description: Empty response.
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidBody:
-      description: Body payload is invalid.
+    Error400InvalidParams:
+      description: Query params are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
     Error503ServiceUnavailable:
       description: Service unavailable
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error503ServiceUnavailable'
-    Error400InvalidParams:
-      description: Query params are invalid.
+    Error400InvalidBody:
+      description: Body payload is invalid.
       content:
         application/json:
           schema:

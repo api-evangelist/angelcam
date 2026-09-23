@@ -1,22 +1,18 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Shared Camera Recording API
+  title: Angelcam Shared Camera Recording API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
 - name: shared-camera-recording
   x-displayName: Shared cameras recording
-  description: 'Everything is same as in recording for my own cameras. Just replace `cameras` by `shared-cameras` in every endpoints url.
-
-    '
+  description: Everything is same as in recording for my own cameras. Just replace `cameras` by `shared-cameras` in every endpoints url.
 paths:
   /shared-cameras/{camera_id}/recording/:
     get:
@@ -98,9 +94,7 @@ paths:
       summary: Retrieve timeline of records for given shared camera
       tags:
       - shared-camera-recording
-      description: 'Please keep in mind that maximum length of timeline is 1 day.
-
-        '
+      description: Please keep in mind that maximum length of timeline is 1 day.
       parameters:
       - $ref: '#/components/parameters/sharedCameraId'
       - name: start
@@ -140,6 +134,38 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     RecordingTimelineResponse:
       type: object
       title: Recording timeline object
@@ -169,116 +195,6 @@ components:
           end: '2017-06-09T03:25:28.000Z'
         - start: '2017-06-09T04:19:42.000Z'
           end: 2017-06-09T010:39:31Z
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    RecordingStreamResponse:
-      type: object
-      title: Recording stream object
-      properties:
-        url:
-          type: string
-          description: URL of a stream.
-          example: 'https://rec-streamer-eu-central-1.angelcam.com/streams/cefa6471a38f469585b46675fc992614/playlist.m3u8
-
-            '
-        format:
-          type: string
-          enum:
-          - hls
-          - mjpeg
-          description: Stream format.
-          example: hls
-        stream_info:
-          deprecated: true
-          type: string
-          description: URL of a recorded stream info endpoint.
-          example: https://api.angelcam.com/v1/recording/stream/rec-streamer-eu-central-1/cefa6471a38f469585b46675fc992614/
-        stream_controls:
-          type: object
-          description: 'Links allowing to synchronize and control stream playback. See [more](#tag/stream-controls).
-
-            '
-          properties:
-            base_url:
-              type: string
-              description: URL for retrieving the current stream position and playback speed.
-              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/
-
-                '
-            play:
-              type: string
-              description: URL for resuming the stream playback.
-              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/play/
-
-                '
-            pause:
-              type: string
-              description: URL for pausing the stream playback.
-              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/pause/
-
-                '
-            speed:
-              type: string
-              description: URL for changing the stream playback speed.
-              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/speed/
-
-                '
-      example:
-        url: https://rec-streamer-eu-central-1.angelcam.com/streams/df0600b7487a44d480217db7713720d3/playlist.m3u8
-        format: hls
-        stream_controls:
-          base_url: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/
-          play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
-          pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
-          speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    SegmentObject:
-      type: object
-      title: Segment object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
-        end:
-          type: string
-          format: date-time
-          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
     RecordingResponse:
       type: object
       title: Recording information
@@ -353,37 +269,109 @@ components:
         record_queue_capacity: null
         recording_start: '2024-05-02T10:32:11.000Z'
         recording_end: 2024-05-07T16:58:7.5400Z
-    Error400InvalidParams:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SegmentObject:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Segment object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+        end:
+          type: string
+          format: date-time
+          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
+    ErrorGeneric:
+      type: object
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
+    RecordingStreamResponse:
+      type: object
+      title: Recording stream object
+      properties:
+        url:
+          type: string
+          description: URL of a stream.
+          example: 'https://rec-streamer-eu-central-1.angelcam.com/streams/cefa6471a38f469585b46675fc992614/playlist.m3u8
+
+            '
+        format:
+          type: string
+          enum:
+          - hls
+          - mjpeg
+          description: Stream format.
+          example: hls
+        stream_info:
+          deprecated: true
+          type: string
+          description: URL of a recorded stream info endpoint.
+          example: https://api.angelcam.com/v1/recording/stream/rec-streamer-eu-central-1/cefa6471a38f469585b46675fc992614/
+        stream_controls:
+          type: object
+          description: 'Links allowing to synchronize and control stream playback. See [more](#tag/stream-controls).
+
+            '
+          properties:
+            base_url:
+              type: string
+              description: URL for retrieving the current stream position and playback speed.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/
+
+                '
+            play:
+              type: string
+              description: URL for resuming the stream playback.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/play/
+
+                '
+            pause:
+              type: string
+              description: URL for pausing the stream playback.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/pause/
+
+                '
+            speed:
+              type: string
+              description: URL for changing the stream playback speed.
+              example: 'https://rec-streamer-eu-central-1.angelcam.com/recording/streams/cefa6471a38f469585b46675fc992614/speed/
+
+                '
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        url: https://rec-streamer-eu-central-1.angelcam.com/streams/df0600b7487a44d480217db7713720d3/playlist.m3u8
+        format: hls
+        stream_controls:
+          base_url: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/
+          play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
+          pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
+          speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -402,6 +390,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     sharedCameraId:
       name: camera_id

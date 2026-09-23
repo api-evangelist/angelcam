@@ -1,35 +1,25 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Client API
+  title: Angelcam Client API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: client
+- name: Client
   x-displayName: Clients
-  description: 'Endpoints for reseller users to manage their clients.
-
-    A reseller can create two types of client accounts:
-
-    * **Full account** — the client has full control over their cameras and services. * **Limited account** — the client has read-only access. They can view their cameras and streams but cannot make any changes. A client can upgrade from limited to full at any time, which also revokes the reseller''s access to their space.
-
-    A reseller automatically has access to their clients'' spaces (cameras, recordings, streams). A client — whether full or limited — can revoke this access at any time.
-
-    '
+  description: Endpoints for reseller users to manage their clients.
 paths:
   /clients/:
     get:
       operationId: my-clients-list
       summary: Retrieve clients list
       tags:
-      - client
+      - Client
       parameters:
       - name: limit
         in: query
@@ -63,11 +53,9 @@ paths:
     post:
       operationId: create-client
       summary: Creates new client account
-      description: 'Creates a new client account. After successful creation client receives an email with link for account activation.
-
-        '
+      description: Creates a new client account. After successful creation client receives an email with link for account activation.
       tags:
-      - client
+      - Client
       requestBody:
         content:
           application/json:
@@ -150,7 +138,7 @@ paths:
       operationId: my-client-detail
       summary: Retrieve client
       tags:
-      - client
+      - Client
       parameters:
       - $ref: '#/components/parameters/clientId'
       security:
@@ -174,7 +162,7 @@ paths:
       operationId: update-client
       summary: Update client account
       tags:
-      - client
+      - Client
       parameters:
       - $ref: '#/components/parameters/clientId'
       requestBody:
@@ -241,9 +229,11 @@ paths:
     post:
       operationId: my-client-invite
       summary: Resend invitation email
-      description: "For resending an invitation email. This is useful in case when client does not receive the first invitation email,\n so client get new chance to activate their account and set a password.\n"
+      description: 'For resending an invitation email. This is useful in case when client does not receive the first invitation email,
+
+        so client get new chance to activate their account and set a password.'
       tags:
-      - client
+      - Client
       parameters:
       - $ref: '#/components/parameters/clientId'
       security:
@@ -261,28 +251,30 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -291,6 +283,35 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    ClientListResponse:
+      type: object
+      title: Client list
+      properties:
+        count:
+          type: integer
+          description: Count of client
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of clients of reseller
+          items:
+            $ref: '#/components/schemas/ClientObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     ClientObject:
       type: object
       title: Client object
@@ -356,35 +377,14 @@ components:
         limited_account: false
         allowed_access: true
         confiremd_at: null
-    ClientListResponse:
-      type: object
-      title: Client list
-      properties:
-        count:
-          type: integer
-          description: Count of client
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of clients of reseller
-          items:
-            $ref: '#/components/schemas/ClientObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -393,37 +393,27 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    Error400InvalidParams:
+    ErrorGeneric:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
+    Error404NotFound:
+      description: The specified resource was not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
+            $ref: '#/components/schemas/Error404NotFound'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -432,12 +422,12 @@ components:
             $ref: '#/components/schemas/Error403PermissionDenied'
     EmptyResponse:
       description: Empty response.
-    Error404NotFound:
-      description: The specified resource was not found
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error404NotFound'
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error400InvalidBody:
       description: Body payload is invalid.
       content:

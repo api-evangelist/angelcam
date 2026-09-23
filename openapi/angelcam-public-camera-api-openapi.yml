@@ -1,14 +1,12 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Public Camera API
+  title: Angelcam Public Camera API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
@@ -16,9 +14,7 @@ tags:
   x-displayName: Public cameras
   description: 'Endpoints for browsing cameras that are publicly accessible. A camera appears here if it has the Broadcasting service active and has been marked as public — either because it uses free public broadcasting, or because the camera owner has explicitly enabled public access.
 
-    > **Access restricted:** These endpoints are available only to partners who have arranged access with Angelcam. Please contact [support](https://www.angelcam.com/support/) if you are interested in using them.
-
-    '
+    > **Access restricted:** These endpoints are available only to partners who have arranged access with Angelcam. Please contact support if you are interested in using them.'
 paths:
   /public-cameras/:
     get:
@@ -91,28 +87,30 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -121,6 +119,51 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    PublicCameraListResponse:
+      type: object
+      title: Public Camera list
+      properties:
+        count:
+          type: integer
+          description: Count of all public cameras
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of public cameras
+          items:
+            $ref: '#/components/schemas/PublicCameraObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     PublicCameraObject:
       type: object
       title: Public camera object
@@ -210,74 +253,27 @@ components:
       example:
         url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
         format: mjpeg
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error400InvalidParams:
+    ErrorGeneric:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    PublicCameraListResponse:
-      type: object
-      title: Public Camera list
-      properties:
-        count:
-          type: integer
-          description: Count of all public cameras
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of public cameras
-          items:
-            $ref: '#/components/schemas/PublicCameraObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
   responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
+    Error404NotFound:
+      description: The specified resource was not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
+            $ref: '#/components/schemas/Error404NotFound'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -290,12 +286,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error404NotFound'
+            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     sharedCameraId:
       name: camera_id

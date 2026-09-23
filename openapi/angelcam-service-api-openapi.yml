@@ -1,33 +1,29 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active Service API
+  title: Angelcam Service API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
-- name: service
+- name: Service
   x-displayName: Available services
-  description: 'A catalog of services available for purchase. Use these endpoints to discover service `code` values before activating a service via the [My services](#tag/active-service) endpoints.
+  description: 'A catalog of services available for purchase. Use these endpoints to discover service `code` values before activating a service via the My services endpoints.
 
     Services fall into two categories:
 
-    * **Account plan** — your overall subscription level. * **Camera services** — features you enable on individual cameras. The two main camera services are **Cloud Recording** and **Broadcasting**. Activating a camera service creates an active service instance that you then [assign to a specific camera](#operation/my-service-usage-update).
-
-    '
+    * **Account plan** — your overall subscription level. * **Camera services** — features you enable on individual cameras. The two main camera services are **Cloud Recording** and **Broadcasting**. Activating a camera service creates an active service instance that you then assign to a specific camera.'
 paths:
   /billing/services/:
     get:
       operationId: services
       summary: Retrieve list of available services
       tags:
-      - service
+      - Service
       parameters:
       - name: type
         in: query
@@ -54,50 +50,30 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
+    Error400InvalidParams:
       type: object
-      title: Error object
+      title: Error 400 Invalid Parameters
       properties:
         title:
           type: string
         detail:
-          type: string
+          type: object
         status:
           type: integer
       required:
       - title
       - detail
       - status
-    PriceObject:
-      type: object
-      title: Price object
-      properties:
-        period:
-          type: string
-          format: duration
-          description: Period of time
-          example: P1M
-        price:
-          type: string
-          format: number
-          description: Decimal price in USD
-          example: 3.99
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
       example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     ServiceListResponse:
       type: object
       title: Service list
@@ -127,30 +103,6 @@ components:
       - next
       - previous
       - results
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     ServiceWithPriceObject:
       type: object
       title: Service object
@@ -189,13 +141,51 @@ components:
       - name
       - prices
       - currency
-  responses:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    PriceObject:
+      type: object
+      title: Price object
+      properties:
+        period:
+          type: string
+          format: duration
+          description: Period of time
+          example: P1M
+        price:
+          type: string
+          format: number
+          description: Decimal price in USD
+          example: 3.99
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+  responses:
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -208,6 +198,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
   securitySchemes:
     OAuth2:
       type: oauth2

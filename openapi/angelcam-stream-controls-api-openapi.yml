@@ -1,47 +1,18 @@
 openapi: 3.2.0
 info:
   version: 2026.06.11
-  title: Angelcam active-service Stream Controls API
+  title: Angelcam Stream Controls API
   contact:
     email: support@angelcam.com
   x-logo:
     url: ./assets/logo-angelcam.svg
-  description: 'Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the [developer docs](/) for quickstart, authentication, and key concepts.
-
-    '
+  description: Angelcam RESTful API — HTTPS only, JSON, all URLs require a trailing slash. See the developer docs for quickstart, authentication, and key concepts.
 servers:
 - url: https://api.angelcam.com/v1
 tags:
 - name: stream-controls
   x-displayName: Recording stream controls
-  description: 'You normally don''t have to know the `streamer_domain` and `stream_id` path parameter, but use the generated endpoint URLs as reported by the `stream_controls` field in a create-stream response. Those URLs correspond to the following endpoints.
-
-    * base_url: [Recording stream info](#tag/stream-controls/operation/recordings-stream-info)
-
-    * play: [Play stream](#tag/stream-controls/operation/recordings-stream-play)
-
-    * pause: [Pause stream](#tag/stream-controls/operation/recordings-stream-pause)
-
-    * speed: [Set plyback stream](#tag/stream-controls/operation/recordings-stream-speed)
-
-
-
-    ## Syncing stream and timeline
-
-    Due to various reasons, the time a user spends watching a stream doesn''t necessarily have to match the time actually
-
-    elapsed in the recorded video (i.e. a 5-minute long stream takes 6 minutes to watch on a user''s slow mobile network
-
-    connection due to lag).
-
-
-    Periodically calling endpoint, [recordings stream info](#tag/stream-controls/operation/recordings-stream-info) comes in handy in this case, because it
-
-    synchronizes the time shown to the user in your UI, with the current time of the stream. This endpoint tells you the
-
-    exact time where the stream is positioned at the current moment.
-
-    '
+  description: You normally don't have to know the `streamer_domain` and `stream_id` path parameter, but use the generated endpoint URLs as reported by the `stream_controls` field in a create-stream response.
 paths:
   /recording/streams/{stream_id}/:
     get:
@@ -138,9 +109,7 @@ paths:
       description: 'If you''re looking to modify the playback speed in your application, there''s an essential step that you need to keep in mind. You must send a request to our streaming service via this endpoint to prepare the HLS playlist at the desired speed.
 
 
-        Keep in mind, however, that altering the playback speed does not only change how fast the video plays, but also affects the bitrate. For instance, if you increase the playback speed to twice (2x) the normal speed, the bitrate will also double. The implications of this are significant. A higher bitrate requires faster internet speeds to maintain smooth playback. So, if your users do not have a fast enough internet connection, they might experience buffering or interruptions during playback.
-
-        '
+        Keep in mind, however, that altering the playback speed does not only change how fast the video plays, but also affects the bitrate. For instance, if you increase the playback speed to twice (2x) the normal speed, the bitrate will also double. The implications of this are significant. A higher bitrate requires faster internet speeds to maintain smooth playback. So, if your users do not have a fast enough internet connection, they might experience buffering or interruptions during playback.'
       tags:
       - stream-controls
       security: []
