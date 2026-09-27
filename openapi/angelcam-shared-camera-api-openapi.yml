@@ -148,6 +148,62 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    StreamObject:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Stream URL
+        format:
+          type: string
+          enum:
+          - hls
+          - mp4
+          - mpegts
+          - mjpeg
+        refresh_rate:
+          type: number
+          format: float
+          description: Stream refresh rate
+      required:
+      - url
+      - format
+      example:
+        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
+        format: mjpeg
     OwnerObject:
       type: object
       title: Owner object
@@ -256,38 +312,39 @@ components:
           last_name: Appleseed
         has_recording: false
         has_notifications: true
-    Error400InvalidParams:
+    SharedApplicationObject:
       type: object
-      title: Error 400 Invalid Parameters
+      properties:
+        code:
+          type: string
+          enum:
+          - CRA
+      required:
+      - code
+      example:
+        code: CRA
+    ErrorGeneric:
+      type: object
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    Error404NotFound:
+    Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
+      title: Error 403 Permission Denied
       example:
-        title: not_found
-        detail: Not Found
-        status: 404
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     SnapshotObject:
       title: Snapshot object
       properties:
@@ -340,96 +397,39 @@ components:
       - next
       - previous
       - results
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    SharedApplicationObject:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - CRA
-      required:
-      - code
-      example:
-        code: CRA
-    StreamObject:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: Stream URL
-        format:
-          type: string
-          enum:
-          - hls
-          - mp4
-          - mpegts
-          - mjpeg
-        refresh_rate:
-          type: number
-          format: float
-          description: Stream refresh rate
-      required:
-      - url
-      - format
-      example:
-        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
-        format: mjpeg
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-  responses:
     Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+  responses:
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     sharedCameraId:
       name: camera_id

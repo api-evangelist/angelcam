@@ -146,6 +146,9 @@ paths:
         '404':
           description: Not Found
 components:
+  responses:
+    EmptyResponse:
+      description: Empty response.
   schemas:
     RecordingStreamInfoResponse:
       type: object
@@ -161,9 +164,6 @@ components:
       example:
         current_time: '2024-01-16T00:00:59.146606443+00:00'
         speed: 1
-  responses:
-    EmptyResponse:
-      description: Empty response.
   securitySchemes:
     OAuth2:
       type: oauth2

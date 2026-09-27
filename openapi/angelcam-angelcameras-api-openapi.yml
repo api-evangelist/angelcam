@@ -45,14 +45,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -61,20 +53,6 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     AngelCameraFirmwareResponse:
       type: object
       title: AngelCamera firmware
@@ -107,19 +85,41 @@ components:
         version: 1.20.0
         image: https://download.angelcam.com/angelcamera/c3c9429e42c76e50f0f300267a7ac733/fw-1.20.0.img
         changelog: ''
-  responses:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
     Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+  responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   securitySchemes:
     OAuth2:
       type: oauth2

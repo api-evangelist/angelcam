@@ -129,109 +129,6 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    IncidentObject:
-      type: object
-      title: Incident object
-      properties:
-        id:
-          type: number
-          minimum: 1
-          description: Incident ID
-        created_at:
-          type: string
-          description: Time when incident was created, format `%Y-%m-%dT%H:%M:%SZ`
-        verified_at:
-          type:
-          - string
-          - 'null'
-          description: Time when incident was verified, format `%Y-%m-%dT%H:%M:%SZ`
-        closed_at:
-          type:
-          - string
-          - 'null'
-          description: Time when incident was closed, format `%Y-%m-%dT%H:%M:%SZ`
-        first_event_occurred_at:
-          type:
-          - string
-          - 'null'
-          description: Time when first event (triggering one) occured, format `%Y-%m-%dT%H:%M:%SZ`
-        last_event_occurred_at:
-          type:
-          - string
-          - 'null'
-          description: Time when last event durign of incident occured, format `%Y-%m-%dT%H:%M:%SZ`
-        event_count:
-          type: number
-          minimum: 1
-          description: Number of events during incident
-        incident_sharing_url:
-          type:
-          - string
-          - 'null'
-          description: URL that can be used for incident verification by third parties. The URL leads to a web page where all cameras from the affected site can be viewed (live streams + the last two hours of recording). The URL is valid for one hour after the corresponding incident is created. This field will be `null` if the URL is no longer valid.
-        snapshot:
-          $ref: '#/components/schemas/SnapshotObject'
-      required:
-      - id
-      - created_at
-      - verified_at
-      - closed_at
-      - first_event_occurred_at
-      - last_event_occurred_at
-      - event_count
-      - incident_sharing_url
-      - snapshot
-      example:
-        id: 1
-        created_at: '2019-08-09T13:23:23.000Z'
-        verified_at: '2019-08-09T13:23:58.000Z'
-        closed_at: null
-        first_event_occurred_at: '2019-08-09T13:23:20.000Z'
-        last_event_occurred_at: '2019-08-09T13:25:16.000Z'
-        event_count: 5
-        incident_sharing_url: www.example.com
-        snapshot:
-          url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
-          created_at: '2019-08-09T13:23:24.000Z'
-    SnapshotObject:
-      title: Snapshot object
-      properties:
-        url:
-          format: uri
-          description: URL of the snapshot image
-          type:
-          - string
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
-      required:
-      - url
-      - created_at
-      example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      type:
-      - object
-      - 'null'
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -300,6 +197,109 @@ components:
       - title
       - detail
       - status
+    IncidentObject:
+      type: object
+      title: Incident object
+      properties:
+        id:
+          type: number
+          minimum: 1
+          description: Incident ID
+        created_at:
+          type: string
+          description: Time when incident was created, format `%Y-%m-%dT%H:%M:%SZ`
+        verified_at:
+          type:
+          - string
+          - 'null'
+          description: Time when incident was verified, format `%Y-%m-%dT%H:%M:%SZ`
+        closed_at:
+          type:
+          - string
+          - 'null'
+          description: Time when incident was closed, format `%Y-%m-%dT%H:%M:%SZ`
+        first_event_occurred_at:
+          type:
+          - string
+          - 'null'
+          description: Time when first event (triggering one) occured, format `%Y-%m-%dT%H:%M:%SZ`
+        last_event_occurred_at:
+          type:
+          - string
+          - 'null'
+          description: Time when last event durign of incident occured, format `%Y-%m-%dT%H:%M:%SZ`
+        event_count:
+          type: number
+          minimum: 1
+          description: Number of events during incident
+        incident_sharing_url:
+          type:
+          - string
+          - 'null'
+          description: URL that can be used for incident verification by third parties. The URL leads to a web page where all cameras from the affected site can be viewed (live streams + the last two hours of recording). The URL is valid for one hour after the corresponding incident is created. This field will be `null` if the URL is no longer valid.
+        snapshot:
+          $ref: '#/components/schemas/SnapshotObject'
+      required:
+      - id
+      - created_at
+      - verified_at
+      - closed_at
+      - first_event_occurred_at
+      - last_event_occurred_at
+      - event_count
+      - incident_sharing_url
+      - snapshot
+      example:
+        id: 1
+        created_at: '2019-08-09T13:23:23.000Z'
+        verified_at: '2019-08-09T13:23:58.000Z'
+        closed_at: null
+        first_event_occurred_at: '2019-08-09T13:23:20.000Z'
+        last_event_occurred_at: '2019-08-09T13:25:16.000Z'
+        event_count: 5
+        incident_sharing_url: www.example.com
+        snapshot:
+          url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
+          created_at: '2019-08-09T13:23:24.000Z'
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    SnapshotObject:
+      title: Snapshot object
+      properties:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
+      required:
+      - url
+      - created_at
+      example:
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
   responses:
     Error403PermissionDenied:
       description: Missing permission.
@@ -313,18 +313,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   parameters:
     incidentId:
       name: incident_id

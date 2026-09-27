@@ -275,43 +275,14 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error404NotFound:
+    Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
+      title: Error 401 Unauthorized
       example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    ClientListResponse:
-      type: object
-      title: Client list
-      properties:
-        count:
-          type: integer
-          description: Count of client
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of clients of reseller
-          items:
-            $ref: '#/components/schemas/ClientObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     ClientObject:
       type: object
       title: Client object
@@ -377,22 +348,35 @@ components:
         limited_account: false
         allowed_access: true
         confiremd_at: null
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+    ClientListResponse:
+      type: object
+      title: Client list
+      properties:
+        count:
+          type: integer
+          description: Count of client
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of clients of reseller
+          items:
+            $ref: '#/components/schemas/ClientObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     ErrorGeneric:
       type: object
       title: Error object
@@ -407,33 +391,49 @@ components:
       - title
       - detail
       - status
-  responses:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+  responses:
+    EmptyResponse:
+      description: Empty response.
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
-    EmptyResponse:
-      description: Empty response.
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
     Error400InvalidBody:
       description: Body payload is invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   parameters:
     clientId:
       name: client_id

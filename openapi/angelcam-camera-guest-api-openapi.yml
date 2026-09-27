@@ -180,6 +180,57 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    CameraGuestPermissionObject:
+      type: object
+      deprecated: true
+      title: Guest permission
+      properties:
+        can_view_rec:
+          type: boolean
+          description: The guest can view camera recordings.
+          x-example: false
+        can_create_clips:
+          type: boolean
+          description: The guest can create clips and view clips created by themselves. This option also implies `can_view_rec`.
+          x-example: false
+        can_view_all_clips:
+          type: boolean
+          description: The guest can view clips created by any user.
+          x-example: false
+        share_notifications:
+          type: boolean
+          description: Share RTS notifications for a given camera.
+          x-example: false
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -188,6 +239,36 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    CameraGuestListResponse:
+      type: object
+      deprecated: true
+      title: Camera guests list
+      properties:
+        count:
+          type: integer
+          description: Count of all camera guests
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of camera guests
+          items:
+            $ref: '#/components/schemas/CameraGuestObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     CameraGuestObject:
       type: object
       deprecated: true
@@ -225,106 +306,6 @@ components:
           can_create_clips: false
           can_view_all_clips: false
           share_notifications: false
-    CameraGuestListResponse:
-      type: object
-      deprecated: true
-      title: Camera guests list
-      properties:
-        count:
-          type: integer
-          description: Count of all camera guests
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of camera guests
-          items:
-            $ref: '#/components/schemas/CameraGuestObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    CameraGuestPermissionObject:
-      type: object
-      deprecated: true
-      title: Guest permission
-      properties:
-        can_view_rec:
-          type: boolean
-          description: The guest can view camera recordings.
-          x-example: false
-        can_create_clips:
-          type: boolean
-          description: The guest can create clips and view clips created by themselves. This option also implies `can_view_rec`.
-          x-example: false
-        can_view_all_clips:
-          type: boolean
-          description: The guest can view clips created by any user.
-          x-example: false
-        share_notifications:
-          type: boolean
-          description: Share RTS notifications for a given camera.
-          x-example: false
-  responses:
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
   parameters:
     guestId:
       name: guest_id
@@ -344,6 +325,25 @@ components:
       schema:
         type: integer
         minimum: 1
+  responses:
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   securitySchemes:
     OAuth2:
       type: oauth2

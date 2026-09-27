@@ -85,23 +85,28 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  schemas:
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
+  responses:
+    EmptyResponse:
+      description: Empty response.
     Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -110,6 +115,30 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
+    StreamObject:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Stream URL
+        format:
+          type: string
+          enum:
+          - hls
+          - mp4
+          - mpegts
+          - mjpeg
+        refresh_rate:
+          type: number
+          format: float
+          description: Stream refresh rate
+      required:
+      - url
+      - format
+      example:
+        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
+        format: mjpeg
     BroadcastingResponse:
       type: object
       title: Broadcasting information
@@ -143,30 +172,6 @@ components:
           url: http://e1.angelcam.com/stream/81/stream.ts?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjMxNiwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.b5b4cf405cf054701a75b359f4069d2af8a102c5ffd8f33cbb560a4638c7cb71
         - format: hls
           url: http://e1.angelcam.com/stream/81/playlist.m3u8?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjQwMSwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.8ac35b434e768e8f10161b2d74da492f5fd8a8c115c18cbb421017665acd908a
-    StreamObject:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: Stream URL
-        format:
-          type: string
-          enum:
-          - hls
-          - mp4
-          - mpegts
-          - mjpeg
-        refresh_rate:
-          type: number
-          format: float
-          description: Stream refresh rate
-      required:
-      - url
-      - format
-      example:
-        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
-        format: mjpeg
     ErrorGeneric:
       type: object
       title: Error object
@@ -181,27 +186,22 @@ components:
       - title
       - detail
       - status
-  responses:
     Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    EmptyResponse:
-      description: Empty response.
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
   parameters:
     cameraId:
       name: camera_id

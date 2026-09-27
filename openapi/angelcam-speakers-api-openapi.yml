@@ -277,14 +277,22 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error404NotFound:
+    Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
+      title: Error 401 Unauthorized
       example:
-        title: not_found
-        detail: Not Found
-        status: 404
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error503ServiceUnavailable:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 502 Bad Gateway
+      example:
+        title: bad_gateway
+        detail: Bad Gateway
+        status: 502
     SpeakerObject:
       type: object
       title: Speaker object
@@ -342,14 +350,36 @@ components:
         arrow_client: 75b62326-eca3-4424-ab68-48e7da47e847
         arrow_service_id: 00af
         endpoint: /api/v1/audio/play
-    Error503ServiceUnavailable:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 502 Bad Gateway
+      title: Error 403 Permission Denied
       example:
-        title: bad_gateway
-        detail: Bad Gateway
-        status: 502
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     SpeakerListResponse:
       type: object
       title: Speaker list
@@ -379,71 +409,41 @@ components:
       - next
       - previous
       - results
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
   responses:
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    EmptyResponse:
-      description: Empty response.
     Error503ServiceUnavailable:
       description: Service unavailable
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error503ServiceUnavailable'
+    EmptyResponse:
+      description: Empty response.
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error400InvalidBody:
       description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
       content:
         application/json:
           schema:

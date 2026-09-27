@@ -74,6 +74,50 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
+    PriceObject:
+      type: object
+      title: Price object
+      properties:
+        period:
+          type: string
+          format: duration
+          description: Period of time
+          example: P1M
+        price:
+          type: string
+          format: number
+          description: Decimal price in USD
+          example: 3.99
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ServiceListResponse:
       type: object
       title: Service list
@@ -141,50 +185,6 @@ components:
       - name
       - prices
       - currency
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    PriceObject:
-      type: object
-      title: Price object
-      properties:
-        period:
-          type: string
-          format: duration
-          description: Period of time
-          example: P1M
-        price:
-          type: string
-          format: number
-          description: Decimal price in USD
-          example: 3.99
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
   responses:
     Error403PermissionDenied:
       description: Missing permission.
@@ -192,18 +192,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   securitySchemes:
     OAuth2:
       type: oauth2

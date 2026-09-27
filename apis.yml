@@ -65,7 +65,7 @@ tags_raw:
 - Webhooks
 apis:
 - aid: angelcam:angelcam-active-service-api
-  name: AngelCam active-service API
+  name: AngelCam Active Service API
   description: >-
     Endpoints for managing your activated services and assigning them to cameras.
 
@@ -121,7 +121,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-angelcameras-api
-  name: AngelCam angelcameras API
+  name: AngelCam Angelcameras API
   description: The angelcameras API from AngelCam — 1 operation(s) for angelcameras.
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
@@ -155,7 +155,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-arrow-clients-api
-  name: AngelCam arrow-clients API
+  name: AngelCam Arrow Clients API
   description: >-
     Manage [Arrow clients](https://github.com/angelcam/arrow-client) — pair them with your account, inspect
     exposed services, and send commands.
@@ -198,7 +198,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-audio-message-api
-  name: AngelCam audio-message API
+  name: AngelCam Audio Message API
   description: >-
     Endpoints for managing audio messages. Audio messages are pre-recorded audio clips that can be played
     through [speakers](#tag/speakers).
@@ -240,7 +240,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-broadcasting-api
-  name: AngelCam broadcasting API
+  name: AngelCam Broadcasting API
   description: >-
     Endpoints for managing broadcasting settings and retrieving broadcasting streams. If a camera doesn't
     have the Broadcasting service activated, all camera broadcasting endpoints will return HTTP 404.
@@ -282,7 +282,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-camera-api
-  name: AngelCam camera API
+  name: AngelCam Camera API
   description: >-
     Manage your cameras and access live streams, snapshots, and recordings. Supported codecs: H.264, H.265
     (experimental), MJPEG. Live streams are limited to 10 concurrent consumers per camera — use the [broadcasting
@@ -321,7 +321,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-camera-guest-api
-  name: AngelCam camera-guest API
+  name: AngelCam Camera Guest API
   description: >-
     You can share your camera with a guest, this means, you allow guests to view stream from your camera.
     There is also an option to share also recordings together with live stream.
@@ -362,7 +362,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-camera-stream-detection-api
-  name: AngelCam camera-stream-detection API
+  name: AngelCam Camera Stream Detection API
   description: >-
     Using these endpoints you can verify if there are camera streams available on specified network address.
     Detection is asynchronous. For this reason there is one endpoint for initializing stream detection
@@ -399,7 +399,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-client-api
-  name: AngelCam client API
+  name: AngelCam Client API
   description: >-
     Endpoints for reseller users to manage their clients.
 
@@ -446,7 +446,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-clip-api
-  name: AngelCam clip API
+  name: AngelCam Clip API
   description: >-
     A clip is a permanent, downloadable excerpt of recorded footage. Unlike a recording stream — which
     is a temporary playback session — a clip is processed into a file that can be downloaded or shared
@@ -504,7 +504,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-event-api
-  name: AngelCam event API
+  name: AngelCam Event API
   description: >-
     Events represent detections reported by cameras or sensors — typically motion detected by a camera
     or a trigger from an external sensor. Events are the building blocks for [RTS incidents](#tag/incidents)
@@ -563,7 +563,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-incidents-api
-  name: AngelCam incidents API
+  name: AngelCam Incidents API
   description: >-
     Endpoints for managing Real Time Security (RTS) incidents.
 
@@ -609,7 +609,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-location-api
-  name: AngelCam location API
+  name: AngelCam Location API
   description: >-
     Endpoints for accessing and managing locations. Locations are used to organize cameras into groups.
     Every camera belongs to exactly one location, and every user has a root location whose ID is available
@@ -655,7 +655,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-order-api
-  name: AngelCam order API
+  name: AngelCam Order API
   description: The order API from AngelCam — 3 operation(s) for order.
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
@@ -691,7 +691,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-public-camera-api
-  name: AngelCam public-camera API
+  name: AngelCam Public Camera API
   description: >-
     Endpoints for browsing cameras that are publicly accessible. A camera appears here if it has the Broadcasting
     service active and has been marked as public — either because it uses free public broadcasting, or
@@ -732,7 +732,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-recording-api
-  name: AngelCam recording API
+  name: AngelCam Recording API
   description: >-
     Cloud Recording endpoints. Requires the Cloud Recording service to be active on the camera — otherwise
     all endpoints return 404.
@@ -774,7 +774,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-rts-messages-api
-  name: AngelCam rts_messages API
+  name: AngelCam Rts Messages API
   description: >-
     Endpoints for managing notifications. Base object is message. We create a message when something important
     happens. For example, when a camera goes offline, when a sensor detects motion, etc. When a message
@@ -812,7 +812,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-rts-notification-methods-api
-  name: AngelCam rts_notification_methods API
+  name: AngelCam Rts Notification Methods API
   description: >-
     Manage notification methods — email and HTTP webhook. HTTP methods send a signed POST to your URL
     with a JSON payload on each notification. See the [Webhooks guide](/guides/webhooks/) for payload
@@ -850,7 +850,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-rts-notification-rules-api
-  name: AngelCam rts_notification_rules API
+  name: AngelCam Rts Notification Rules API
   description: >-
     Endpoints for managing notification rules. Notification rule is a rule that defines when and how we
     should send message to user. For example, we can create rule that says: "When camera goes offline,
@@ -888,7 +888,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-rts-settings-api
-  name: AngelCam rts_settings API
+  name: AngelCam Rts Settings API
   description: >-
     Global Real Time Security (RTS) settings for your account.
 
@@ -927,7 +927,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-sensor-api
-  name: AngelCam sensor API
+  name: AngelCam Sensor API
   description: >-
     With sensor endpoints you can view, manage and connect sensors to the user account.
 
@@ -981,7 +981,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-service-api
-  name: AngelCam service API
+  name: AngelCam Service API
   description: >-
     A catalog of services available for purchase. Use these endpoints to discover service `code` values
     before activating a service via the [My services](#tag/active-service) endpoints.
@@ -1026,7 +1026,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-shared-camera-api
-  name: AngelCam shared-camera API
+  name: AngelCam Shared Camera API
   description: >-
     For access to cameras which somebody shared with you. In general everything is same as in my cameras
     section, see above, there is only one difference. Together with cameras information you get also a
@@ -1063,7 +1063,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-shared-camera-clip-api
-  name: AngelCam shared-camera-clip API
+  name: AngelCam Shared Camera Clip API
   description: >-
     Recording clips on cameras shared with you. Everything works the same as [My recording clips](#tag/clip)
     — just replace `cameras` with `shared-cameras` in the endpoint URLs.
@@ -1099,7 +1099,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-shared-camera-recording-api
-  name: AngelCam shared-camera-recording API
+  name: AngelCam Shared Camera Recording API
   description: >-
     Everything is same as in recording for my own cameras. Just replace `cameras` by `shared-cameras`
     in every endpoints url.
@@ -1135,7 +1135,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-space-api
-  name: AngelCam space API
+  name: AngelCam Space API
   description: >-
     A **space** is the organisational unit in Angelcam — it owns all resources: cameras, locations, recordings,
     services, and billing. Every API request operates within a space context — by default the user's default
@@ -1176,7 +1176,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-speakers-api
-  name: AngelCam speakers API
+  name: AngelCam Speakers API
   description: >-
     Manage speakers and trigger audio playback. See the [Speakers guide](/guides/speakers/) for setup
     instructions, including how to configure an AngelBox as a speaker.
@@ -1214,7 +1214,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-stream-controls-api
-  name: AngelCam stream-controls API
+  name: AngelCam Stream Controls API
   description: >-
     You normally don't have to know the `streamer_domain` and `stream_id` path parameter, but use the
     generated endpoint URLs as reported by the `stream_controls` field in a create-stream response. Those
@@ -1280,7 +1280,7 @@ apis:
   - type: Arazzo
     url: arazzo/angelcam-create-and-share-clip.yml
 - aid: angelcam:angelcam-user-api
-  name: AngelCam user API
+  name: AngelCam User API
   description: The user API from AngelCam — 1 operation(s) for user.
   humanURL: https://developers.angelcam.com/
   baseURL: https://api.angelcam.com/v1
