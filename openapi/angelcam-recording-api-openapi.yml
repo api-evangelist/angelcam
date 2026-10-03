@@ -604,6 +604,14 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -628,6 +636,24 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
+    RecordingStreamInfoResponseDeprecated:
+      type: object
+      title: Recording stream information
+      properties:
+        current_time:
+          type: string
+          format: date-time
+          description: Current time in a stream.
+      example:
+        current_time: '2017-01-01T00:00:00.000Z'
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     RecordingTimelineResponse:
       type: object
       title: Recording timeline object
@@ -657,100 +683,6 @@ components:
           end: '2017-06-09T03:25:28.000Z'
         - start: '2017-06-09T04:19:42.000Z'
           end: 2017-06-09T010:39:31Z
-    RecordingResponse:
-      type: object
-      title: Recording information
-      required:
-      - id
-      - status
-      - retention
-      - deactivated_at
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Recording ID
-        status:
-          type: string
-          enum:
-          - READY
-          - CONNECTING
-          - RECORDING
-          - STOPPING
-          - ERROR
-          description: 'Recording status values have the following meaning:
-
-            * `READY` - Not recording (recording is ready to be started)
-
-            * `CONNECTING` - Recorder is trying to connect to the stream (this usually indicates camera connectivity problems; the recorder keeps trying to connect).
-
-            * `RECORDING` - Recorder is connected to the stream and records are being created
-
-            * `STOPPING` - Recording is stopping
-
-            * `ERROR` - Error occurred when recording (this indicates a possible issue with Angelcam infrastructure)
-
-            '
-        retention:
-          description: 'Retention period in ISO 8601 duration format tells how long in past we store the footage. Example: P7D means 7 days.
-
-            '
-          type:
-          - string
-          - 'null'
-        record_queue_capacity:
-          description: 'Capacity of the record queue in seconds, maxium amount of seconds to be recorded in total, unlimited if null
-
-            '
-          type:
-          - number
-          - 'null'
-        deactivated_at:
-          type:
-          - string
-          - 'null'
-          format: datetime
-          description: Datetime when recording service has been deactivated, if null then recording is active.
-        recording_start:
-          type:
-          - string
-          - 'null'
-          format: datetime
-          description: Recording footage start datetime, if null there is no recording footage
-        recording_end:
-          type:
-          - string
-          - 'null'
-          format: datetime
-          description: Recording footage end datetime, if null there is no recording footage
-      example:
-        id: df5fcd78-6114-4750-b23a-cec3c3febc5b
-        status: RECORDING
-        retention: P7D
-        deactivated_at: null
-        record_queue_capacity: null
-        recording_start: '2024-05-02T10:32:11.000Z'
-        recording_end: 2024-05-07T16:58:7.5400Z
-    RecordingStreamInfoResponseDeprecated:
-      type: object
-      title: Recording stream information
-      properties:
-        current_time:
-          type: string
-          format: date-time
-          description: Current time in a stream.
-      example:
-        current_time: '2017-01-01T00:00:00.000Z'
-    RecordingDownloadResponse:
-      type: object
-      title: Recording download
-      properties:
-        url:
-          type: string
-          format: url
-          description: Download URL
-      example:
-        url: https://rust-streamer-eu-central-1-07489f9b03f198b91.angelcam.com/recordings/7e65d945-fffc-42e7-b78d-dd6f5cea91ee/download/?start=2019%2D09%2D30T07%3A23%3A14%2E932%2B00%3A00&end=2019%2D09%2D30T07%3A53%3A57%2E016%2B00%3A00&token=eyJ0aW1lIjoxNTY5ODU3NjgzLCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E020b136d5da0d9518ed5428bfa01cadab1a139bf1e4f8e64a726fe3dfd40e541&filename=clip
     ErrorGeneric:
       type: object
       title: Error object
@@ -825,34 +757,6 @@ components:
           play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
           pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
           speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    SegmentObject:
-      type: object
-      title: Segment object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
-        end:
-          type: string
-          format: date-time
-          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
     RecordingListResponse:
       type: object
       title: Recording list
@@ -882,14 +786,110 @@ components:
       - next
       - previous
       - results
-    Error403PermissionDenied:
+    RecordingResponse:
+      type: object
+      title: Recording information
+      required:
+      - id
+      - status
+      - retention
+      - deactivated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Recording ID
+        status:
+          type: string
+          enum:
+          - READY
+          - CONNECTING
+          - RECORDING
+          - STOPPING
+          - ERROR
+          description: 'Recording status values have the following meaning:
+
+            * `READY` - Not recording (recording is ready to be started)
+
+            * `CONNECTING` - Recorder is trying to connect to the stream (this usually indicates camera connectivity problems; the recorder keeps trying to connect).
+
+            * `RECORDING` - Recorder is connected to the stream and records are being created
+
+            * `STOPPING` - Recording is stopping
+
+            * `ERROR` - Error occurred when recording (this indicates a possible issue with Angelcam infrastructure)
+
+            '
+        retention:
+          description: 'Retention period in ISO 8601 duration format tells how long in past we store the footage. Example: P7D means 7 days.
+
+            '
+          type:
+          - string
+          - 'null'
+        record_queue_capacity:
+          description: 'Capacity of the record queue in seconds, maxium amount of seconds to be recorded in total, unlimited if null
+
+            '
+          type:
+          - number
+          - 'null'
+        deactivated_at:
+          type:
+          - string
+          - 'null'
+          format: datetime
+          description: Datetime when recording service has been deactivated, if null then recording is active.
+        recording_start:
+          type:
+          - string
+          - 'null'
+          format: datetime
+          description: Recording footage start datetime, if null there is no recording footage
+        recording_end:
+          type:
+          - string
+          - 'null'
+          format: datetime
+          description: Recording footage end datetime, if null there is no recording footage
+      example:
+        id: df5fcd78-6114-4750-b23a-cec3c3febc5b
+        status: RECORDING
+        retention: P7D
+        deactivated_at: null
+        record_queue_capacity: null
+        recording_start: '2024-05-02T10:32:11.000Z'
+        recording_end: 2024-05-07T16:58:7.5400Z
+    RecordingDownloadResponse:
+      type: object
+      title: Recording download
+      properties:
+        url:
+          type: string
+          format: url
+          description: Download URL
+      example:
+        url: https://rust-streamer-eu-central-1-07489f9b03f198b91.angelcam.com/recordings/7e65d945-fffc-42e7-b78d-dd6f5cea91ee/download/?start=2019%2D09%2D30T07%3A23%3A14%2E932%2B00%3A00&end=2019%2D09%2D30T07%3A53%3A57%2E016%2B00%3A00&token=eyJ0aW1lIjoxNTY5ODU3NjgzLCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E020b136d5da0d9518ed5428bfa01cadab1a139bf1e4f8e64a726fe3dfd40e541&filename=clip
+    Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      title: Error 401 Unauthorized
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SegmentObject:
+      type: object
+      title: Segment object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+        end:
+          type: string
+          format: date-time
+          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
   responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.
@@ -897,6 +897,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
     Error400InvalidParams:
       description: Query params are invalid.
       content:
@@ -909,8 +911,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    EmptyResponse:
-      description: Empty response.
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -918,15 +918,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
   parameters:
-    cameraId:
-      name: camera_id
-      in: path
-      required: true
-      description: Camera ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
     recordingId:
       name: recording_id
       in: path
@@ -936,6 +927,15 @@ components:
       schema:
         type: string
         format: uuid
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -101,30 +101,6 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -154,6 +130,22 @@ components:
       - url
       - type
       - preview
+    CameraStartStreamDetectionResponse:
+      type: object
+      title: Camera Start Stream Detection Response
+      properties:
+        session_id:
+          type: string
+      required:
+      - session_id
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     CameraStreamDetectionPreview:
       type: object
       title: Camera preview
@@ -171,6 +163,30 @@ components:
       required:
       - live_snapshot
       - streams
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     CameraStreamDetectionPreviewStream:
       type: object
       title: Camera preview stream
@@ -203,14 +219,6 @@ components:
       - title
       - detail
       - status
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     CameraStreamDetectionResponse:
       type: object
       title: Camera Result Stream Detection Response
@@ -246,14 +254,25 @@ components:
               url: http://m1.angelcam.com/stream/81/stream.mp4?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjMxNiwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.b5b4cf405cf054701a75b359f4069d2af8a102c5ffd8f33cbb560a4638c7cb71
             - format: hls
               url: http://m1.angelcam.com/stream/81/playlist.m3u8?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjQwMSwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.8ac35b434e768e8f10161b2d74da492f5fd8a8c115c18cbb421017665acd908a
-    CameraStartStreamDetectionResponse:
-      type: object
-      title: Camera Start Stream Detection Response
-      properties:
-        session_id:
-          type: string
-      required:
-      - session_id
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     sessionId:
       name: session_id
@@ -266,25 +285,6 @@ components:
       schema:
         type: string
         format: uuid
-  responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
   securitySchemes:
     OAuth2:
       type: oauth2

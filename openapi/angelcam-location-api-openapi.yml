@@ -79,72 +79,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    LocationListResponse:
-      type: object
-      title: Location list
-      properties:
-        count:
-          type: integer
-          description: Total number of locations
-          example: 2
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of locations
-          items:
-            $ref: '#/components/schemas/LocationObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 2
-        next: null
-        previous: null
-        results:
-        - id: 1
-          name: My house
-          description: Main bedroom
-          is_armed: true
-          next_arming: '2025-06-28T23:03:00Z'
-          next_disarming: null
-          cameras_count: 3
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -153,20 +87,6 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     LocationObject:
       type: object
       title: Location object
@@ -231,6 +151,111 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    LocationListResponse:
+      type: object
+      title: Location list
+      properties:
+        count:
+          type: integer
+          description: Total number of locations
+          example: 2
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of locations
+          items:
+            $ref: '#/components/schemas/LocationObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 2
+        next: null
+        previous: null
+        results:
+        - id: 1
+          name: My house
+          description: Main bedroom
+          is_armed: true
+          next_arming: '2025-06-28T23:03:00Z'
+          next_disarming: null
+          cameras_count: 3
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     locationId:
       name: location_id
@@ -241,31 +266,6 @@ components:
       schema:
         type: integer
         minimum: 1
-  responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
   securitySchemes:
     OAuth2:
       type: oauth2

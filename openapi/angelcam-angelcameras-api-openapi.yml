@@ -85,6 +85,14 @@ components:
         version: 1.20.0
         image: https://download.angelcam.com/angelcamera/c3c9429e42c76e50f0f300267a7ac733/fw-1.20.0.img
         changelog: ''
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     ErrorGeneric:
       type: object
       title: Error object
@@ -99,14 +107,6 @@ components:
       - title
       - detail
       - status
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
   responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.

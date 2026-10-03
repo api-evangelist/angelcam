@@ -166,30 +166,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -198,65 +174,6 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    MessageListResponse:
-      type: object
-      title: Message list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all messages
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of messages
-          items:
-            $ref: '#/components/schemas/MessageObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: 1
-          created_at: '2019-08-09T13:23:23Z'
-          title: Sensor My Sensor detected motion
-          short_message: Your sensor with name My Sensor detected motion.
-          long_message: Your sensor with name My Sensor detected motion. Find out more at <url>.
-          is_read: false
-          image: https://s3.us-west-2.amazonaws.com/rec-prod.us-west-2.angelcam.com/c/944c8ee2-0230-4dbf-b03d-de09dc4a79da.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=REDACTED_AWS_ACCESS_KEY_ID%2F20180416%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180416T093432Z&X-Amz-Expires=86400&X-Amz-Signature=40b3701f85114ed22f76a97e6b0c099b1dc7301645bd2db8380c5fa824c59455&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Frontdoor%20loitering.jpg%22
-          action_url: https://my.angelcam.com/camera/1/
-          action_label: Show camera
-          show_detail: false
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -265,14 +182,6 @@ components:
         title: permission_denied
         detail: You do not have permission to perform this action.
         status: 403
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
     MessageObject:
       type: object
       title: Message object
@@ -352,19 +261,98 @@ components:
         action_label: Show camera
         show_detail: false
         incident_sharing_url: null
-  responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
+    MessageListResponse:
+      type: object
+      title: Message list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all messages
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of messages
+          items:
+            $ref: '#/components/schemas/MessageObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: 1
+          created_at: '2019-08-09T13:23:23Z'
+          title: Sensor My Sensor detected motion
+          short_message: Your sensor with name My Sensor detected motion.
+          long_message: Your sensor with name My Sensor detected motion. Find out more at <url>.
+          is_read: false
+          image: https://s3.us-west-2.amazonaws.com/rec-prod.us-west-2.angelcam.com/c/944c8ee2-0230-4dbf-b03d-de09dc4a79da.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=REDACTED_AWS_ACCESS_KEY_ID%2F20180416%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20180416T093432Z&X-Amz-Expires=86400&X-Amz-Signature=40b3701f85114ed22f76a97e6b0c099b1dc7301645bd2db8380c5fa824c59455&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Frontdoor%20loitering.jpg%22
+          action_url: https://my.angelcam.com/camera/1/
+          action_label: Show camera
+          show_detail: false
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+  responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
@@ -377,6 +365,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     messageId:
       name: message_id

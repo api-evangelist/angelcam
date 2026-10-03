@@ -51,21 +51,6 @@ paths:
         '403':
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
-  responses:
-    EmptyResponse:
-      description: Empty response.
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
   schemas:
     Error401Unauthorized:
       allOf:
@@ -75,20 +60,6 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -163,6 +134,35 @@ components:
         require_qualification: false
         available_features:
           live_view: true
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    EmptyResponse:
+      description: Empty response.
   securitySchemes:
     OAuth2:
       type: oauth2

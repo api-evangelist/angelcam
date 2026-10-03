@@ -141,38 +141,24 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error400InvalidParams:
+    AudioMessageWriteObject:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Audio message object
       properties:
-        title:
+        name:
           type: string
-        detail:
-          type: object
-        status:
-          type: integer
+          description: Audio message name
+        message:
+          type: string
+          format: base64
+          description: 'Base64-encoded audio file. Supported formats: `audio/aac`, `audio/mpeg` (MP3), `audio/wav`, `audio/ogg`, `audio/webm`. Keep files short — a few seconds is ideal for reliable playback.'
       required:
-      - title
-      - detail
-      - status
+      - name
+      - message
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+        id: 157
+        name: Alarm
+        message: dGhlIGF1ZGlvIGZpbGUgY29udGVudCBnb2VzIGhlcmU=
     AudioMessageListResponse:
       type: object
       title: Audio Message list
@@ -202,38 +188,22 @@ components:
       - next
       - previous
       - results
-    AudioMessageWriteObject:
-      type: object
-      title: Audio message object
-      properties:
-        name:
-          type: string
-          description: Audio message name
-        message:
-          type: string
-          format: base64
-          description: 'Base64-encoded audio file. Supported formats: `audio/aac`, `audio/mpeg` (MP3), `audio/wav`, `audio/ogg`, `audio/webm`. Keep files short — a few seconds is ideal for reliable playback.'
-      required:
-      - name
-      - message
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
       example:
-        id: 157
-        name: Alarm
-        message: dGhlIGF1ZGlvIGZpbGUgY29udGVudCBnb2VzIGhlcmU=
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     AudioMessageObject:
       type: object
       title: Audio message object
@@ -257,14 +227,20 @@ components:
         id: 157
         name: Alarm
         message: https://example.com/alarm.mp3
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -273,33 +249,57 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
   responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error400InvalidParams:
       description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error400InvalidBody:
+      description: Body payload is invalid.
       content:
         application/json:
           schema:

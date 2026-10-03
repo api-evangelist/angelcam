@@ -148,30 +148,29 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
+    SnapshotObject:
+      title: Snapshot object
       properties:
-        title:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
           type: string
-        detail:
-          type: object
-        status:
-          type: integer
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
       required:
-      - title
-      - detail
-      - status
+      - url
+      - created_at
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -180,6 +179,96 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    SharedCameraListResponse:
+      type: object
+      title: Shared Camera list
+      properties:
+        count:
+          type: integer
+          description: Count of all shared cameras
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of cameras shared with the user
+          items:
+            $ref: '#/components/schemas/SharedCameraObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    OwnerObject:
+      type: object
+      title: Owner object
+      properties:
+        first_name:
+          type: string
+          description: User's first or given name.
+        last_name:
+          type: string
+          description: User's last or family name.
+        email:
+          type: string
+          format: email
+          description: User's email.
+      required:
+      - email
+      example:
+        first_name: John
+        last_name: Appleseed
+        email: john@apple.com
+    SharedApplicationObject:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - CRA
+      required:
+      - code
+      example:
+        code: CRA
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     StreamObject:
       type: object
       properties:
@@ -204,26 +293,30 @@ components:
       example:
         url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
         format: mjpeg
-    OwnerObject:
+    Error400InvalidParams:
       type: object
-      title: Owner object
+      title: Error 400 Invalid Parameters
       properties:
-        first_name:
+        title:
           type: string
-          description: User's first or given name.
-        last_name:
-          type: string
-          description: User's last or family name.
-        email:
-          type: string
-          format: email
-          description: User's email.
+        detail:
+          type: object
+        status:
+          type: integer
       required:
-      - email
+      - title
+      - detail
+      - status
       example:
-        first_name: John
-        last_name: Appleseed
-        email: john@apple.com
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     SharedCameraObject:
       type: object
       title: Shared camera object
@@ -312,118 +405,25 @@ components:
           last_name: Appleseed
         has_recording: false
         has_notifications: true
-    SharedApplicationObject:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - CRA
-      required:
-      - code
-      example:
-        code: CRA
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    SnapshotObject:
-      title: Snapshot object
-      properties:
-        url:
-          format: uri
-          description: URL of the snapshot image
-          type:
-          - string
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
-      required:
-      - url
-      - created_at
-      example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      type:
-      - object
-      - 'null'
-    SharedCameraListResponse:
-      type: object
-      title: Shared Camera list
-      properties:
-        count:
-          type: integer
-          description: Count of all shared cameras
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of cameras shared with the user
-          items:
-            $ref: '#/components/schemas/SharedCameraObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
   responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error400InvalidParams:
       description: Query params are invalid.
       content:

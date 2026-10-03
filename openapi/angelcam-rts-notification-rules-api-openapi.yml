@@ -138,30 +138,78 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    NotificationRuleChangeObject:
+      type: object
+      title: Http notification rule object
+      properties:
+        notification_method:
+          type: integer
+          description: notification method ID
+        message_type:
+          type: string
+          enum:
+          - my_incident
+          - shared_incident
+          - arming
+          - trigger_action
+          - open_incident_verification
+          - verify_incident
+          - close_incident
+          - arrow_status_online
+          - arrow_status_offline
+          - camera_status_online
+          - camera_status_offline
+          description: message type to send notification for
+        allowed_cameras:
+          type: array
+          items:
+            type: integer
+            description: 'List of camera IDs that are allowed to send notifications.
+
+              Allowed only for `camera_status_online` and `camera_status_offline` message types.
+
+              When empty, all cameras are allowed.
+
+              '
+        allowed_arrow_clients:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: 'List of Arrow client UUIDs that are allowed to send notifications.
+
+              Allowed only for `arrow_status_online` and `arrow_status_offline` message types.
+
+              When empty, all Arrow clients are allowed.
+
+              '
+      required:
+      - notification_method
+      - message_type
+      example:
+        id: 85
+        notification_method: 254
+        message_type: camera_status_online
+        allowed_cameras:
+        - 1
+        - 2
+        - 3
     NotificationRuleObject:
       type: object
       title: Http notification rule object
@@ -223,92 +271,6 @@ components:
         - 1
         - 2
         - 3
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    NotificationRuleChangeObject:
-      type: object
-      title: Http notification rule object
-      properties:
-        notification_method:
-          type: integer
-          description: notification method ID
-        message_type:
-          type: string
-          enum:
-          - my_incident
-          - shared_incident
-          - arming
-          - trigger_action
-          - open_incident_verification
-          - verify_incident
-          - close_incident
-          - arrow_status_online
-          - arrow_status_offline
-          - camera_status_online
-          - camera_status_offline
-          description: message type to send notification for
-        allowed_cameras:
-          type: array
-          items:
-            type: integer
-            description: 'List of camera IDs that are allowed to send notifications.
-
-              Allowed only for `camera_status_online` and `camera_status_offline` message types.
-
-              When empty, all cameras are allowed.
-
-              '
-        allowed_arrow_clients:
-          type: array
-          items:
-            type: string
-            format: uuid
-            description: 'List of Arrow client UUIDs that are allowed to send notifications.
-
-              Allowed only for `arrow_status_online` and `arrow_status_offline` message types.
-
-              When empty, all Arrow clients are allowed.
-
-              '
-      required:
-      - notification_method
-      - message_type
-      example:
-        id: 85
-        notification_method: 254
-        message_type: camera_status_online
-        allowed_cameras:
-        - 1
-        - 2
-        - 3
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -359,25 +321,63 @@ components:
           - 1
           - 2
           - 3
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
   responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
     Error400InvalidParams:
       description: Query params are invalid.
       content:

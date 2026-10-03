@@ -105,30 +105,29 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
+    SnapshotObject:
+      title: Snapshot object
       properties:
-        title:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
           type: string
-        detail:
-          type: object
-        status:
-          type: integer
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
       required:
-      - title
-      - detail
-      - status
+      - url
+      - created_at
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -137,6 +136,14 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     IncidentListResponse:
       type: object
       title: Incident list
@@ -183,6 +190,38 @@ components:
           snapshot:
             url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
             created_at: '2019-08-09T13:23:24.000Z'
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     ErrorGeneric:
       type: object
       title: Error object
@@ -261,58 +300,7 @@ components:
         snapshot:
           url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
           created_at: '2019-08-09T13:23:24.000Z'
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    SnapshotObject:
-      title: Snapshot object
-      properties:
-        url:
-          format: uri
-          description: URL of the snapshot image
-          type:
-          - string
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
-      required:
-      - url
-      - created_at
-      example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      type:
-      - object
-      - 'null'
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
   responses:
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
@@ -325,6 +313,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
     incidentId:
       name: incident_id

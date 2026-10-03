@@ -363,6 +363,46 @@ paths:
           $ref: '#/components/responses/Error502BadGateway'
 components:
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ArrowClientAddServiceRequest:
+      type: object
+      title: New Arrow service
+      properties:
+        type:
+          type: string
+          enum:
+          - http
+          - rtsp
+          description: Type of the target service
+        ip:
+          type: string
+          description: local IP address
+        port:
+          type: integer
+          description: service port
+      required:
+      - type
+      - ip
+      - port
+      example:
+        type: rtsp
+        ip: 192.168.1.100
+        port: 554
+    Error502BadGateway:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 502 Bad Gateway
+      example:
+        title: bad_gateway
+        detail: Bad Gateway
+        status: 502
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -387,6 +427,37 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
+    ArrowClientListObject:
+      type: object
+      title: Paired Arrow client
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: UUID of the Arrow client
+        mac:
+          type: string
+          format: mac
+          description: MAC address of the device running the Arrow client
+        ip:
+          type: string
+          description: Public IP address of the device running the Arrow client
+      required:
+      - uuid
+      - mac
+      - ip
+      example:
+        uuid: 75b62326-eca3-4424-ab68-48e7da47e847
+        mac: 12:34:56:78:9a:bc
+        ip: 1.1.1.1
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     ArrowClientServicesResponse:
       type: object
       title: A list of Arrow services
@@ -416,38 +487,6 @@ components:
       - next
       - previous
       - results
-    Error502BadGateway:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 502 Bad Gateway
-      example:
-        title: bad_gateway
-        detail: Bad Gateway
-        status: 502
-    ArrowClientAddServiceRequest:
-      type: object
-      title: New Arrow service
-      properties:
-        type:
-          type: string
-          enum:
-          - http
-          - rtsp
-          description: Type of the target service
-        ip:
-          type: string
-          description: local IP address
-        port:
-          type: integer
-          description: service port
-      required:
-      - type
-      - ip
-      - port
-      example:
-        type: rtsp
-        ip: 192.168.1.100
-        port: 554
     ErrorGeneric:
       type: object
       title: Error object
@@ -462,17 +501,6 @@ components:
       - title
       - detail
       - status
-    ArrowClientAddServiceResponse:
-      type: object
-      title: Arrow client add service response
-      properties:
-        service_id:
-          type: string
-          description: Arrow service ID
-      required:
-      - service_id
-      example:
-        service_id: abcd
     Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -481,6 +509,35 @@ components:
         title: not_authenticated
         detail: Authentication credentials were not provided
         status: 401
+    ArrowClientsResponse:
+      type: object
+      title: A list of Arrow clients
+      properties:
+        count:
+          type: integer
+          description: Number of all clients
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: A list of Arrow clients
+          items:
+            $ref: '#/components/schemas/ArrowClientListObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     ArrowServiceObject:
       type: object
       title: Arrow service
@@ -579,14 +636,6 @@ components:
           discovered: true
           custom: false
         camera_ids: []
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
     ArrowClientPairingResponse:
       type: object
       title: Arrow client pairing response
@@ -601,14 +650,6 @@ components:
           description: MAC address of the paired Arrow client
       example:
         uuid: 75b62326-eca3-4424-ab68-48e7da47e847
-    Error405MethodNotAllowed:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 405 Method Not Allowed
-      example:
-        title: method_not_allowed
-        detail: Method Not Allowed
-        status: 405
     ArrowClientDetailObject:
       type: object
       title: Arrow client
@@ -700,101 +741,26 @@ components:
           token: xxx.yyy.zzz
         capabilities:
           add_custom_service: true
-    ArrowClientListObject:
-      type: object
-      title: Paired Arrow client
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: UUID of the Arrow client
-        mac:
-          type: string
-          format: mac
-          description: MAC address of the device running the Arrow client
-        ip:
-          type: string
-          description: Public IP address of the device running the Arrow client
-      required:
-      - uuid
-      - mac
-      - ip
-      example:
-        uuid: 75b62326-eca3-4424-ab68-48e7da47e847
-        mac: 12:34:56:78:9a:bc
-        ip: 1.1.1.1
-    ArrowClientsResponse:
-      type: object
-      title: A list of Arrow clients
-      properties:
-        count:
-          type: integer
-          description: Number of all clients
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: A list of Arrow clients
-          items:
-            $ref: '#/components/schemas/ArrowClientListObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Error403PermissionDenied:
+    Error405MethodNotAllowed:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      title: Error 405 Method Not Allowed
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-  parameters:
-    arrowClientId:
-      name: uuid
-      in: path
-      required: true
-      description: Arrow client UUID
-      example: c95227c4-218c-4dee-899d-f3fa2ce9c39b
-      schema:
-        type: string
-        format: uuid
-    arrowClientMAC:
-      name: mac
-      in: path
-      required: true
-      description: Arrow client MAC address
-      example: 12:34:56:78:90:AB
-      schema:
-        type: string
-        format: MAC address
-    arrowClientServiceId:
-      name: service_id
-      in: path
-      required: true
-      description: Arrow client service ID
-      example: 1ab2
-      schema:
-        type: string
-        format: hex
+        title: method_not_allowed
+        detail: Method Not Allowed
+        status: 405
+    ArrowClientAddServiceResponse:
+      type: object
+      title: Arrow client add service response
+      properties:
+        service_id:
+          type: string
+          description: Arrow service ID
+      required:
+      - service_id
+      example:
+        service_id: abcd
   responses:
-    Error405MethodNotAllowed:
-      description: The specified method is not allowed for the resource
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error405MethodNotAllowed'
     Error401Unauthorized:
       description: Missing or invalid authorization.
       content:
@@ -807,26 +773,60 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error502BadGateway'
+    EmptyResponse:
+      description: Empty response.
     Error404NotFound:
       description: The specified resource was not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error404NotFound'
-    EmptyResponse:
-      description: Empty response.
     Error403PermissionDenied:
       description: Missing permission.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error403PermissionDenied'
+    Error405MethodNotAllowed:
+      description: The specified method is not allowed for the resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error405MethodNotAllowed'
     Error400InvalidBody:
       description: Body payload is invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+  parameters:
+    arrowClientServiceId:
+      name: service_id
+      in: path
+      required: true
+      description: Arrow client service ID
+      example: 1ab2
+      schema:
+        type: string
+        format: hex
+    arrowClientMAC:
+      name: mac
+      in: path
+      required: true
+      description: Arrow client MAC address
+      example: 12:34:56:78:90:AB
+      schema:
+        type: string
+        format: MAC address
+    arrowClientId:
+      name: uuid
+      in: path
+      required: true
+      description: Arrow client UUID
+      example: c95227c4-218c-4dee-899d-f3fa2ce9c39b
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     OAuth2:
       type: oauth2
