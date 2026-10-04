@@ -44,15 +44,20 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  schemas:
+  responses:
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
     AngelCameraFirmwareResponse:
       type: object
       title: AngelCamera firmware
@@ -93,6 +98,14 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     ErrorGeneric:
       type: object
       title: Error object
@@ -107,19 +120,6 @@ components:
       - title
       - detail
       - status
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   securitySchemes:
     OAuth2:
       type: oauth2

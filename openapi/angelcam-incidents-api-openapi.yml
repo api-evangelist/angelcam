@@ -105,137 +105,6 @@ paths:
           $ref: '#/components/responses/Error404NotFound'
 components:
   schemas:
-    SnapshotObject:
-      title: Snapshot object
-      properties:
-        url:
-          format: uri
-          description: URL of the snapshot image
-          type:
-          - string
-          - 'null'
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
-      required:
-      - url
-      - created_at
-      example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      type:
-      - object
-      - 'null'
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    IncidentListResponse:
-      type: object
-      title: Incident list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all incidents
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of incidents
-          items:
-            $ref: '#/components/schemas/IncidentObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: 1
-          created_at: '2019-08-09T13:23:23.000Z'
-          verified_at: '2019-08-09T13:23:58.000Z'
-          closed_at: null
-          first_event_occurred_at: '2019-08-09T13:23:20.000Z'
-          last_event_occurred_at: '2019-08-09T13:25:16.000Z'
-          event_count: 5
-          incident_sharing_url: www.example.com
-          snapshot:
-            url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
-            created_at: '2019-08-09T13:23:24.000Z'
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     IncidentObject:
       type: object
       title: Incident object
@@ -300,6 +169,137 @@ components:
         snapshot:
           url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
           created_at: '2019-08-09T13:23:24.000Z'
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    IncidentListResponse:
+      type: object
+      title: Incident list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all incidents
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of incidents
+          items:
+            $ref: '#/components/schemas/IncidentObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: 1
+          created_at: '2019-08-09T13:23:23.000Z'
+          verified_at: '2019-08-09T13:23:58.000Z'
+          closed_at: null
+          first_event_occurred_at: '2019-08-09T13:23:20.000Z'
+          last_event_occurred_at: '2019-08-09T13:25:16.000Z'
+          event_count: 5
+          incident_sharing_url: www.example.com
+          snapshot:
+            url: https://dsw4ncxjbie85.cloudfront.net/snapshot/81/y8jol6kbn0ol1gh2.jpg
+            created_at: '2019-08-09T13:23:24.000Z'
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    SnapshotObject:
+      title: Snapshot object
+      properties:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
+      required:
+      - url
+      - created_at
+      example:
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
   responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.
@@ -307,12 +307,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
     Error403PermissionDenied:
       description: Missing permission.
       content:
@@ -325,6 +319,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error400InvalidParams'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   parameters:
     incidentId:
       name: incident_id

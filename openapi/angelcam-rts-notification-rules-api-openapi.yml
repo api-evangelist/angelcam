@@ -137,148 +137,42 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  schemas:
+  parameters:
+    notificationRuleId:
+      name: rule_id
+      in: path
+      required: true
+      description: Notification rule ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
+  responses:
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    NotificationRuleChangeObject:
-      type: object
-      title: Http notification rule object
-      properties:
-        notification_method:
-          type: integer
-          description: notification method ID
-        message_type:
-          type: string
-          enum:
-          - my_incident
-          - shared_incident
-          - arming
-          - trigger_action
-          - open_incident_verification
-          - verify_incident
-          - close_incident
-          - arrow_status_online
-          - arrow_status_offline
-          - camera_status_online
-          - camera_status_offline
-          description: message type to send notification for
-        allowed_cameras:
-          type: array
-          items:
-            type: integer
-            description: 'List of camera IDs that are allowed to send notifications.
-
-              Allowed only for `camera_status_online` and `camera_status_offline` message types.
-
-              When empty, all cameras are allowed.
-
-              '
-        allowed_arrow_clients:
-          type: array
-          items:
-            type: string
-            format: uuid
-            description: 'List of Arrow client UUIDs that are allowed to send notifications.
-
-              Allowed only for `arrow_status_online` and `arrow_status_offline` message types.
-
-              When empty, all Arrow clients are allowed.
-
-              '
-      required:
-      - notification_method
-      - message_type
-      example:
-        id: 85
-        notification_method: 254
-        message_type: camera_status_online
-        allowed_cameras:
-        - 1
-        - 2
-        - 3
-    NotificationRuleObject:
-      type: object
-      title: Http notification rule object
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          description: notification rule ID
-        notification_method:
-          type: integer
-          description: notification method ID
-        message_type:
-          type: string
-          enum:
-          - my_incident
-          - shared_incident
-          - arming
-          - trigger_action
-          - open_incident_verification
-          - verify_incident
-          - close_incident
-          - arrow_status_online
-          - arrow_status_offline
-          - camera_status_online
-          - camera_status_offline
-          description: message type to send notification for
-        allowed_cameras:
-          type: array
-          items:
-            type: integer
-            description: 'List of camera IDs that are allowed to send notifications.
-
-              Allowed only for `camera_status_online` and `camera_status_offline` message types.
-
-              When empty, all cameras are allowed.
-
-              '
-        allowed_arrow_clients:
-          type: array
-          items:
-            type: string
-            format: uuid
-            description: 'List of Arrow client UUIDs that are allowed to send notifications.
-
-              Allowed only for `arrow_status_online` and `arrow_status_offline` message types.
-
-              When empty, all Arrow clients are allowed.
-
-              '
-      required:
-      - id
-      - notification_method
-      - message_type
-      example:
-        id: 85
-        notification_method: 254
-        message_type: camera_status_online
-        allowed_cameras:
-        - 1
-        - 2
-        - 3
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
     Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
     NotificationRuleListResponse:
       type: object
       title: Notification rule list
@@ -345,6 +239,147 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
+    NotificationRuleChangeObject:
+      type: object
+      title: Http notification rule object
+      properties:
+        notification_method:
+          type: integer
+          description: notification method ID
+        message_type:
+          type: string
+          enum:
+          - my_incident
+          - shared_incident
+          - arming
+          - trigger_action
+          - open_incident_verification
+          - verify_incident
+          - close_incident
+          - arrow_status_online
+          - arrow_status_offline
+          - camera_status_online
+          - camera_status_offline
+          description: message type to send notification for
+        allowed_cameras:
+          type: array
+          items:
+            type: integer
+            description: 'List of camera IDs that are allowed to send notifications.
+
+              Allowed only for `camera_status_online` and `camera_status_offline` message types.
+
+              When empty, all cameras are allowed.
+
+              '
+        allowed_arrow_clients:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: 'List of Arrow client UUIDs that are allowed to send notifications.
+
+              Allowed only for `arrow_status_online` and `arrow_status_offline` message types.
+
+              When empty, all Arrow clients are allowed.
+
+              '
+      required:
+      - notification_method
+      - message_type
+      example:
+        id: 85
+        notification_method: 254
+        message_type: camera_status_online
+        allowed_cameras:
+        - 1
+        - 2
+        - 3
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    NotificationRuleObject:
+      type: object
+      title: Http notification rule object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: notification rule ID
+        notification_method:
+          type: integer
+          description: notification method ID
+        message_type:
+          type: string
+          enum:
+          - my_incident
+          - shared_incident
+          - arming
+          - trigger_action
+          - open_incident_verification
+          - verify_incident
+          - close_incident
+          - arrow_status_online
+          - arrow_status_offline
+          - camera_status_online
+          - camera_status_offline
+          description: message type to send notification for
+        allowed_cameras:
+          type: array
+          items:
+            type: integer
+            description: 'List of camera IDs that are allowed to send notifications.
+
+              Allowed only for `camera_status_online` and `camera_status_offline` message types.
+
+              When empty, all cameras are allowed.
+
+              '
+        allowed_arrow_clients:
+          type: array
+          items:
+            type: string
+            format: uuid
+            description: 'List of Arrow client UUIDs that are allowed to send notifications.
+
+              Allowed only for `arrow_status_online` and `arrow_status_offline` message types.
+
+              When empty, all Arrow clients are allowed.
+
+              '
+      required:
+      - id
+      - notification_method
+      - message_type
+      example:
+        id: 85
+        notification_method: 254
+        message_type: camera_status_online
+        allowed_cameras:
+        - 1
+        - 2
+        - 3
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -359,41 +394,6 @@ components:
       - title
       - detail
       - status
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-  parameters:
-    notificationRuleId:
-      name: rule_id
-      in: path
-      required: true
-      description: Notification rule ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -102,25 +102,56 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  parameters:
-    orderId:
-      name: order_id
-      in: path
-      required: true
-      description: Order ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
-  schemas:
+  responses:
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
       example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     OrderListResponse:
       type: object
       title: Order list
@@ -150,6 +181,87 @@ components:
       - next
       - previous
       - results
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    OrderObject:
+      type: object
+      title: Order object
+      properties:
+        id:
+          type: integer
+          description: Order id
+          example: 1
+        closed_at:
+          type: string
+          format: datetime
+          description: Date when order was closed
+          example: '2017-01-01T00:00:20.000Z'
+        paid_at:
+          type:
+          - string
+          - 'null'
+          format: datetime
+          description: Date when order was paid
+          example: '2017-01-01T00:00:20.000Z'
+        due_at:
+          type:
+          - string
+          - 'null'
+          format: datetime
+          description: Date when order is due
+          example: '2017-01-01T00:00:20.000Z'
+        total_price:
+          type: string
+          format: number
+          description: Decimal price in USD
+          example: 3.99
+        currency:
+          type: string
+          description: Currency of the order
+          example: USD
+      required:
+      - id
+      - closed_at
+      - paid_at
+      - due_at
+      - total_price
+      - currency
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
     ServiceObject:
       type: object
       title: Service object
@@ -172,14 +284,6 @@ components:
       required:
       - type
       - code
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     OrderItemListResponse:
       type: object
       title: Order list
@@ -253,120 +357,16 @@ components:
       - price
       - currency
       - type
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    OrderObject:
-      type: object
-      title: Order object
-      properties:
-        id:
-          type: integer
-          description: Order id
-          example: 1
-        closed_at:
-          type: string
-          format: datetime
-          description: Date when order was closed
-          example: '2017-01-01T00:00:20.000Z'
-        paid_at:
-          type:
-          - string
-          - 'null'
-          format: datetime
-          description: Date when order was paid
-          example: '2017-01-01T00:00:20.000Z'
-        due_at:
-          type:
-          - string
-          - 'null'
-          format: datetime
-          description: Date when order is due
-          example: '2017-01-01T00:00:20.000Z'
-        total_price:
-          type: string
-          format: number
-          description: Decimal price in USD
-          example: 3.99
-        currency:
-          type: string
-          description: Currency of the order
-          example: USD
-      required:
-      - id
-      - closed_at
-      - paid_at
-      - due_at
-      - total_price
-      - currency
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
+  parameters:
+    orderId:
+      name: order_id
+      in: path
+      required: true
+      description: Order ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

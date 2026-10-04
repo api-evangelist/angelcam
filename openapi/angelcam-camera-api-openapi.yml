@@ -321,90 +321,86 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
   schemas:
-    ApplicationObject:
+    StreamObject:
       type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - LSA
-          - CRA
-          - VVA
-          - VPA
-          - TLA
-      required:
-      - code
-      example:
-        code: LSA
-    SnapshotObject:
-      title: Snapshot object
       properties:
         url:
-          format: uri
-          description: URL of the snapshot image
-          type:
-          - string
-          - 'null'
-        created_at:
           type: string
-          format: date-time
-          description: The date and time when the snapshot was created for the first time
+          format: uri
+          description: Stream URL
+        format:
+          type: string
+          enum:
+          - hls
+          - mp4
+          - mpegts
+          - mjpeg
+        refresh_rate:
+          type: number
+          format: float
+          description: Stream refresh rate
       required:
       - url
-      - created_at
+      - format
       example:
-        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
-        created_at: '2017-03-31T12:29:10.000Z'
-      description: Snapshot is created by Angelcam when certain types of events are received
-      type:
-      - object
-      - 'null'
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    CameraListResponse:
+        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
+        format: mjpeg
+    Error400InvalidParams:
       type: object
-      title: Camera list
+      title: Error 400 Invalid Parameters
       properties:
-        count:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
           type: integer
-          description: Count of all cameras
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of cameras owned by the user
-          items:
-            $ref: '#/components/schemas/CameraObject'
       required:
-      - count
-      - next
-      - previous
-      - results
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
+      - title
+      - detail
+      - status
       example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     CameraObject:
       type: object
       title: Camera object
@@ -509,6 +505,97 @@ components:
         tags:
         - office
         - entrance
+    CameraListResponse:
+      type: object
+      title: Camera list
+      properties:
+        count:
+          type: integer
+          description: Count of all cameras
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of cameras owned by the user
+          items:
+            $ref: '#/components/schemas/CameraObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ApplicationObject:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - LSA
+          - CRA
+          - VVA
+          - VPA
+          - TLA
+      required:
+      - code
+      example:
+        code: LSA
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    SnapshotObject:
+      title: Snapshot object
+      properties:
+        url:
+          format: uri
+          description: URL of the snapshot image
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the snapshot was created for the first time
+      required:
+      - url
+      - created_at
+      example:
+        url: https://dsw4ncxjbie85.cloudfront.net/snapshot/157/h8yeodu1mrjtiiok.jpg
+        created_at: '2017-03-31T12:29:10.000Z'
+      description: Snapshot is created by Angelcam when certain types of events are received
+      type:
+      - object
+      - 'null'
     ErrorGeneric:
       type: object
       title: Error object
@@ -523,103 +610,7 @@ components:
       - title
       - detail
       - status
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    StreamObject:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: Stream URL
-        format:
-          type: string
-          enum:
-          - hls
-          - mp4
-          - mpegts
-          - mjpeg
-        refresh_rate:
-          type: number
-          format: float
-          description: Stream refresh rate
-      required:
-      - url
-      - format
-      example:
-        url: http://m2-eu1.angelcam.com/stream/157/stream.mjpeg?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE4Mjc3OCwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiMTU3In0%3D.d365e2a6fbdfae0bfa5b27175a6ea57de1ae31844fdcd22ff5f56da10a970d65
-        format: mjpeg
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
-    streamExpiresAt:
-      name: stream_expires_at
-      in: query
-      required: false
-      description: "Date and time when the returned camera streams should stop. By default, the returned streams have no expiration allowing the consumer to pull them indefinitely.\n    \nDo not confuse this with expiration of the stream URLs themselves. The stream URLs have a short expiration in order to minimize the risk of leaking and this behavior cannot be changed. However, once a stream URL is used to establish a connection, the returned stream can be pulled indefinitely unless the `stream_expires_at` parameter is used.\n"
-      example: 2999-12-12T00%3A00%3A00Z
-      schema:
-        type: string
-        format: date-time
     cameraId:
       name: camera_id
       in: path
@@ -629,6 +620,15 @@ components:
       schema:
         type: integer
         minimum: 1
+    streamExpiresAt:
+      name: stream_expires_at
+      in: query
+      required: false
+      description: "Date and time when the returned camera streams should stop. By default, the returned streams have no expiration allowing the consumer to pull them indefinitely.\n    \nDo not confuse this with expiration of the stream URLs themselves. The stream URLs have a short expiration in order to minimize the risk of leaking and this behavior cannot be changed. However, once a stream URL is used to establish a connection, the returned stream can be pulled indefinitely unless the `stream_expires_at` parameter is used.\n"
+      example: 2999-12-12T00%3A00%3A00Z
+      schema:
+        type: string
+        format: date-time
   securitySchemes:
     OAuth2:
       type: oauth2

@@ -172,31 +172,32 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  schemas:
+  responses:
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
     Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -221,127 +222,6 @@ components:
           - valid number is required.
           - Ensure this value is greater than or equal to 1.
         status: 400
-    Error400Invalid:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 400 Bad Request
-      example:
-        title: invalid
-        detail: Invalid hash
-        status: 400
-    SharedCameraClipObject:
-      type: object
-      title: Clip object
-      properties:
-        id:
-          type: string
-          minimum: 1
-          description: Clip UUID
-        created_by:
-          type: integer
-          description: User who created the clip
-        created_at:
-          type: string
-          minimum: 1
-          description: Time when the clip was created
-        name:
-          type: string
-          minimum: 1
-          description: Clip name
-        status:
-          type: string
-          description: Status of clip processing
-          enum:
-          - PENDING
-          - BUILDING
-          - READY
-          - ERROR
-        start:
-          type: string
-          minimum: 1
-          description: Start time of the clip
-        end:
-          type: string
-          minimum: 1
-          description: End time of the clip
-        download_url:
-          type: string
-          description: URL for download of the clip as TS/MP4 file (TS for HLS cameras, MP4 for MJPEG cameras). The URL contains security token valid for a limited time.
-      required:
-      - id
-      - created_by
-      - created_at
-      - download_url
-      - end
-      - name
-      - start
-      - status
-      example:
-        id: b9aad334-07ba-4660-9f18-041875ec1ea4
-        created_by: 1
-        name: Frontdoor loitering
-        status: READY
-        start: '2017-01-01T00:00:20.000Z'
-        end: '2017-01-01T00:25:20.000Z'
-        created_at: '2017-02-01T02:37:21.000Z'
-        download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
-    SharedCameraClipListResponse:
-      type: object
-      title: Clip list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all clips
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of clips for the camera
-          items:
-            $ref: '#/components/schemas/SharedCameraClipObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: b9aad334-07ba-4660-9f18-041875ec1ea4
-          created_by: 1
-          name: Frontdoor loitering
-          status: READY
-          start: '2017-01-01T00:00:20.000Z'
-          end: '2017-01-01T00:25:20.000Z'
-          created_at: '2017-02-01T02:37:21.000Z'
-          download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     RecordingStreamResponse:
       type: object
       title: Recording stream object
@@ -402,16 +282,152 @@ components:
           play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
           pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
           speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
+    SharedCameraClipObject:
+      type: object
+      title: Clip object
+      properties:
+        id:
+          type: string
+          minimum: 1
+          description: Clip UUID
+        created_by:
+          type: integer
+          description: User who created the clip
+        created_at:
+          type: string
+          minimum: 1
+          description: Time when the clip was created
+        name:
+          type: string
+          minimum: 1
+          description: Clip name
+        status:
+          type: string
+          description: Status of clip processing
+          enum:
+          - PENDING
+          - BUILDING
+          - READY
+          - ERROR
+        start:
+          type: string
+          minimum: 1
+          description: Start time of the clip
+        end:
+          type: string
+          minimum: 1
+          description: End time of the clip
+        download_url:
+          type: string
+          description: URL for download of the clip as TS/MP4 file (TS for HLS cameras, MP4 for MJPEG cameras). The URL contains security token valid for a limited time.
+      required:
+      - id
+      - created_by
+      - created_at
+      - download_url
+      - end
+      - name
+      - start
+      - status
+      example:
+        id: b9aad334-07ba-4660-9f18-041875ec1ea4
+        created_by: 1
+        name: Frontdoor loitering
+        status: READY
+        start: '2017-01-01T00:00:20.000Z'
+        end: '2017-01-01T00:25:20.000Z'
+        created_at: '2017-02-01T02:37:21.000Z'
+        download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    Error400Invalid:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 400 Bad Request
+      example:
+        title: invalid
+        detail: Invalid hash
+        status: 400
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    SharedCameraClipListResponse:
+      type: object
+      title: Clip list
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          description: Count of all clips
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of clips for the camera
+          items:
+            $ref: '#/components/schemas/SharedCameraClipObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+      example:
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: b9aad334-07ba-4660-9f18-041875ec1ea4
+          created_by: 1
+          name: Frontdoor loitering
+          status: READY
+          start: '2017-01-01T00:00:20.000Z'
+          end: '2017-01-01T00:25:20.000Z'
+          created_at: '2017-02-01T02:37:21.000Z'
+          download_url: https://rust-streamer-us-west-2-07489f9b03f198b91.angelcam.com/clips/b986b0c8-05c2-4c59-8fdd-8afd7bbfa2bf/download/?start=2019%2D12%2D09T14%3A19%3A59%2B00%3A00&end=2019%2D12%2D09T14%3A20%3A29%2B00%3A00&token=eyJ0aW1lIjoxNTc2NzUyMzY3LCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E1c5903efe76af570bea4ef5edf49c39f5afc1ce2c1aaf79e85ad5d140c8c3f42&filename=Frontdoor%20loitering
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
   parameters:
-    clipId:
-      name: clip_id
-      in: path
-      required: true
-      description: Clip UUID
-      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
-      schema:
-        type: string
-        format: uuid
     cameraId:
       name: camera_id
       in: path
@@ -421,31 +437,15 @@ components:
       schema:
         type: integer
         minimum: 1
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
+    clipId:
+      name: clip_id
+      in: path
+      required: true
+      description: Clip UUID
+      example: cd13975b-0b08-48f5-bd39-3f7d2a0c935a
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     OAuth2:
       type: oauth2

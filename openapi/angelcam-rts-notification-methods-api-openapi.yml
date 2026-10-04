@@ -147,76 +147,56 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  schemas:
+  responses:
     Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    EmailNotificationMethodChangeObject:
-      type: object
-      title: Email notification object
-      properties:
-        name:
-          type: string
-          description: notification method name
-        type:
-          type: string
-          enum:
-          - email
-          description: notification method type
-        email:
-          type: string
-          format: email
-          description: email address
-      required:
-      - type
-      - email
-      example:
-        name: My email
-        type: email
-        email: email@example.com
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
     Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    EmailNotificationMethodObject:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+  schemas:
+    Error400InvalidParams:
       type: object
-      title: Email notification object
+      title: Error 400 Invalid Parameters
       properties:
-        id:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
           type: integer
-          minimum: 1
-          description: notification method ID
-        name:
-          type: string
-          description: notification method name
-        type:
-          type: string
-          enum:
-          - email
-          description: notification method type
-        email:
-          type: string
-          format: email
-          description: email address
       required:
-      - id
-      - name
-      - type
-      - email
+      - title
+      - detail
+      - status
       example:
-        id: 85
-        name: My email
-        type: email
-        email: email@example.com
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
     HttpNotificationMethodChangeObject:
       type: object
       title: Http notification object
@@ -260,6 +240,36 @@ components:
         http_method: POST
         url: https://example.com/notify
         signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
+    EmailNotificationMethodObject:
+      type: object
+      title: Email notification object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: notification method ID
+        name:
+          type: string
+          description: notification method name
+        type:
+          type: string
+          enum:
+          - email
+          description: notification method type
+        email:
+          type: string
+          format: email
+          description: email address
+      required:
+      - id
+      - name
+      - type
+      - email
+      example:
+        id: 85
+        name: My email
+        type: email
+        email: email@example.com
     NotificationMethodListResponse:
       type: object
       title: Notification method list
@@ -315,6 +325,22 @@ components:
         title: not_found
         detail: Not Found
         status: 404
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     HttpNotificationMethodObject:
       type: object
       title: Http notification object
@@ -367,30 +393,6 @@ components:
         http_method: POST
         url: https://example.com/notify
         signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     ErrorGeneric:
       type: object
       title: Error object
@@ -405,31 +407,29 @@ components:
       - title
       - detail
       - status
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
+    EmailNotificationMethodChangeObject:
+      type: object
+      title: Email notification object
+      properties:
+        name:
+          type: string
+          description: notification method name
+        type:
+          type: string
+          enum:
+          - email
+          description: notification method type
+        email:
+          type: string
+          format: email
+          description: email address
+      required:
+      - type
+      - email
+      example:
+        name: My email
+        type: email
+        email: email@example.com
   parameters:
     notificationMethodId:
       name: method_id

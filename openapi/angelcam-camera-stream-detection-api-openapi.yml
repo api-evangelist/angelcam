@@ -101,14 +101,24 @@ paths:
           $ref: '#/components/responses/Error403PermissionDenied'
 components:
   schemas:
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+    CameraStreamDetectionPreviewStream:
+      type: object
+      title: Camera preview stream
+      properties:
+        format:
+          type: string
+          enum:
+          - hls
+          - mjpeg
+          - mp4
+          description: Stream type
+        url:
+          type: string
+          format: url
+          description: Stream URL
+      required:
+      - format
+      - url
     CameraStreamDetectionStream:
       type: object
       title: Detected stream
@@ -130,95 +140,6 @@ components:
       - url
       - type
       - preview
-    CameraStartStreamDetectionResponse:
-      type: object
-      title: Camera Start Stream Detection Response
-      properties:
-        session_id:
-          type: string
-      required:
-      - session_id
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    CameraStreamDetectionPreview:
-      type: object
-      title: Camera preview
-      description: Camera preview that can be used to access the underlying stream in various ways. The preview is available only for 20 minutes.
-      properties:
-        live_snapshot:
-          type: string
-          format: url
-          description: A URL that can be used to retrieve a snapshot from the camera
-        streams:
-          type: array
-          description: A list of streams available for the preview
-          items:
-            $ref: '#/components/schemas/CameraStreamDetectionPreviewStream'
-      required:
-      - live_snapshot
-      - streams
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    CameraStreamDetectionPreviewStream:
-      type: object
-      title: Camera preview stream
-      properties:
-        format:
-          type: string
-          enum:
-          - hls
-          - mjpeg
-          - mp4
-          description: Stream type
-        url:
-          type: string
-          format: url
-          description: Stream URL
-      required:
-      - format
-      - url
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
     CameraStreamDetectionResponse:
       type: object
       title: Camera Result Stream Detection Response
@@ -254,6 +175,85 @@ components:
               url: http://m1.angelcam.com/stream/81/stream.mp4?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjMxNiwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.b5b4cf405cf054701a75b359f4069d2af8a102c5ffd8f33cbb560a4638c7cb71
             - format: hls
               url: http://m1.angelcam.com/stream/81/playlist.m3u8?token=eyJ0aW1lIjogMTQ5NjkzNDYyODE5NjQwMSwgInRpbWVvdXQiOiAzNjAwLCAiYWxpYXMiOiAiODEifQ==.8ac35b434e768e8f10161b2d74da492f5fd8a8c115c18cbb421017665acd908a
+    CameraStartStreamDetectionResponse:
+      type: object
+      title: Camera Start Stream Detection Response
+      properties:
+        session_id:
+          type: string
+      required:
+      - session_id
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    CameraStreamDetectionPreview:
+      type: object
+      title: Camera preview
+      description: Camera preview that can be used to access the underlying stream in various ways. The preview is available only for 20 minutes.
+      properties:
+        live_snapshot:
+          type: string
+          format: url
+          description: A URL that can be used to retrieve a snapshot from the camera
+        streams:
+          type: array
+          description: A list of streams available for the preview
+          items:
+            $ref: '#/components/schemas/CameraStreamDetectionPreviewStream'
+      required:
+      - live_snapshot
+      - streams
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
   responses:
     Error401Unauthorized:
       description: Missing or invalid authorization.
