@@ -1,0 +1,12 @@
+{
+ "url": "https://developers.angelcam.com/openapi.yaml",
+ "requested_url": "https://developers.angelcam.com/openapi.yaml",
+ "status": 200,
+ "content_type": "text/yaml",
+ "bytes": 300492,
+ "sha256": "1740d75e8b743401315a413886265373fd6703fb0edb9981aefe1f6d6dce1b12",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.984), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
