@@ -163,56 +163,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error429TooManyRequests'
 components:
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     EventObject:
       type: object
       title: Event object
@@ -262,14 +229,14 @@ components:
         category: motion_detected
         received_at: '2018-10-24T11:21:59.000Z'
         occurred_at: '2018-10-24T11:21:39.000Z'
-    Error429TooManyRequests:
+    Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 429 Too Many Requests
+      title: Error 404 Not Found
       example:
-        title: rate_limited
-        detail: The rate limit has been reached
-        status: 429
+        title: not_found
+        detail: Not Found
+        status: 404
     EventListResponse:
       type: object
       title: Event list
@@ -307,30 +274,38 @@ components:
         title: invalid
         detail: Invalid hash
         status: 400
-    Error404NotFound:
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error429TooManyRequests:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
+      title: Error 429 Too Many Requests
       example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        title: rate_limited
+        detail: The rate limit has been reached
+        status: 429
     ErrorGeneric:
       type: object
       title: Error object
@@ -345,6 +320,31 @@ components:
       - title
       - detail
       - status
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   parameters:
     cameraId:
       name: camera_id

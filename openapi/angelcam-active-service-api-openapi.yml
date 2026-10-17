@@ -258,118 +258,7 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    EmptyResponse:
-      description: Empty response.
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
-    UsageDetailObject:
-      type: object
-      title: Usage detail
-      description: In case of camera service show info for what camera the service is used.
-      properties:
-        camera_id:
-          type: integer
-        camera_name:
-          type: string
-    ActiveServiceListResponse:
-      type: object
-      title: Active service list
-      properties:
-        count:
-          type: integer
-          description: Count of all services
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of services available for user
-          items:
-            $ref: '#/components/schemas/ActiveServiceObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
     Error403PermissionDenied:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -378,6 +267,29 @@ components:
         title: permission_denied
         detail: You do not have permission to perform this action.
         status: 403
+    ActiveServiceUsageObject:
+      type: object
+      title: Service object
+      properties:
+        id:
+          type: integer
+        in_use:
+          type: boolean
+          description: Says if service is in use for example by a camera
+        usage_detail:
+          $ref: '#/components/schemas/UsageDetailObject'
+      required:
+      - id
+      - in_use
+      - usage_detail
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     ActiveServiceObject:
       type: object
       title: Service object
@@ -412,6 +324,23 @@ components:
       - valid_until
       - in_use
       - usage_detail
+    UsageDetailObject:
+      type: object
+      title: Usage detail
+      description: In case of camera service show info for what camera the service is used.
+      properties:
+        camera_id:
+          type: integer
+        camera_name:
+          type: string
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     ErrorGeneric:
       type: object
       title: Error object
@@ -426,6 +355,35 @@ components:
       - title
       - detail
       - status
+    ActiveServiceListResponse:
+      type: object
+      title: Active service list
+      properties:
+        count:
+          type: integer
+          description: Count of all services
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of services available for user
+          items:
+            $ref: '#/components/schemas/ActiveServiceObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
     ServiceObject:
       type: object
       title: Service object
@@ -448,21 +406,63 @@ components:
       required:
       - type
       - code
-    ActiveServiceUsageObject:
+    Error400InvalidParams:
       type: object
-      title: Service object
+      title: Error 400 Invalid Parameters
       properties:
-        id:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
           type: integer
-        in_use:
-          type: boolean
-          description: Says if service is in use for example by a camera
-        usage_detail:
-          $ref: '#/components/schemas/UsageDetailObject'
       required:
-      - id
-      - in_use
-      - usage_detail
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   parameters:
     activeServiceId:
       name: active_service_id

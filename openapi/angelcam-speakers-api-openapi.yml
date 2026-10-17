@@ -252,70 +252,15 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  responses:
-    Error503ServiceUnavailable:
-      description: Service unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error503ServiceUnavailable'
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidBody:
-      description: Body payload is invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    EmptyResponse:
-      description: Empty response.
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   schemas:
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
     SpeakerObject:
       type: object
       title: Speaker object
@@ -373,14 +318,14 @@ components:
         arrow_client: 75b62326-eca3-4424-ab68-48e7da47e847
         arrow_service_id: 00af
         endpoint: /api/v1/audio/play
-    Error503ServiceUnavailable:
+    Error401Unauthorized:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 502 Bad Gateway
+      title: Error 401 Unauthorized
       example:
-        title: bad_gateway
-        detail: Bad Gateway
-        status: 502
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     Error404NotFound:
       allOf:
       - $ref: '#/components/schemas/ErrorGeneric'
@@ -418,22 +363,6 @@ components:
       - next
       - previous
       - results
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     ErrorGeneric:
       type: object
       title: Error object
@@ -448,6 +377,77 @@ components:
       - title
       - detail
       - status
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error503ServiceUnavailable:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 502 Bad Gateway
+      example:
+        title: bad_gateway
+        detail: Bad Gateway
+        status: 502
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error503ServiceUnavailable:
+      description: Service unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error503ServiceUnavailable'
+    EmptyResponse:
+      description: Empty response.
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidBody:
+      description: Body payload is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   parameters:
     speakerId:
       name: speaker_id

@@ -102,56 +102,74 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   schemas:
-    Error400InvalidParams:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    OrderItemListResponse:
       type: object
-      title: Error 400 Invalid Parameters
+      title: Order list
+      properties:
+        count:
+          type: integer
+          description: Count of all services
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of orders
+          items:
+            $ref: '#/components/schemas/OrderItemObject'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
+    ErrorGeneric:
+      type: object
+      title: Error object
       properties:
         title:
           type: string
         detail:
-          type: object
+          type: string
         status:
           type: integer
       required:
       - title
       - detail
       - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     OrderListResponse:
       type: object
       title: Order list
@@ -181,22 +199,6 @@ components:
       - next
       - previous
       - results
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
     OrderObject:
       type: object
       title: Order object
@@ -240,79 +242,6 @@ components:
       - due_at
       - total_price
       - currency
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    ErrorGeneric:
-      type: object
-      title: Error object
-      properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-    ServiceObject:
-      type: object
-      title: Service object
-      properties:
-        type:
-          type: string
-          description: Type of service
-          enum:
-          - cloud-recording
-          - broadcasting
-          - timelapse
-          - user-service
-          - event-recording
-          - live-view
-          example: cloud-recording
-        code:
-          type: string
-          description: Code of service, this code together with type is unique identifier of service
-          example: 3-days
-      required:
-      - type
-      - code
-    OrderItemListResponse:
-      type: object
-      title: Order list
-      properties:
-        count:
-          type: integer
-          description: Count of all services
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of orders
-          items:
-            $ref: '#/components/schemas/OrderItemObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
     OrderItemObject:
       type: object
       title: Order item object
@@ -357,6 +286,52 @@ components:
       - price
       - currency
       - type
+    ServiceObject:
+      type: object
+      title: Service object
+      properties:
+        type:
+          type: string
+          description: Type of service
+          enum:
+          - cloud-recording
+          - broadcasting
+          - timelapse
+          - user-service
+          - event-recording
+          - live-view
+          example: cloud-recording
+        code:
+          type: string
+          description: Code of service, this code together with type is unique identifier of service
+          example: 3-days
+      required:
+      - type
+      - code
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
   parameters:
     orderId:
       name: order_id
@@ -367,6 +342,31 @@ components:
       schema:
         type: integer
         minimum: 1
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   securitySchemes:
     OAuth2:
       type: oauth2

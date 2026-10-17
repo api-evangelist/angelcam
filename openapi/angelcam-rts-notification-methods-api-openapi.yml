@@ -147,32 +147,61 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
   schemas:
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    EmailNotificationMethodObject:
+      type: object
+      title: Email notification object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          description: notification method ID
+        name:
+          type: string
+          description: notification method name
+        type:
+          type: string
+          enum:
+          - email
+          description: notification method type
+        email:
+          type: string
+          format: email
+          description: email address
+      required:
+      - id
+      - name
+      - type
+      - email
+      example:
+        id: 85
+        name: My email
+        type: email
+        email: email@example.com
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     Error400InvalidParams:
       type: object
       title: Error 400 Invalid Parameters
@@ -240,14 +269,24 @@ components:
         http_method: POST
         url: https://example.com/notify
         signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
-    EmailNotificationMethodObject:
+    ErrorGeneric:
+      type: object
+      title: Error object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+    EmailNotificationMethodChangeObject:
       type: object
       title: Email notification object
       properties:
-        id:
-          type: integer
-          minimum: 1
-          description: notification method ID
         name:
           type: string
           description: notification method name
@@ -261,86 +300,12 @@ components:
           format: email
           description: email address
       required:
-      - id
-      - name
       - type
       - email
       example:
-        id: 85
         name: My email
         type: email
         email: email@example.com
-    NotificationMethodListResponse:
-      type: object
-      title: Notification method list
-      properties:
-        count:
-          type: integer
-          minimum: 0
-          description: Count of all notifications methods
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of notification methods
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/HttpNotificationMethodObject'
-            - $ref: '#/components/schemas/EmailNotificationMethodObject'
-      required:
-      - count
-      - next
-      - previous
-      - results
-      example:
-        count: 10
-        next: null
-        previous: null
-        results:
-        - id: 85
-          name: My Email
-          type: email
-          email: email@example.com
-        - id: 254
-          name: My Server
-          type: http
-          http_method: POST
-          url: https://example.com/notify
-          signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
     HttpNotificationMethodObject:
       type: object
       title: Http notification object
@@ -393,43 +358,78 @@ components:
         http_method: POST
         url: https://example.com/notify
         signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
-    ErrorGeneric:
+    NotificationMethodListResponse:
       type: object
-      title: Error object
+      title: Notification method list
       properties:
-        title:
-          type: string
-        detail:
-          type: string
-        status:
+        count:
           type: integer
+          minimum: 0
+          description: Count of all notifications methods
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of notification methods
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/HttpNotificationMethodObject'
+            - $ref: '#/components/schemas/EmailNotificationMethodObject'
       required:
-      - title
-      - detail
-      - status
-    EmailNotificationMethodChangeObject:
-      type: object
-      title: Email notification object
-      properties:
-        name:
-          type: string
-          description: notification method name
-        type:
-          type: string
-          enum:
-          - email
-          description: notification method type
-        email:
-          type: string
-          format: email
-          description: email address
-      required:
-      - type
-      - email
+      - count
+      - next
+      - previous
+      - results
       example:
-        name: My email
-        type: email
-        email: email@example.com
+        count: 10
+        next: null
+        previous: null
+        results:
+        - id: 85
+          name: My Email
+          type: email
+          email: email@example.com
+        - id: 254
+          name: My Server
+          type: http
+          http_method: POST
+          url: https://example.com/notify
+          signature_private_key: CHDFXB3CLXSJ8JjHh3xY8SSNJyjTmGB4jdz7reLm6cVW8ammg4
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   parameters:
     notificationMethodId:
       name: method_id

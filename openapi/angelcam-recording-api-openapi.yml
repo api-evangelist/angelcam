@@ -603,50 +603,36 @@ paths:
         '404':
           $ref: '#/components/responses/Error404NotFound'
 components:
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
-    EmptyResponse:
-      description: Empty response.
-    Error404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error404NotFound'
-    Error400InvalidParams:
-      description: Query params are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error400InvalidParams'
   schemas:
-    Error404NotFound:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 404 Not Found
-      example:
-        title: not_found
-        detail: Not Found
-        status: 404
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
-      example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
+    RecordingListResponse:
+      type: object
+      title: Recording list
+      properties:
+        count:
+          type: integer
+          description: Recording count
+        next:
+          format: uri
+          description: Next page from pagination
+          type:
+          - string
+          - 'null'
+        previous:
+          format: uri
+          description: Previous page from pagination
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          description: List of recordings on a given camera
+          items:
+            $ref: '#/components/schemas/RecordingResponse'
+      required:
+      - count
+      - next
+      - previous
+      - results
     RecordingResponse:
       type: object
       title: Recording information
@@ -721,40 +707,6 @@ components:
         record_queue_capacity: null
         recording_start: '2024-05-02T10:32:11.000Z'
         recording_end: 2024-05-07T16:58:7.5400Z
-    RecordingStreamInfoResponseDeprecated:
-      type: object
-      title: Recording stream information
-      properties:
-        current_time:
-          type: string
-          format: date-time
-          description: Current time in a stream.
-      example:
-        current_time: '2017-01-01T00:00:00.000Z'
-    Error400InvalidParams:
-      type: object
-      title: Error 400 Invalid Parameters
-      properties:
-        title:
-          type: string
-        detail:
-          type: object
-        status:
-          type: integer
-      required:
-      - title
-      - detail
-      - status
-      example:
-        title: invalid
-        detail:
-        - refresh_rate:
-          - valid number is required.
-          - Ensure this value is greater than 0.
-        - max_width:
-          - valid number is required.
-          - Ensure this value is greater than or equal to 1.
-        status: 400
     ErrorGeneric:
       type: object
       title: Error object
@@ -798,35 +750,36 @@ components:
           end: '2017-06-09T03:25:28.000Z'
         - start: '2017-06-09T04:19:42.000Z'
           end: 2017-06-09T010:39:31Z
-    RecordingListResponse:
+    SegmentObject:
       type: object
-      title: Recording list
+      title: Segment object
       properties:
-        count:
-          type: integer
-          description: Recording count
-        next:
-          format: uri
-          description: Next page from pagination
-          type:
-          - string
-          - 'null'
-        previous:
-          format: uri
-          description: Previous page from pagination
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          description: List of recordings on a given camera
-          items:
-            $ref: '#/components/schemas/RecordingResponse'
-      required:
-      - count
-      - next
-      - previous
-      - results
+        start:
+          type: string
+          format: date-time
+          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
+        end:
+          type: string
+          format: date-time
+          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
+    RecordingStreamInfoResponseDeprecated:
+      type: object
+      title: Recording stream information
+      properties:
+        current_time:
+          type: string
+          format: date-time
+          description: Current time in a stream.
+      example:
+        current_time: '2017-01-01T00:00:00.000Z'
     RecordingDownloadResponse:
       type: object
       title: Recording download
@@ -837,6 +790,46 @@ components:
           description: Download URL
       example:
         url: https://rust-streamer-eu-central-1-07489f9b03f198b91.angelcam.com/recordings/7e65d945-fffc-42e7-b78d-dd6f5cea91ee/download/?start=2019%2D09%2D30T07%3A23%3A14%2E932%2B00%3A00&end=2019%2D09%2D30T07%3A53%3A57%2E016%2B00%3A00&token=eyJ0aW1lIjoxNTY5ODU3NjgzLCJ0aW1lb3V0IjoxMjAwfQ%3D%3D%2E020b136d5da0d9518ed5428bfa01cadab1a139bf1e4f8e64a726fe3dfd40e541&filename=clip
+    Error400InvalidParams:
+      type: object
+      title: Error 400 Invalid Parameters
+      properties:
+        title:
+          type: string
+        detail:
+          type: object
+        status:
+          type: integer
+      required:
+      - title
+      - detail
+      - status
+      example:
+        title: invalid
+        detail:
+        - refresh_rate:
+          - valid number is required.
+          - Ensure this value is greater than 0.
+        - max_width:
+          - valid number is required.
+          - Ensure this value is greater than or equal to 1.
+        status: 400
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
+      example:
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error404NotFound:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 404 Not Found
+      example:
+        title: not_found
+        detail: Not Found
+        status: 404
     RecordingStreamResponse:
       type: object
       title: Recording stream object
@@ -897,36 +890,34 @@ components:
           play: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/play/
           pause: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/pause/
           speed: https://rec-streamer-eu-central-1.angelcam.com/recording/streams/df0600b7487a44d480217db7713720d3/speed/
+  responses:
     Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
-    SegmentObject:
-      type: object
-      title: Segment object
-      properties:
-        start:
-          type: string
-          format: date-time
-          description: 'Start of record segment. Example: `2017-01-01T00:00:00Z`.'
-        end:
-          type: string
-          format: date-time
-          description: 'End of record segment. Example: `2017-01-01T00:00:00Z`.'
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    EmptyResponse:
+      description: Empty response.
+    Error404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error404NotFound'
+    Error400InvalidParams:
+      description: Query params are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error400InvalidParams'
   parameters:
-    cameraId:
-      name: camera_id
-      in: path
-      required: true
-      description: Camera ID
-      example: 3
-      schema:
-        type: integer
-        minimum: 1
     recordingId:
       name: recording_id
       in: path
@@ -936,6 +927,15 @@ components:
       schema:
         type: string
         format: uuid
+    cameraId:
+      name: camera_id
+      in: path
+      required: true
+      description: Camera ID
+      example: 3
+      schema:
+        type: integer
+        minimum: 1
   securitySchemes:
     OAuth2:
       type: oauth2

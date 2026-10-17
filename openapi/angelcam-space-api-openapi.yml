@@ -107,41 +107,23 @@ paths:
         '404':
           description: Space not found or the user is not a member.
 components:
-  responses:
-    Error401Unauthorized:
-      description: Missing or invalid authorization.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error401Unauthorized'
-    Error403PermissionDenied:
-      description: Missing permission.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error403PermissionDenied'
   schemas:
-    SpacePermissionsObject:
-      type: object
-      title: Space permissions
-      properties:
-        assignments:
-          type: array
-          description: 'All permissions effective for the authenticated user in the active space. Includes both directly assigned permissions and those inherited through group membership.
-
-            '
-          items:
-            $ref: '#/components/schemas/AccessAssignmentObject'
-      required:
-      - assignments
+    Error403PermissionDenied:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 403 Permission Denied
       example:
-        assignments:
-        - permission: camera.view
-          location_id: 12
-          camera_id: 345
-        - permission: location.access
-          location_id: 12
-          camera_id: null
+        title: permission_denied
+        detail: You do not have permission to perform this action.
+        status: 403
+    Error401Unauthorized:
+      allOf:
+      - $ref: '#/components/schemas/ErrorGeneric'
+      title: Error 401 Unauthorized
+      example:
+        title: not_authenticated
+        detail: Authentication credentials were not provided
+        status: 401
     AccessAssignmentObject:
       type: object
       title: Access assignment
@@ -221,22 +203,27 @@ components:
         id: 7
         name: My Organisation
         is_default: true
-    Error401Unauthorized:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 401 Unauthorized
+    SpacePermissionsObject:
+      type: object
+      title: Space permissions
+      properties:
+        assignments:
+          type: array
+          description: 'All permissions effective for the authenticated user in the active space. Includes both directly assigned permissions and those inherited through group membership.
+
+            '
+          items:
+            $ref: '#/components/schemas/AccessAssignmentObject'
+      required:
+      - assignments
       example:
-        title: not_authenticated
-        detail: Authentication credentials were not provided
-        status: 401
-    Error403PermissionDenied:
-      allOf:
-      - $ref: '#/components/schemas/ErrorGeneric'
-      title: Error 403 Permission Denied
-      example:
-        title: permission_denied
-        detail: You do not have permission to perform this action.
-        status: 403
+        assignments:
+        - permission: camera.view
+          location_id: 12
+          camera_id: 345
+        - permission: location.access
+          location_id: 12
+          camera_id: null
     ErrorGeneric:
       type: object
       title: Error object
@@ -251,6 +238,19 @@ components:
       - title
       - detail
       - status
+  responses:
+    Error401Unauthorized:
+      description: Missing or invalid authorization.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error401Unauthorized'
+    Error403PermissionDenied:
+      description: Missing permission.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error403PermissionDenied'
   securitySchemes:
     OAuth2:
       type: oauth2
