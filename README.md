@@ -241,7 +241,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Dynamic Client Registration | — |
 | Agentic Commerce | — |
 | Pagination Ratio | paginated |
-| Operation Distinctiveness | mostly |
+| Operation Distinctiveness | mostly (partial credit) |
 
 **Regulatory alignment 34.3** — Horizontal (data, software, accessibility, platform)
 
